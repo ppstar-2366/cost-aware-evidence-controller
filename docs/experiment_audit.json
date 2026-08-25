@@ -1,0 +1,964 @@
+{
+  "archive_schema_version": 1,
+  "generated_at_utc": "2026-08-20T07:45:32.015888+00:00",
+  "project_root_name": "cost_aware_evidence_controller",
+  "experiment_completion": {
+    "retrieval_methods_expected": [
+      "BM25_top1",
+      "BM25_top3",
+      "BM25_top5",
+      "BM25_top10",
+      "BM25_top20",
+      "ControllerV3",
+      "ControllerV3_no_section"
+    ],
+    "generation_methods_expected": [
+      "BM25_top5",
+      "BM25_top10",
+      "BM25_top20",
+      "ControllerV3"
+    ],
+    "expected_questions_per_generation_method": 156,
+    "expected_total_generation_records": 624
+  },
+  "runtime": {
+    "python": "3.13.5",
+    "platform": "Windows-11-10.0.26200-SP0",
+    "logical_processors_visible": 8
+  },
+  "datasets": {
+    "train_100": {
+      "path": "data/processed/qasper_train_100.jsonl",
+      "papers": 100,
+      "questions": 420,
+      "questions_with_gold_evidence": 367,
+      "total_gold_evidence_spans": 761,
+      "total_reference_answer_strings": 753,
+      "evidence_units": 3123,
+      "unit_type_counts": {
+        "title": 100,
+        "abstract": 100,
+        "chunk": 2254,
+        "figure_caption": 314,
+        "table": 355
+      },
+      "top_section_names": {
+        "figures and tables": 669,
+        "introduction": 242,
+        "title": 100,
+        "abstract": 100,
+        "related work": 86,
+        "conclusion": 53,
+        "experiments": 29,
+        "generative model": 28,
+        "results": 27,
+        "acknowledgments": 19,
+        "conclusions": 19,
+        "acknowledgements": 16,
+        "method": 14,
+        "proposed model": 13,
+        "conclusion and future work": 11,
+        "discussion": 11,
+        "background": 10,
+        "experimental results": 10,
+        "acknowledgment": 9,
+        "experimental setup": 9
+      },
+      "answer_annotation_forms_nonexclusive": {
+        "free_form_annotations": 86,
+        "extractive_annotations": 282,
+        "yes_no_annotations": 81,
+        "unanswerable_annotations": 53
+      },
+      "avg_unit_words": 132.71,
+      "median_unit_words": 125,
+      "min_unit_words": 1,
+      "max_unit_words": 255
+    },
+    "validation_50": {
+      "path": "data/processed/qasper_validation_50.jsonl",
+      "papers": 50,
+      "questions": 156,
+      "questions_with_gold_evidence": 151,
+      "total_gold_evidence_spans": 395,
+      "total_reference_answer_strings": 449,
+      "evidence_units": 1574,
+      "unit_type_counts": {
+        "title": 50,
+        "abstract": 50,
+        "chunk": 1129,
+        "figure_caption": 139,
+        "table": 206
+      },
+      "top_section_names": {
+        "figures and tables": 345,
+        "introduction": 134,
+        "related work": 61,
+        "title": 50,
+        "abstract": 50,
+        "conclusion": 30,
+        "experiments": 24,
+        "results": 24,
+        "acknowledgments": 16,
+        "model": 12,
+        "discussion": 11,
+        "conclusions": 9,
+        "working of lili": 9,
+        "evaluation": 8,
+        "model ::: dialogue modules": 8,
+        "quantitative analysis": 7,
+        "data": 6,
+        "re-implementation of units with bert": 6,
+        "learning to translate: ukrainian-to-russian transformations": 6,
+        "approaches to identifying dogmatism": 5
+      },
+      "answer_annotation_forms_nonexclusive": {
+        "extractive_annotations": 174,
+        "free_form_annotations": 71,
+        "yes_no_annotations": 41,
+        "unanswerable_annotations": 26
+      },
+      "avg_unit_words": 132.63,
+      "median_unit_words": 123.0,
+      "min_unit_words": 3,
+      "max_unit_words": 250
+    }
+  },
+  "retrieval": {
+    "BM25_top1": {
+      "path": "outputs/validation50_bm25_top1.jsonl",
+      "records": 156,
+      "unique_paper_question_keys": 156,
+      "duplicate_keys": 0,
+      "threshold": 0.5,
+      "total_questions_with_gold": 151,
+      "questions_with_hit": 52,
+      "question_hit_rate": 0.3443708609271523,
+      "total_gold_spans": 395,
+      "covered_gold_spans": 91,
+      "evidence_recall": 0.23037974683544304,
+      "average_best_overlap": 0.39511323519501745,
+      "avg_retrieved_units": 1.0,
+      "avg_evidence_words": 166.44,
+      "avg_estimated_tokens": 216,
+      "avg_chunks": 0.7,
+      "avg_tables": 0.03,
+      "avg_figures": 0.02,
+      "avg_abstracts": 0.26,
+      "avg_action_steps": 0.0,
+      "action_counts": {},
+      "recall_per_1k_tokens": 1.0667
+    },
+    "BM25_top3": {
+      "path": "outputs/validation50_bm25_top3.jsonl",
+      "records": 156,
+      "unique_paper_question_keys": 156,
+      "duplicate_keys": 0,
+      "threshold": 0.5,
+      "total_questions_with_gold": 151,
+      "questions_with_hit": 89,
+      "question_hit_rate": 0.5894039735099338,
+      "total_gold_spans": 395,
+      "covered_gold_spans": 168,
+      "evidence_recall": 0.4253164556962025,
+      "average_best_overlap": 0.5462202946102211,
+      "avg_retrieved_units": 3.0,
+      "avg_evidence_words": 521.72,
+      "avg_estimated_tokens": 678,
+      "avg_chunks": 2.44,
+      "avg_tables": 0.09,
+      "avg_figures": 0.08,
+      "avg_abstracts": 0.39,
+      "avg_action_steps": 0.0,
+      "action_counts": {},
+      "recall_per_1k_tokens": 0.6273
+    },
+    "BM25_top5": {
+      "path": "outputs/validation50_bm25_top5.jsonl",
+      "records": 156,
+      "unique_paper_question_keys": 156,
+      "duplicate_keys": 0,
+      "threshold": 0.5,
+      "total_questions_with_gold": 151,
+      "questions_with_hit": 117,
+      "question_hit_rate": 0.7748344370860927,
+      "total_gold_spans": 395,
+      "covered_gold_spans": 223,
+      "evidence_recall": 0.5645569620253165,
+      "average_best_overlap": 0.6275284483316138,
+      "avg_retrieved_units": 5.0,
+      "avg_evidence_words": 889.41,
+      "avg_estimated_tokens": 1156,
+      "avg_chunks": 4.24,
+      "avg_tables": 0.13,
+      "avg_figures": 0.12,
+      "avg_abstracts": 0.51,
+      "avg_action_steps": 0.0,
+      "action_counts": {},
+      "recall_per_1k_tokens": 0.4884
+    },
+    "BM25_top10": {
+      "path": "outputs/validation50_bm25_top10.jsonl",
+      "records": 156,
+      "unique_paper_question_keys": 156,
+      "duplicate_keys": 0,
+      "threshold": 0.5,
+      "total_questions_with_gold": 151,
+      "questions_with_hit": 136,
+      "question_hit_rate": 0.9006622516556292,
+      "total_gold_spans": 395,
+      "covered_gold_spans": 307,
+      "evidence_recall": 0.7772151898734178,
+      "average_best_overlap": 0.7656886388325207,
+      "avg_retrieved_units": 10.0,
+      "avg_evidence_words": 1785.85,
+      "avg_estimated_tokens": 2322,
+      "avg_chunks": 8.83,
+      "avg_tables": 0.27,
+      "avg_figures": 0.21,
+      "avg_abstracts": 0.69,
+      "avg_action_steps": 0.0,
+      "action_counts": {},
+      "recall_per_1k_tokens": 0.3347
+    },
+    "BM25_top20": {
+      "path": "outputs/validation50_bm25_top20.jsonl",
+      "records": 156,
+      "unique_paper_question_keys": 156,
+      "duplicate_keys": 0,
+      "threshold": 0.5,
+      "total_questions_with_gold": 151,
+      "questions_with_hit": 148,
+      "question_hit_rate": 0.9801324503311258,
+      "total_gold_spans": 395,
+      "covered_gold_spans": 376,
+      "evidence_recall": 0.9518987341772152,
+      "average_best_overlap": 0.9065754950693456,
+      "avg_retrieved_units": 19.53,
+      "avg_evidence_words": 3187.4,
+      "avg_estimated_tokens": 4144,
+      "avg_chunks": 16.6,
+      "avg_tables": 1.06,
+      "avg_figures": 0.95,
+      "avg_abstracts": 0.92,
+      "avg_action_steps": 0.0,
+      "action_counts": {},
+      "recall_per_1k_tokens": 0.2297
+    },
+    "ControllerV3": {
+      "path": "outputs/validation50_controller_v3.jsonl",
+      "records": 156,
+      "unique_paper_question_keys": 156,
+      "duplicate_keys": 0,
+      "threshold": 0.5,
+      "total_questions_with_gold": 151,
+      "questions_with_hit": 131,
+      "question_hit_rate": 0.8675496688741722,
+      "total_gold_spans": 395,
+      "covered_gold_spans": 279,
+      "evidence_recall": 0.7063291139240506,
+      "average_best_overlap": 0.7230653245749327,
+      "avg_retrieved_units": 7.69,
+      "avg_evidence_words": 1261.78,
+      "avg_estimated_tokens": 1640,
+      "avg_chunks": 6.03,
+      "avg_tables": 0.91,
+      "avg_figures": 0.17,
+      "avg_abstracts": 0.58,
+      "avg_action_steps": 3.62,
+      "action_counts": {
+        "ReadTop3": 156,
+        "ReadMoreForResultOrData": 64,
+        "ReadTable": 60,
+        "Stop": 156,
+        "DataSectionExpansion": 34,
+        "ReadDefaultTop5": 22,
+        "DefinitionIntroExpansion": 19,
+        "ReadMoreForMethodOrComplex": 51,
+        "ReadFigureCaption": 3
+      },
+      "recall_per_1k_tokens": 0.4307
+    },
+    "ControllerV3_no_section": {
+      "path": "outputs/validation50_controller_v3_no_section.jsonl",
+      "records": 156,
+      "unique_paper_question_keys": 156,
+      "duplicate_keys": 0,
+      "threshold": 0.5,
+      "total_questions_with_gold": 151,
+      "questions_with_hit": 126,
+      "question_hit_rate": 0.8344370860927153,
+      "total_gold_spans": 395,
+      "covered_gold_spans": 267,
+      "evidence_recall": 0.6759493670886076,
+      "average_best_overlap": 0.6992549914979656,
+      "avg_retrieved_units": 7.24,
+      "avg_evidence_words": 1186.74,
+      "avg_estimated_tokens": 1543,
+      "avg_chunks": 5.62,
+      "avg_tables": 0.91,
+      "avg_figures": 0.16,
+      "avg_abstracts": 0.54,
+      "avg_action_steps": 3.4,
+      "action_counts": {
+        "ReadTop3": 156,
+        "ReadMoreForResultOrData": 64,
+        "ReadTable": 60,
+        "Stop": 156,
+        "ReadDefaultTop5": 22,
+        "DefinitionExpansion": 19,
+        "ReadMoreForMethodOrComplex": 51,
+        "ReadFigureCaption": 3
+      },
+      "recall_per_1k_tokens": 0.438
+    },
+    "stored_summary_integrity": {
+      "path": "outputs/validation50_method_comparison_threshold05.csv",
+      "expected_rows": 7,
+      "actual_rows": 7,
+      "checked_fields": [
+        "question_hit_rate",
+        "evidence_recall",
+        "average_best_overlap",
+        "avg_retrieved_units",
+        "avg_evidence_words",
+        "avg_estimated_tokens",
+        "recall_per_1k_tokens"
+      ],
+      "mismatch_count": 0,
+      "mismatches": []
+    },
+    "ControllerV3_diagnostics": {
+      "question_type_counts_nonexclusive": {
+        "is_result": 38,
+        "is_data": 38,
+        "is_definition": 19,
+        "is_method": 79,
+        "is_complex": 44,
+        "is_abbreviation": 2,
+        "is_figure": 5
+      },
+      "action_counts": {
+        "ReadTop3": 156,
+        "ReadMoreForResultOrData": 64,
+        "ReadTable": 60,
+        "Stop": 156,
+        "DataSectionExpansion": 34,
+        "ReadDefaultTop5": 22,
+        "DefinitionIntroExpansion": 19,
+        "ReadMoreForMethodOrComplex": 51,
+        "ReadFigureCaption": 3
+      },
+      "action_sequence_counts": {
+        "ReadTop3 -> ReadMoreForResultOrData -> ReadTable -> Stop": 27,
+        "ReadTop3 -> ReadMoreForResultOrData -> DataSectionExpansion -> ReadTable -> Stop": 33,
+        "ReadTop3 -> ReadDefaultTop5 -> Stop": 20,
+        "ReadTop3 -> DefinitionIntroExpansion -> Stop": 19,
+        "ReadTop3 -> ReadMoreForMethodOrComplex -> Stop": 50,
+        "ReadTop3 -> ReadMoreForResultOrData -> DataSectionExpansion -> Stop": 1,
+        "ReadTop3 -> ReadMoreForMethodOrComplex -> ReadFigureCaption -> Stop": 1,
+        "ReadTop3 -> ReadDefaultTop5 -> ReadFigureCaption -> Stop": 2,
+        "ReadTop3 -> ReadMoreForResultOrData -> Stop": 3
+      },
+      "selected_unit_counts_by_action": {
+        "ReadTop3": 468,
+        "ReadMoreForResultOrData": 256,
+        "ReadTable": 113,
+        "DataSectionExpansion": 72,
+        "ReadDefaultTop5": 44,
+        "DefinitionIntroExpansion": 37,
+        "ReadMoreForMethodOrComplex": 204,
+        "ReadFigureCaption": 5
+      }
+    }
+  },
+  "error_analysis": {
+    "path": "outputs/error_analysis_controller_v3_validation50.csv",
+    "rows_questions_with_gold": 151,
+    "category_counts": {
+      "success": 131,
+      "retrieval_or_gold_mapping_failure": 3,
+      "controller_selection_failure": 10,
+      "definition_selection_failure": 1,
+      "figure_selection_failure": 2,
+      "data_evidence_selection_failure": 2,
+      "result_evidence_selection_failure": 1,
+      "missing_figure_failure": 1
+    },
+    "failure_category_counts": {
+      "retrieval_or_gold_mapping_failure": 3,
+      "controller_selection_failure": 10,
+      "definition_selection_failure": 1,
+      "figure_selection_failure": 2,
+      "data_evidence_selection_failure": 2,
+      "result_evidence_selection_failure": 1,
+      "missing_figure_failure": 1
+    },
+    "failure_category_share_of_all_gold_questions": {
+      "retrieval_or_gold_mapping_failure": 0.019868,
+      "controller_selection_failure": 0.066225,
+      "definition_selection_failure": 0.006623,
+      "figure_selection_failure": 0.013245,
+      "data_evidence_selection_failure": 0.013245,
+      "result_evidence_selection_failure": 0.006623,
+      "missing_figure_failure": 0.006623
+    },
+    "failure_category_share_within_failures": {
+      "retrieval_or_gold_mapping_failure": 0.15,
+      "controller_selection_failure": 0.5,
+      "definition_selection_failure": 0.05,
+      "figure_selection_failure": 0.1,
+      "data_evidence_selection_failure": 0.1,
+      "result_evidence_selection_failure": 0.05,
+      "missing_figure_failure": 0.05
+    }
+  },
+  "generation_prompts": {
+    "path": "outputs/generation_prompts_validation50.jsonl",
+    "total_records": 624,
+    "methods": {
+      "BM25_top10": {
+        "records": 156,
+        "unique_method_question_keys": 156,
+        "duplicate_keys": 0,
+        "avg_num_retrieved_units_before_char_cap": 10.0,
+        "avg_prompt_chars": 6186.59,
+        "median_prompt_chars": 6195.0,
+        "min_prompt_chars": 5221,
+        "max_prompt_chars": 6909
+      },
+      "BM25_top20": {
+        "records": 156,
+        "unique_method_question_keys": 156,
+        "duplicate_keys": 0,
+        "avg_num_retrieved_units_before_char_cap": 19.53,
+        "avg_prompt_chars": 6186.59,
+        "median_prompt_chars": 6195.0,
+        "min_prompt_chars": 5221,
+        "max_prompt_chars": 6909
+      },
+      "BM25_top5": {
+        "records": 156,
+        "unique_method_question_keys": 156,
+        "duplicate_keys": 0,
+        "avg_num_retrieved_units_before_char_cap": 5.0,
+        "avg_prompt_chars": 5880.29,
+        "median_prompt_chars": 5927.5,
+        "min_prompt_chars": 3511,
+        "max_prompt_chars": 6909
+      },
+      "ControllerV3": {
+        "records": 156,
+        "unique_method_question_keys": 156,
+        "duplicate_keys": 0,
+        "avg_num_retrieved_units_before_char_cap": 7.69,
+        "avg_prompt_chars": 6128.77,
+        "median_prompt_chars": 6185.5,
+        "min_prompt_chars": 4283,
+        "max_prompt_chars": 6909
+      }
+    },
+    "evidence_character_cap": 6000,
+    "paired_prompt_comparisons": {
+      "BM25_top10_vs_BM25_top20": {
+        "paired_questions": 156,
+        "identical_prompt_count": 156,
+        "different_prompt_count": 0
+      },
+      "BM25_top5_vs_BM25_top10": {
+        "paired_questions": 156,
+        "identical_prompt_count": 121,
+        "different_prompt_count": 35
+      },
+      "ControllerV3_vs_BM25_top5": {
+        "paired_questions": 156,
+        "identical_prompt_count": 114,
+        "different_prompt_count": 42
+      },
+      "ControllerV3_vs_BM25_top10": {
+        "paired_questions": 156,
+        "identical_prompt_count": 134,
+        "different_prompt_count": 22
+      },
+      "ControllerV3_vs_BM25_top20": {
+        "paired_questions": 156,
+        "identical_prompt_count": 134,
+        "different_prompt_count": 22
+      }
+    }
+  },
+  "answer_generation": {
+    "path": "outputs/ollama_generations_validation50.jsonl",
+    "raw_line_records": 624,
+    "latest_unique_method_question_records": 624,
+    "duplicate_or_superseded_raw_records": 0,
+    "method_runs": {
+      "BM25_top10": {
+        "latest_unique_records": 156,
+        "successful_records": 156,
+        "error_records": 0,
+        "success_rate": 1.0,
+        "models": {
+          "qwen2.5:3b": 156
+        },
+        "done_reasons": {
+          "stop": 156
+        },
+        "avg_prompt_tokens": 1309.1,
+        "avg_output_tokens": 10.19,
+        "total_prompt_tokens": 204219,
+        "total_output_tokens": 1590,
+        "avg_wall_time_seconds_diagnostic_only": 14.518,
+        "first_created_at_utc": "2026-07-31T07:03:01.721926+00:00",
+        "last_created_at_utc": "2026-07-31T07:40:43.062116+00:00"
+      },
+      "BM25_top20": {
+        "latest_unique_records": 156,
+        "successful_records": 156,
+        "error_records": 0,
+        "success_rate": 1.0,
+        "models": {
+          "qwen2.5:3b": 156
+        },
+        "done_reasons": {
+          "stop": 156
+        },
+        "avg_prompt_tokens": 1309.1,
+        "avg_output_tokens": 9.93,
+        "total_prompt_tokens": 204219,
+        "total_output_tokens": 1549,
+        "avg_wall_time_seconds_diagnostic_only": 5.147,
+        "first_created_at_utc": "2026-07-31T07:41:09.413163+00:00",
+        "last_created_at_utc": "2026-07-31T07:54:27.637924+00:00"
+      },
+      "BM25_top5": {
+        "latest_unique_records": 156,
+        "successful_records": 156,
+        "error_records": 0,
+        "success_rate": 1.0,
+        "models": {
+          "qwen2.5:3b": 156
+        },
+        "done_reasons": {
+          "stop": 156
+        },
+        "avg_prompt_tokens": 1243.39,
+        "avg_output_tokens": 8.95,
+        "total_prompt_tokens": 193969,
+        "total_output_tokens": 1396,
+        "avg_wall_time_seconds_diagnostic_only": 6047.644,
+        "first_created_at_utc": "2026-07-20T08:51:20.835497+00:00",
+        "last_created_at_utc": "2026-07-31T06:59:04.814219+00:00"
+      },
+      "ControllerV3": {
+        "latest_unique_records": 156,
+        "successful_records": 156,
+        "error_records": 0,
+        "success_rate": 1.0,
+        "models": {
+          "qwen2.5:3b": 156
+        },
+        "done_reasons": {
+          "stop": 156
+        },
+        "avg_prompt_tokens": 1295.44,
+        "avg_output_tokens": 9.96,
+        "total_prompt_tokens": 202089,
+        "total_output_tokens": 1553,
+        "avg_wall_time_seconds_diagnostic_only": 8.908,
+        "first_created_at_utc": "2026-07-31T07:54:56.769950+00:00",
+        "last_created_at_utc": "2026-07-31T08:17:59.515877+00:00"
+      }
+    },
+    "answer_score_distributions": {
+      "BM25_top10": {
+        "records": 156,
+        "answer_f1_mean": 0.262938,
+        "answer_f1_median": 0.063054,
+        "exact_match_mean": 0.128205,
+        "zero_f1_count": 76,
+        "positive_f1_count": 80,
+        "f1_at_least_0_5_count": 36,
+        "exact_match_count": 20
+      },
+      "BM25_top20": {
+        "records": 156,
+        "answer_f1_mean": 0.257749,
+        "answer_f1_median": 0.044196,
+        "exact_match_mean": 0.121795,
+        "zero_f1_count": 77,
+        "positive_f1_count": 79,
+        "f1_at_least_0_5_count": 35,
+        "exact_match_count": 19
+      },
+      "BM25_top5": {
+        "records": 156,
+        "answer_f1_mean": 0.259133,
+        "answer_f1_median": 0.0,
+        "exact_match_mean": 0.121795,
+        "zero_f1_count": 79,
+        "positive_f1_count": 77,
+        "f1_at_least_0_5_count": 36,
+        "exact_match_count": 19
+      },
+      "ControllerV3": {
+        "records": 156,
+        "answer_f1_mean": 0.257732,
+        "answer_f1_median": 0.044196,
+        "exact_match_mean": 0.121795,
+        "zero_f1_count": 77,
+        "positive_f1_count": 79,
+        "f1_at_least_0_5_count": 35,
+        "exact_match_count": 19
+      }
+    },
+    "saved_answer_score_integrity": {
+      "path": "outputs/ollama_answer_scores_validation50.csv",
+      "raw_latest_keys": 624,
+      "saved_score_keys": 624,
+      "missing_saved_score_keys": 0,
+      "extra_saved_score_keys": 0,
+      "recomputed_score_mismatch_count": 0,
+      "recomputed_score_mismatches": []
+    },
+    "paired_f1_comparisons": {
+      "ControllerV3_vs_BM25_top5": {
+        "paired_questions": 156,
+        "controller_wins": 14,
+        "ties": 130,
+        "controller_losses": 12,
+        "mean_f1_difference_controller_minus_baseline": -0.001402
+      },
+      "ControllerV3_vs_BM25_top10": {
+        "paired_questions": 156,
+        "controller_wins": 6,
+        "ties": 143,
+        "controller_losses": 7,
+        "mean_f1_difference_controller_minus_baseline": -0.005206
+      },
+      "ControllerV3_vs_BM25_top20": {
+        "paired_questions": 156,
+        "controller_wins": 4,
+        "ties": 148,
+        "controller_losses": 4,
+        "mean_f1_difference_controller_minus_baseline": -1.7e-05
+      }
+    },
+    "paired_generated_answer_comparisons": {
+      "BM25_top10_vs_BM25_top20": {
+        "paired_questions": 156,
+        "identical_generated_answer_count": 147,
+        "different_generated_answer_count": 9
+      },
+      "BM25_top5_vs_BM25_top10": {
+        "paired_questions": 156,
+        "identical_generated_answer_count": 116,
+        "different_generated_answer_count": 40
+      },
+      "ControllerV3_vs_BM25_top5": {
+        "paired_questions": 156,
+        "identical_generated_answer_count": 117,
+        "different_generated_answer_count": 39
+      },
+      "ControllerV3_vs_BM25_top10": {
+        "paired_questions": 156,
+        "identical_generated_answer_count": 139,
+        "different_generated_answer_count": 17
+      },
+      "ControllerV3_vs_BM25_top20": {
+        "paired_questions": 156,
+        "identical_generated_answer_count": 144,
+        "different_generated_answer_count": 12
+      }
+    },
+    "wall_time_warning": "Generation was completed through interrupted/resumed sessions. Wall-clock fields are diagnostics, not a controlled benchmark."
+  },
+  "artifact_inventory": [
+    {
+      "path": "data/processed/qasper_train_100.jsonl",
+      "exists": true,
+      "size_bytes": 4234223,
+      "sha256": "3bc2941ef882718ab49e25c2d2444efd8b3ca8832a5312334132fd315b156bf6",
+      "records": 100,
+      "fields": [
+        "paper_id",
+        "title",
+        "evidence_units",
+        "questions",
+        "num_units",
+        "num_questions"
+      ]
+    },
+    {
+      "path": "data/processed/qasper_validation_50.jsonl",
+      "exists": true,
+      "size_bytes": 2250134,
+      "sha256": "98bd0a5444e1b967e6df1e3642a4d43d2c738379dd91fb872e22fe6e3a7a1c0c",
+      "records": 50,
+      "fields": [
+        "paper_id",
+        "title",
+        "evidence_units",
+        "questions",
+        "num_units",
+        "num_questions"
+      ]
+    },
+    {
+      "path": "outputs/validation50_bm25_top1.jsonl",
+      "exists": true,
+      "size_bytes": 482006,
+      "sha256": "0563faca12a051c3d62e50f58c4fba24d2c2bedd61276705ed8613a56c9b64f9",
+      "records": 156,
+      "fields": [
+        "paper_id",
+        "title",
+        "question_id",
+        "question",
+        "reference_answers",
+        "gold_evidence",
+        "retrieved_units"
+      ]
+    },
+    {
+      "path": "outputs/validation50_bm25_top3.jsonl",
+      "exists": true,
+      "size_bytes": 898927,
+      "sha256": "249d5b30ca8a10db887cc844f0bacb88daea33b8f13f9aa9b945850109fd717b",
+      "records": 156,
+      "fields": [
+        "paper_id",
+        "title",
+        "question_id",
+        "question",
+        "reference_answers",
+        "gold_evidence",
+        "retrieved_units"
+      ]
+    },
+    {
+      "path": "outputs/validation50_bm25_top5.jsonl",
+      "exists": true,
+      "size_bytes": 1329069,
+      "sha256": "93f6fff0d0549142a73aeb5fcc2b677fabdf2540c31d06fa53518796717d5b2e",
+      "records": 156,
+      "fields": [
+        "paper_id",
+        "title",
+        "question_id",
+        "question",
+        "reference_answers",
+        "gold_evidence",
+        "retrieved_units"
+      ]
+    },
+    {
+      "path": "outputs/validation50_bm25_top10.jsonl",
+      "exists": true,
+      "size_bytes": 2378130,
+      "sha256": "214e50166565d14ea3a0cdda90797e23ab3ac881780cd08e5bb43a334dff1b9b",
+      "records": 156,
+      "fields": [
+        "paper_id",
+        "title",
+        "question_id",
+        "question",
+        "reference_answers",
+        "gold_evidence",
+        "retrieved_units"
+      ]
+    },
+    {
+      "path": "outputs/validation50_bm25_top20.jsonl",
+      "exists": true,
+      "size_bytes": 4070645,
+      "sha256": "4650ccbe5974724ac39cf5b30e0b072f91cf52926fe3b9e2b2d3752bdbdbe954",
+      "records": 156,
+      "fields": [
+        "paper_id",
+        "title",
+        "question_id",
+        "question",
+        "reference_answers",
+        "gold_evidence",
+        "retrieved_units"
+      ]
+    },
+    {
+      "path": "outputs/validation50_controller_v3.jsonl",
+      "exists": true,
+      "size_bytes": 1918071,
+      "sha256": "18e4fac6cc457c6afa117946a8fdd074d9bfbb8d7e30ded2677b5f33073d5fd3",
+      "records": 156,
+      "fields": [
+        "paper_id",
+        "title",
+        "question_id",
+        "question",
+        "question_type",
+        "reference_answers",
+        "gold_evidence",
+        "retrieved_units",
+        "actions"
+      ]
+    },
+    {
+      "path": "outputs/validation50_controller_v3_no_section.jsonl",
+      "exists": true,
+      "size_bytes": 1820445,
+      "sha256": "b58ae3621ee39a9473e09686c57680ea71e059e4b1b8045a9a775d2a504b9d0a",
+      "records": 156,
+      "fields": [
+        "paper_id",
+        "title",
+        "question_id",
+        "question",
+        "question_type",
+        "reference_answers",
+        "gold_evidence",
+        "retrieved_units",
+        "actions"
+      ]
+    },
+    {
+      "path": "outputs/validation50_method_comparison_threshold05.csv",
+      "exists": true,
+      "size_bytes": 878,
+      "sha256": "c9895f411908f2e5bb5b2783a36455d17de5ade947df22cb18c3b962393205c9",
+      "records": 7,
+      "fields": [
+        "method",
+        "threshold",
+        "total_questions_with_gold",
+        "question_hit_rate",
+        "evidence_recall",
+        "average_best_overlap",
+        "avg_retrieved_units",
+        "avg_evidence_words",
+        "avg_estimated_tokens",
+        "avg_chunks",
+        "avg_tables",
+        "avg_figures",
+        "avg_abstracts",
+        "avg_action_steps",
+        "recall_per_1k_tokens"
+      ]
+    },
+    {
+      "path": "outputs/error_analysis_controller_v3_validation50.csv",
+      "exists": true,
+      "size_bytes": 191417,
+      "sha256": "ac2e5e218970c15d83f9f1d09ea34af16d7beedcdad21a8e449410c5da9596cb",
+      "records": 151,
+      "fields": [
+        "paper_id",
+        "question_id",
+        "question",
+        "category",
+        "controller_hit",
+        "controller_best_overlap",
+        "bm25_top20_hit",
+        "bm25_top20_best_overlap",
+        "action_sequence",
+        "selected_types",
+        "gold_evidence_preview",
+        "controller_best_unit_type",
+        "controller_best_section",
+        "controller_best_text_preview",
+        "bm25_best_unit_type",
+        "bm25_best_section",
+        "bm25_best_text_preview"
+      ]
+    },
+    {
+      "path": "outputs/generation_prompts_validation50.jsonl",
+      "exists": true,
+      "size_bytes": 4946252,
+      "sha256": "c9ce874ded1baaea4861930281f8a8133e300bbdf1c4670aa70863a1b3d419b2",
+      "records": 624,
+      "fields": [
+        "method",
+        "paper_id",
+        "question_id",
+        "question",
+        "reference_answers",
+        "gold_evidence",
+        "num_retrieved_units",
+        "prompt"
+      ]
+    },
+    {
+      "path": "outputs/ollama_generations_validation50.jsonl",
+      "exists": true,
+      "size_bytes": 1342793,
+      "sha256": "282426b348d874a69b812969f4476696ee3b5aa831db049d0aece749d8ca4626",
+      "records": 624,
+      "fields": [
+        "method",
+        "paper_id",
+        "question_id",
+        "question",
+        "reference_answers",
+        "gold_evidence",
+        "num_retrieved_units",
+        "model",
+        "status",
+        "generated_answer",
+        "done_reason",
+        "prompt_eval_count",
+        "eval_count",
+        "total_duration_ns",
+        "load_duration_ns",
+        "prompt_eval_duration_ns",
+        "eval_duration_ns",
+        "wall_time_seconds",
+        "error",
+        "created_at"
+      ]
+    },
+    {
+      "path": "outputs/ollama_answer_scores_validation50.csv",
+      "exists": true,
+      "size_bytes": 230991,
+      "sha256": "71c3e74d9262652a0a33fc31ebd30d653713daf0b5cb49cd9f1ff0eff8355317",
+      "records": 624,
+      "fields": [
+        "method",
+        "paper_id",
+        "question_id",
+        "question",
+        "status",
+        "generated_answer",
+        "reference_answers",
+        "answer_f1",
+        "exact_match",
+        "prompt_tokens",
+        "output_tokens",
+        "wall_time_seconds",
+        "model",
+        "error"
+      ]
+    },
+    {
+      "path": "outputs/ollama_answer_summary_validation50.csv",
+      "exists": true,
+      "size_bytes": 520,
+      "sha256": "2eb02be9246cf641b70b57390f8e05215a2d1b7567a0df843ab1b917f8ed1a75",
+      "records": 4,
+      "fields": [
+        "method",
+        "model",
+        "total_records",
+        "successful_records",
+        "success_rate",
+        "answer_f1",
+        "exact_match",
+        "avg_prompt_tokens",
+        "avg_output_tokens",
+        "total_prompt_tokens",
+        "total_output_tokens",
+        "avg_wall_time_seconds"
+      ]
+    }
+  ]
+}

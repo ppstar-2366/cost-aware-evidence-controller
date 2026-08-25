@@ -1,0 +1,8 @@
+﻿method,experiment_role,records,evidence_recall_at_0_5,question_hit_rate_at_0_5,average_best_overlap,avg_retrieved_units,avg_evidence_words,avg_estimated_retrieval_tokens,recall_per_1k_tokens,answer_f1,exact_match,generation_success_rate,avg_actual_prompt_tokens,avg_output_tokens,notes
+BM25_top1,fixed_top_k_baseline,156,0.2304,0.3444,0.3951,1.0,166.44,216,1.0667,,,,,,
+BM25_top3,fixed_top_k_baseline,156,0.4253,0.5894,0.5462,3.0,521.72,678,0.6273,,,,,,
+BM25_top5,fixed_top_k_baseline,156,0.5646,0.7748,0.6275,5.0,889.41,1156,0.4884,0.259133,0.121795,1.0,1243.39,8.95,
+BM25_top10,fixed_top_k_baseline,156,0.7772,0.9007,0.7657,10.0,1785.85,2322,0.3347,0.262938,0.128205,1.0,1309.1,10.19,Generation prompt is affected by the 6000-character evidence cap.
+BM25_top20,fixed_top_k_baseline,156,0.9519,0.9801,0.9066,19.53,3187.4,4144,0.2297,0.257749,0.121795,1.0,1309.1,9.93,Generation prompt is affected by the 6000-character evidence cap.
+ControllerV3,proposed_method,156,0.7063,0.8675,0.7231,7.69,1261.78,1640,0.4307,0.257732,0.121795,1.0,1295.44,9.96,
+ControllerV3_no_section,section_expansion_ablation,156,0.6759,0.8344,0.6993,7.24,1186.74,1543,0.438,,,,,,

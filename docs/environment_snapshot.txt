@@ -1,0 +1,107 @@
+Cost-Aware Evidence Controller - Final Experiment Environment Snapshot
+Captured/verified: 2026-08-20, Asia/Shanghai
+
+SYSTEM
+------
+OS kernel: Microsoft Windows NT 10.0.26200.0
+Architecture: x64
+CPU: Intel(R) Core(TM) i5-10210U CPU @ 1.60GHz
+Logical processors visible: 8
+Physical memory: approximately 7.8 GB
+Graphics: Intel(R) UHD Graphics
+
+PYTHON
+------
+Python: 3.13.5
+Virtual environment used: project-root .venv
+
+Core project packages actually installed:
+datasets==3.6.0
+huggingface_hub==1.14.0
+pandas==3.0.3
+numpy==2.4.4
+tqdm==4.67.3
+rank-bm25==0.2.2
+
+Full pip snapshot:
+aiohappyeyeballs==2.6.1
+aiohttp==3.13.5
+aiosignal==1.4.0
+annotated-doc==0.0.4
+anyio==4.13.0
+attrs==26.1.0
+certifi==2026.4.22
+charset-normalizer==3.4.7
+click==8.3.3
+colorama==0.4.6
+datasets==3.6.0
+dill==0.3.8
+filelock==3.29.0
+frozenlist==1.8.0
+fsspec==2024.3.1
+h11==0.16.0
+hf-xet==1.5.0
+httpcore==1.0.9
+httpx==0.28.1
+huggingface_hub==1.14.0
+idna==3.14
+markdown-it-py==4.2.0
+mdurl==0.1.2
+multidict==6.7.1
+multiprocess==0.70.16
+numpy==2.4.4
+packaging==26.2
+pandas==3.0.3
+pip==26.1.1
+propcache==0.5.2
+pyarrow==24.0.0
+pyarrow-hotfix==0.7
+Pygments==2.20.0
+python-dateutil==2.9.0.post0
+PyYAML==6.0.3
+rank-bm25==0.2.2
+requests==2.34.0
+rich==15.0.0
+shellingham==1.5.4
+six==1.17.0
+tqdm==4.67.3
+typer==0.25.1
+typing_extensions==4.15.0
+tzdata==2026.2
+urllib3==2.7.0
+xxhash==3.7.0
+yarl==1.23.0
+
+OLLAMA
+------
+Executable: D:\Ollama\ollama.exe
+Version: 0.30.10
+User OLLAMA_MODELS: D:\OllamaModels
+Base URL: http://127.0.0.1:11434
+
+Installed model:
+name: qwen2.5:3b
+model id: 357c53fb659c
+reported size: 1.9 GB
+
+FINAL GENERATION OPTIONS
+------------------------
+model=qwen2.5:3b
+stream=false
+keep_alive=10m
+num_ctx=4096
+num_predict=128
+temperature=0.0
+seed=42
+retries=3
+timeout=240 seconds in the explicit full-run commands
+
+REPRODUCIBILITY NOTES
+---------------------
+1. requirements.txt contains minimum constraints, not this exact lock snapshot.
+2. The saved processed data and outputs are the authoritative artifacts.
+3. The full generation ran through interrupted/resumed sessions.
+4. Wall-clock fields are not a controlled performance benchmark.
+5. Temperature 0 plus seed 42 did not guarantee byte-identical outputs across
+   different resumed sessions: BM25 top-10 and top-20 had identical prompts for
+   all 156 questions, but 9 generated-answer pairs differed.
