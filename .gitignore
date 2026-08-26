@@ -36,6 +36,12 @@ data/processed/qasper_test_416.jsonl
 outputs/test416/*.jsonl
 outputs/supplementary/*.jsonl
 outputs/supplementary/generation/*.jsonl
+outputs/supplementary/generation/test_generation_smoke_answer_*
+outputs/supplementary/generation/test_generation_smoke_integrity_audit.json
+outputs/supplementary/generation/test_generation_smoke_sha256_manifest.csv
+outputs/supplementary/generation/test_generation_smoke256_answer_details.csv
+outputs/supplementary/generation/test_generation_smoke256_answer_by_type.csv
+outputs/supplementary/generation/test_generation_smoke256_answer_bootstrap_*.csv
 
 # Temporary runtime files
 *.log

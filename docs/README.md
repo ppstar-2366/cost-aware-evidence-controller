@@ -9,13 +9,14 @@
 3. [EXPERIMENT_GAP_AUDIT_ZH.md](EXPERIMENT_GAP_AUDIT_ZH.md)：提交前仍应补充的实验、优先级和不建议扩展的范围。
 4. [SUPPLEMENTARY_EXPERIMENT_PROTOCOL.md](SUPPLEMENTARY_EXPERIMENT_PROTOCOL.md)：新增检索、机制对照、行为分析和 test 生成在运行前冻结的方案。
 5. [SUPPLEMENTARY_RETRIEVAL_RESULTS.md](SUPPLEMENTARY_RETRIEVAL_RESULTS.md)：预算匹配机制对照、参考点和控制器行为分析结果。
-6. [THESIS_EVIDENCE_MAP_ZH.md](THESIS_EVIDENCE_MAP_ZH.md)：每项论文主张对应的数据、允许表述与禁止过度结论。
-7. [EXPERIMENT_ARCHIVE_ZH.md](EXPERIMENT_ARCHIVE_ZH.md)：Validation50 开发过程、历史调试和生成实验归档。
-8. [REPRODUCTION_GUIDE_ZH.md](REPRODUCTION_GUIDE_ZH.md)：从环境检查到重新运行全部实验的命令级手册。
-9. [DATA_DICTIONARY_ZH.md](DATA_DICTIONARY_ZH.md)：每个源码、JSONL、CSV 文件及字段的含义。
-10. [THESIS_WRITING_MATERIAL_ZH.md](THESIS_WRITING_MATERIAL_ZH.md)：毕业论文实验章节可直接使用的结构、表格和讨论要点。
-11. [RESEARCH_REFLECTIONS_AND_CONCLUSIONS_ZH.md](RESEARCH_REFLECTIONS_AND_CONCLUSIONS_ZH.md)：实验感悟、研究结论、摘要结果句和未来工作。
-12. [environment_snapshot.txt](environment_snapshot.txt)：早期本地生成实验的软件、模型和硬件快照。
+6. [GENERATION_SMOKE_GATE.md](GENERATION_SMOKE_GATE.md)：冻结 test 生成样本、prompt 去重和两轮 completion gate 的完整记录。
+7. [THESIS_EVIDENCE_MAP_ZH.md](THESIS_EVIDENCE_MAP_ZH.md)：每项论文主张对应的数据、允许表述与禁止过度结论。
+8. [EXPERIMENT_ARCHIVE_ZH.md](EXPERIMENT_ARCHIVE_ZH.md)：Validation50 开发过程、历史调试和生成实验归档。
+9. [REPRODUCTION_GUIDE_ZH.md](REPRODUCTION_GUIDE_ZH.md)：从环境检查到重新运行全部实验的命令级手册。
+10. [DATA_DICTIONARY_ZH.md](DATA_DICTIONARY_ZH.md)：每个源码、JSONL、CSV 文件及字段的含义。
+11. [THESIS_WRITING_MATERIAL_ZH.md](THESIS_WRITING_MATERIAL_ZH.md)：毕业论文实验章节可直接使用的结构、表格和讨论要点。
+12. [RESEARCH_REFLECTIONS_AND_CONCLUSIONS_ZH.md](RESEARCH_REFLECTIONS_AND_CONCLUSIONS_ZH.md)：实验感悟、研究结论、摘要结果句和未来工作。
+13. [environment_snapshot.txt](environment_snapshot.txt)：早期本地生成实验的软件、模型和硬件快照。
 
 ## 机器可读档案
 
@@ -31,6 +32,8 @@
 - 补充检索参考点和两个预算匹配对照：已完成，各 1,451 条。
 - ControllerV3 行为与问题级预算分布分析：已完成。
 - 补充实验完整性、预算匹配与 SHA-256 审计：已通过。
+- Test 生成样本与 prompt 去重：已冻结，53 篇 / 201 问 / 608 个 unique prompts。
+- 20 问 test 生成 smoke gate：256-token 配置已通过，67/67 unique calls 成功。
 - 数据预处理：已完成。
 - BM25 top-1/3/5/10/20：已完成，每种方法 156 条。
 - ControllerV3：已完成，156 条。

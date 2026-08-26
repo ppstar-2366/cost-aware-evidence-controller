@@ -1,0 +1,231 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Python: Compile sources",
+      "type": "shell",
+      "command": "${workspaceFolder}/.venv/bin/python",
+      "args": ["-m", "py_compile", "${workspaceFolder}/src/*.py"],
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "QASPER: Build held-out test split",
+      "type": "process",
+      "command": "${workspaceFolder}/.venv/bin/python",
+      "args": [
+        "${workspaceFolder}/src/build_evidence_units.py",
+        "--splits",
+        "test",
+        "--test-output",
+        "${workspaceFolder}/data/processed/qasper_test_416.jsonl",
+        "--dataset-revision",
+        "13b496d2a5359329b110e3419628de3cf791843b"
+      ],
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "Experiment: Run held-out retrieval",
+      "type": "process",
+      "command": "${workspaceFolder}/.venv/bin/python",
+      "args": [
+        "${workspaceFolder}/src/run_retrieval_experiment.py",
+        "--input",
+        "${workspaceFolder}/data/processed/qasper_test_416.jsonl",
+        "--output-dir",
+        "${workspaceFolder}/outputs/test416",
+        "--run-name",
+        "test416",
+        "--threshold",
+        "0.5",
+        "--top-k",
+        "1",
+        "3",
+        "5",
+        "7",
+        "8",
+        "10",
+        "20"
+      ],
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "Statistics: Run paired paper bootstrap",
+      "type": "process",
+      "command": "${workspaceFolder}/.venv/bin/python",
+      "args": [
+        "${workspaceFolder}/src/bootstrap_retrieval.py",
+        "--output-dir",
+        "${workspaceFolder}/outputs/test416",
+        "--run-name",
+        "test416",
+        "--replicates",
+        "5000",
+        "--seed",
+        "42"
+      ],
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "Audit: Verify held-out artifacts",
+      "type": "process",
+      "command": "${workspaceFolder}/.venv/bin/python",
+      "args": [
+        "${workspaceFolder}/src/audit_test_experiment.py",
+        "--input",
+        "${workspaceFolder}/data/processed/qasper_test_416.jsonl",
+        "--output-dir",
+        "${workspaceFolder}/outputs/test416",
+        "--run-name",
+        "test416"
+      ],
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "Supplementary: Run budget-matched retrieval",
+      "type": "process",
+      "command": "${workspaceFolder}/.venv/bin/python",
+      "args": ["${workspaceFolder}/src/run_supplementary_retrieval.py"],
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "Supplementary: Bootstrap mechanism contrasts",
+      "type": "process",
+      "command": "${workspaceFolder}/.venv/bin/python",
+      "args": ["${workspaceFolder}/src/bootstrap_supplementary.py"],
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "Supplementary: Analyze controller behaviour",
+      "type": "process",
+      "command": "${workspaceFolder}/.venv/bin/python",
+      "args": ["${workspaceFolder}/src/analyze_controller_behavior.py"],
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "Supplementary: Audit retrieval artifacts",
+      "type": "process",
+      "command": "${workspaceFolder}/.venv/bin/python",
+      "args": ["${workspaceFolder}/src/audit_supplementary.py"],
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "Generation: Freeze sample and build prompts",
+      "type": "process",
+      "command": "${workspaceFolder}/.venv/bin/python",
+      "args": ["${workspaceFolder}/src/build_test_generation_sample.py"],
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "Generation: Run 20-question smoke",
+      "type": "process",
+      "command": "${workspaceFolder}/.venv/bin/python",
+      "args": [
+        "${workspaceFolder}/src/run_deduplicated_ollama_generation.py",
+        "--output",
+        "${workspaceFolder}/outputs/supplementary/generation/test_generation_smoke_unique_generations.jsonl",
+        "--limit-questions",
+        "20"
+      ],
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "Generation: Evaluate smoke",
+      "type": "process",
+      "command": "${workspaceFolder}/.venv/bin/python",
+      "args": [
+        "${workspaceFolder}/src/evaluate_test_generation.py",
+        "--generations",
+        "${workspaceFolder}/outputs/supplementary/generation/test_generation_smoke_unique_generations.jsonl",
+        "--prefix",
+        "test_generation_smoke",
+        "--limit-questions",
+        "20"
+      ],
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "Generation: Audit smoke",
+      "type": "process",
+      "command": "${workspaceFolder}/.venv/bin/python",
+      "args": [
+        "${workspaceFolder}/src/audit_test_generation.py",
+        "--generations",
+        "${workspaceFolder}/outputs/supplementary/generation/test_generation_smoke_unique_generations.jsonl",
+        "--prefix",
+        "test_generation_smoke",
+        "--limit-questions",
+        "20"
+      ],
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "Generation: Run frozen 201-question sample",
+      "type": "process",
+      "command": "${workspaceFolder}/.venv/bin/python",
+      "args": ["${workspaceFolder}/src/run_deduplicated_ollama_generation.py"],
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "Generation: Evaluate frozen sample",
+      "type": "process",
+      "command": "${workspaceFolder}/.venv/bin/python",
+      "args": ["${workspaceFolder}/src/evaluate_test_generation.py"],
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "Generation: Audit frozen sample",
+      "type": "process",
+      "command": "${workspaceFolder}/.venv/bin/python",
+      "args": ["${workspaceFolder}/src/audit_test_generation.py"],
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "problemMatcher": []
+    }
+  ]
+}

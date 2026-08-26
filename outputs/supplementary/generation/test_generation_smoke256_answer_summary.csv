@@ -1,0 +1,5 @@
+method,records,successful_records,success_rate,answer_f1,exact_match,unanimously_unanswerable_questions,unanswerable_accuracy,avg_prompt_tokens,avg_output_tokens,total_prompt_tokens_hypothetical,total_output_tokens_hypothetical
+BM25_top7,20,20,1.0,0.326825,0.2,0,0.0,2044.6,12.8,40892,256
+BM25_top8,20,20,1.0,0.269236,0.15,0,0.0,2344.05,17.65,46881,353
+ControllerV3,20,20,1.0,0.275165,0.2,0,0.0,2120.3,12.1,42406,242
+ControllerV3_no_section,20,20,1.0,0.314355,0.2,0,0.0,1958.35,16.95,39167,339
