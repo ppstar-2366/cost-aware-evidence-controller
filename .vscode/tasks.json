@@ -3,9 +3,9 @@
   "tasks": [
     {
       "label": "Python: Compile sources",
-      "type": "shell",
+      "type": "process",
       "command": "${workspaceFolder}/.venv/bin/python",
-      "args": ["-m", "py_compile", "${workspaceFolder}/src/*.py"],
+      "args": ["-m", "compileall", "-q", "${workspaceFolder}/src"],
       "options": {
         "cwd": "${workspaceFolder}"
       },
@@ -146,15 +146,25 @@
       "problemMatcher": []
     },
     {
-      "label": "Generation: Run 20-question smoke",
+      "label": "Generation: Run 20-question smoke (256 tokens)",
       "type": "process",
       "command": "${workspaceFolder}/.venv/bin/python",
       "args": [
         "${workspaceFolder}/src/run_deduplicated_ollama_generation.py",
         "--output",
-        "${workspaceFolder}/outputs/supplementary/generation/test_generation_smoke_unique_generations.jsonl",
+        "${workspaceFolder}/outputs/supplementary/generation/test_generation_smoke256_unique_generations.jsonl",
         "--limit-questions",
-        "20"
+        "20",
+        "--num-predict",
+        "256",
+        "--model",
+        "qwen2.5:3b",
+        "--num-ctx",
+        "8192",
+        "--temperature",
+        "0",
+        "--seed",
+        "42"
       ],
       "options": {
         "cwd": "${workspaceFolder}"
@@ -168,9 +178,9 @@
       "args": [
         "${workspaceFolder}/src/evaluate_test_generation.py",
         "--generations",
-        "${workspaceFolder}/outputs/supplementary/generation/test_generation_smoke_unique_generations.jsonl",
+        "${workspaceFolder}/outputs/supplementary/generation/test_generation_smoke256_unique_generations.jsonl",
         "--prefix",
-        "test_generation_smoke",
+        "test_generation_smoke256",
         "--limit-questions",
         "20"
       ],
@@ -186,9 +196,9 @@
       "args": [
         "${workspaceFolder}/src/audit_test_generation.py",
         "--generations",
-        "${workspaceFolder}/outputs/supplementary/generation/test_generation_smoke_unique_generations.jsonl",
+        "${workspaceFolder}/outputs/supplementary/generation/test_generation_smoke256_unique_generations.jsonl",
         "--prefix",
-        "test_generation_smoke",
+        "test_generation_smoke256",
         "--limit-questions",
         "20"
       ],
@@ -201,7 +211,19 @@
       "label": "Generation: Run frozen 201-question sample",
       "type": "process",
       "command": "${workspaceFolder}/.venv/bin/python",
-      "args": ["${workspaceFolder}/src/run_deduplicated_ollama_generation.py"],
+      "args": [
+        "${workspaceFolder}/src/run_deduplicated_ollama_generation.py",
+        "--model",
+        "qwen2.5:3b",
+        "--num-ctx",
+        "8192",
+        "--num-predict",
+        "256",
+        "--temperature",
+        "0",
+        "--seed",
+        "42"
+      ],
       "options": {
         "cwd": "${workspaceFolder}"
       },
@@ -222,6 +244,19 @@
       "type": "process",
       "command": "${workspaceFolder}/.venv/bin/python",
       "args": ["${workspaceFolder}/src/audit_test_generation.py"],
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "Figures: Render thesis result figures",
+      "type": "process",
+      "command": "${workspaceFolder}/.venv/bin/python",
+      "args": [
+        "${workspaceFolder}/src/make_thesis_figures.py",
+        "--overwrite"
+      ],
       "options": {
         "cwd": "${workspaceFolder}"
       },

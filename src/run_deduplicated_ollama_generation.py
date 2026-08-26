@@ -265,9 +265,15 @@ def main() -> None:
         for prompt_hash, record in selected_latest.items()
         if record.get("status") != "ok"
     ]
+    length_stops = [
+        prompt_hash
+        for prompt_hash, record in selected_latest.items()
+        if record.get("status") == "ok" and record.get("done_reason") == "length"
+    ]
     prompt_tokens = [int(record.get("prompt_eval_count", 0)) for record in ok]
+    output_tokens = [int(record.get("eval_count", 0)) for record in ok]
     audit = {
-        "status": "pass" if not errors else "fail",
+        "status": "pass" if not errors and not length_stops else "fail",
         "mode": "smoke" if args.limit_questions is not None else "frozen_sample",
         "input": args.input,
         "output": args.output,
@@ -280,6 +286,8 @@ def main() -> None:
         "successful_unique_prompts": len(ok),
         "failed_unique_prompts": len(errors),
         "failed_hashes": errors,
+        "length_stopped_unique_prompts": len(length_stops),
+        "length_stopped_hashes": length_stops,
         "model": args.model,
         "model_inventory": tags.get("models", []),
         "options": {
@@ -296,12 +304,16 @@ def main() -> None:
                 max(prompt_tokens, default=0) / args.num_ctx if args.num_ctx else 0.0
             ),
         },
+        "output_tokens": {
+            "mean": sum(output_tokens) / len(output_tokens) if output_tokens else 0.0,
+            "maximum": max(output_tokens, default=0),
+        },
     }
     audit_path = output_path.with_suffix(".audit.json")
     audit_path.write_text(json.dumps(audit, indent=2) + "\n", encoding="utf-8")
     print(f"Saved unique generations to {output_path}")
     print(f"Audit status: {audit['status']}; saved to {audit_path}")
-    if errors:
+    if errors or length_stops:
         raise SystemExit(1)
 
 

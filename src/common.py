@@ -40,7 +40,7 @@ def write_csv(rows: List[Dict[str, Any]], path: str) -> None:
     fieldnames = list(rows[0].keys())
 
     with open(output_path, "w", encoding="utf-8", newline="") as f:
-        writer = csv.DictWriter(f, fieldnames=fieldnames)
+        writer = csv.DictWriter(f, fieldnames=fieldnames, lineterminator="\n")
         writer.writeheader()
         writer.writerows(rows)
 

@@ -31,7 +31,14 @@ test 分析必须标为预先写明方案后的 supplementary analysis；探索�
 
 ## 3. 提交前必须补充：P0
 
-### P0-A：独立的下游答案生成评估
+### P0-A：冻结的 test-sample 下游答案生成评估
+
+**状态：已完成并通过审计。** 冻结样本为 53 篇完整 paper clusters、201 问、
+804 个方法—问题记录和 608 个 unique prompts；全部生成完整成功，0 failure、
+0 length stop。ControllerV3 与 BM25 top-7 的 Answer F1 差值为 +0.0002，
+95% paired CI [−0.0313, +0.0312]。完整结果和边界见
+`docs/TEST_GENERATION_RESULTS.md`。由于 test 已先用于主检索评估，最终文件准确称为
+冻结的 supplementary test sample，而不是新获得的 untouched split。
 
 **目的。** 中期报告把“完整 evidence-grounded QA pipeline”列为最低成功标准，
 但当前生成实验只在参与规则开发的 Validation50 上完成，而且 6,000 字符上限
@@ -163,8 +170,8 @@ chunks，预测单元与官方段落不一一对应。不能把“命中 gold sp
 
 | 顺序 | 工作 | 计算成本 | 对论文可信度的增益 |
 |---|---|---:|---|
-| 1 | 固定下游生成协议、修复 prompt 去重与 token 审计 | 低（开发） | 极高（进行中） |
-| 2 | 200+ 问题 cluster-sampled generation | 中等，约 800 个方法—问题记录，实际 unique prompts 更少 | 极高（待完成） |
+| 1 | 固定下游生成协议、修复 prompt 去重与 token 审计 | 低（开发） | 已完成 |
+| 2 | 200+ 问题 cluster-sampled generation | 中等，804 个方法—问题记录、608 个 unique prompts | 已完成 |
 | 3 | 章节扩展预算匹配对照 | 低，纯检索 | 已完成 |
 | 4 | 可变预算/动作/决策路径分析 | 低，离线统计 | 已完成 |
 | 5 | Abstract-only 与 Read-all | 很低，纯检索 | 已完成 |

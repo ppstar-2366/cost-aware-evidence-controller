@@ -365,3 +365,47 @@ Controller 的 `retrieved_units[]` 还包含：
 4. `outputs/ollama_answer_scores_validation50.csv`：逐问题生成细节；
 5. `docs/experiment_audit.json`：分布、动作、paired comparison 和完整性验证；
 6. README/Markdown 表格：便于阅读，但不是唯一原始数据源。
+
+## 14. 2026-08-27 test 与补充实验扩展
+
+第 1–13 节保留的是 Validation50 开发归档。终期论文引用优先级已由完整官方
+test416 和冻结的 paper-cluster generation sample 取代，Validation50 不再称为
+正式独立终评。
+
+### 检索与 bootstrap
+
+- `outputs/test416/test416_method_comparison_threshold05.csv`：完整 test 主检索表；
+- `outputs/test416/test416_bootstrap_method_cis.csv`：方法级 paper bootstrap 区间；
+- `outputs/test416/test416_bootstrap_paired_differences.csv`：预先指定的 paired 差值；
+- `outputs/supplementary/test416_supplementary_retrieval_summary.csv`：abstract-only、
+  read-all 和预算匹配对照；
+- `outputs/supplementary/test416_controller_behavior_*.csv`：可变预算、路径和动作诊断。
+
+### 冻结 test 生成
+
+- `test_generation_sample_manifest.json`：53 个完整 paper clusters、201 个问题和
+  固定 seed 的样本身份；
+- `test_generation_prompt_audit.json`：804 个方法—问题记录、608 个 unique prompt、
+  截断与方法对齐审计；
+- `test_generation_unique_generations.jsonl`：每个唯一 prompt 一条 Ollama 返回；大文件
+  留在本地且被 Git 忽略；
+- `test_generation_answer_details.csv`：把唯一生成结果映射回每个方法—问题，并保存
+  Answer F1、EM、答案类型、实际输入/输出 token；
+- `test_generation_answer_summary.csv` 与 `test_generation_answer_by_type.csv`：方法级
+  和答案类型级汇总；
+- `test_generation_answer_bootstrap_method_cis.csv`：方法级 F1、EM、prompt/output token
+  的 95% paper-cluster bootstrap 区间；
+- `test_generation_answer_bootstrap_paired.csv`：ControllerV3 相对 top-7、top-8、
+  no-section 的 paired 差值与区间；
+- `test_generation_integrity_audit.json`：对齐、缺失、API 失败、长度截断、上下文、
+  prompt 去重实际成本和理论未去重成本；
+- `test_generation_sha256_manifest.csv`：协议、脚本和本地大文件的 SHA-256 证据链。
+
+### 图表
+
+`outputs/figures/` 中的 PDF 是 LaTeX 首选矢量文件，PNG 是 400 dpi RGB 复核版本。
+`figure_manifest.json` 保存数据源与输出哈希、变换说明和 alt text。图表的推荐 caption
+及结论边界见 `docs/THESIS_FIGURE_GUIDE.md`。
+
+终期论文应首先引用 test416 的主检索结果和冻结 test generation sample；第 13 节
+列出的 Validation50 文件只用于开发史、补充诊断或与旧草稿核对。

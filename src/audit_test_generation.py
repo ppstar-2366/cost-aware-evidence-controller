@@ -161,12 +161,22 @@ def main() -> None:
         for prompt_hash in expected_hashes & set(latest_generations)
         if latest_generations[prompt_hash].get("status") != "ok"
     }
+    length_stopped_hashes = {
+        prompt_hash
+        for prompt_hash in expected_hashes & set(latest_generations)
+        if latest_generations[prompt_hash].get("status") == "ok"
+        and latest_generations[prompt_hash].get("done_reason") == "length"
+    }
     if missing_hashes:
         errors.append(f"Missing {len(missing_hashes)} unique generations.")
     if unexpected_hashes:
         errors.append(f"Found {len(unexpected_hashes)} unexpected generation hashes.")
     if failed_hashes:
         errors.append(f"Found {len(failed_hashes)} failed unique generations.")
+    if length_stopped_hashes:
+        errors.append(
+            f"Found {len(length_stopped_hashes)} length-stopped unique generations."
+        )
 
     prompt_tokens = [
         int(latest_generations[prompt_hash].get("prompt_eval_count", 0))
@@ -174,6 +184,28 @@ def main() -> None:
         if latest_generations[prompt_hash].get("status") == "ok"
     ]
     max_prompt_tokens = max(prompt_tokens, default=0)
+    output_tokens = [
+        int(latest_generations[prompt_hash].get("eval_count", 0))
+        for prompt_hash in expected_hashes & set(latest_generations)
+        if latest_generations[prompt_hash].get("status") == "ok"
+    ]
+    max_output_tokens = max(output_tokens, default=0)
+    hypothetical_prompt_tokens = sum(
+        int(
+            latest_generations.get(str(record["prompt_sha256"]), {}).get(
+                "prompt_eval_count", 0
+            )
+        )
+        for record in prompts
+    )
+    hypothetical_output_tokens = sum(
+        int(
+            latest_generations.get(str(record["prompt_sha256"]), {}).get(
+                "eval_count", 0
+            )
+        )
+        for record in prompts
+    )
     if max_prompt_tokens >= args.num_ctx:
         errors.append(
             f"Maximum prompt tokens {max_prompt_tokens} reaches context {args.num_ctx}."
@@ -195,14 +227,31 @@ def main() -> None:
         "prompt_reuse_rate": 1.0 - len(expected_hashes) / len(prompts),
         "raw_generation_records": raw_generation_count,
         "latest_unique_generation_records": len(latest_generations),
-        "successful_expected_unique_generations": len(expected_hashes - missing_hashes - failed_hashes),
+        "successful_complete_expected_unique_generations": len(
+            expected_hashes
+            - missing_hashes
+            - failed_hashes
+            - length_stopped_hashes
+        ),
         "missing_unique_generations": len(missing_hashes),
         "unexpected_unique_generations": len(unexpected_hashes),
         "failed_unique_generations": len(failed_hashes),
+        "length_stopped_unique_generations": len(length_stopped_hashes),
         "max_retained_evidence_chars": max(
             (int(record["retained_evidence_chars"]) for record in prompts), default=0
         ),
         "max_prompt_tokens": max_prompt_tokens,
+        "max_output_tokens": max_output_tokens,
+        "actual_unique_call_prompt_tokens": sum(prompt_tokens),
+        "actual_unique_call_output_tokens": sum(output_tokens),
+        "hypothetical_method_question_prompt_tokens": hypothetical_prompt_tokens,
+        "hypothetical_method_question_output_tokens": hypothetical_output_tokens,
+        "prompt_tokens_avoided_by_deduplication": (
+            hypothetical_prompt_tokens - sum(prompt_tokens)
+        ),
+        "output_tokens_avoided_by_deduplication": (
+            hypothetical_output_tokens - sum(output_tokens)
+        ),
         "num_ctx": args.num_ctx,
         "errors": errors,
     }
@@ -217,6 +266,8 @@ def main() -> None:
         Path("src/run_deduplicated_ollama_generation.py"),
         Path("src/evaluate_test_generation.py"),
         Path("src/audit_test_generation.py"),
+        Path("src/common.py"),
+        Path("requirements.txt"),
         Path("docs/SUPPLEMENTARY_EXPERIMENT_PROTOCOL.md"),
     ]
     manifest_rows = []
@@ -229,7 +280,11 @@ def main() -> None:
         )
     sha_path = output_dir / f"{args.prefix}_sha256_manifest.csv"
     with sha_path.open("w", encoding="utf-8", newline="") as handle:
-        writer = csv.DictWriter(handle, fieldnames=["path", "bytes", "sha256"])
+        writer = csv.DictWriter(
+            handle,
+            fieldnames=["path", "bytes", "sha256"],
+            lineterminator="\n",
+        )
         writer.writeheader()
         writer.writerows(manifest_rows)
 
@@ -243,6 +298,10 @@ def main() -> None:
         f"unique prompts: {len(expected_hashes)}"
     )
     print(f"Maximum prompt tokens: {max_prompt_tokens}/{args.num_ctx}")
+    print(
+        f"Maximum output tokens: {max_output_tokens}; "
+        f"length stops: {len(length_stopped_hashes)}"
+    )
     print(f"Saved audit to {audit_path}")
     print(f"Saved SHA-256 manifest to {sha_path}")
     if errors:

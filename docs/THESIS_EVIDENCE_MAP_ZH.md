@@ -4,7 +4,8 @@
 
 > **2026-08-27 更新：** 本文件原有第 1–13 节记录 Validation50 开发归档，
 > 不能再称为独立“正式验证”。论文检索主结果必须优先使用下方 test416 映射；
-> Validation50 仅用于开发过程、prompt 试验和补充诊断。
+> 下游主证据使用冻结的 test generation sample；Validation50 仅用于开发过程、
+> prompt 试验和补充诊断。
 
 ## 0. 官方 test416 主结果映射
 
@@ -42,6 +43,29 @@
 预算匹配对照已经完成；其置信区间跨零，因而最后一句目前没有数据支持。该分析在
 主 test 结果已知后固定，应标为 supplementary mechanism analysis，而非预注册的
 主假设检验。完整解释见 `docs/SUPPLEMENTARY_RETRIEVAL_RESULTS.md`。
+
+### 0.1 冻结 test generation sample 映射
+
+| 可写主张 | 数值或边界 | 正式证据 |
+| --- | --- | --- |
+| 样本与调用 | 53 papers / 201 questions / 804 method rows / 608 unique prompts | `outputs/supplementary/generation/test_generation_integrity_audit.json` |
+| ControllerV3 Answer F1 | 0.3280；95% CI [0.2756, 0.3850] | `outputs/supplementary/generation/test_generation_answer_bootstrap_method_cis.csv` |
+| BM25 top-7 Answer F1 | 0.3278；95% CI [0.2710, 0.3875] | 同上 |
+| Controller − top-7 F1 | +0.0002；95% paired CI [−0.0313, +0.0312] | `outputs/supplementary/generation/test_generation_answer_bootstrap_paired.csv` |
+| Controller − top-8 F1 | −0.0188；95% paired CI [−0.0502, +0.0134] | 同上 |
+| Controller − no-section F1 | +0.0143；95% paired CI [−0.0083, +0.0385] | 同上 |
+| Controller − no-section actual prompt tokens | +128.58；95% paired CI [+94.02, +165.62] | 同上 |
+| 完整性 | 608/608 complete；0 failure；0 length stop；max prompt 3,796/8,192 | `outputs/supplementary/generation/test_generation_integrity_audit.json` |
+
+允许写：
+
+> 在冻结的 201-question paper-cluster sample 和固定 Qwen2.5-3B 生成设置下，
+> ControllerV3 与 BM25 top-7 的 Answer F1 点估计几乎相同，paired interval 未显示
+> 清晰差异。
+
+不能把区间跨零写成统计等价，也不能称为全 1,451 问的生成评估。由于 test split
+已先用于检索主实验，该生成结果必须称为 frozen supplementary test sample，而非
+新获得的 untouched evaluation。完整解释见 `docs/TEST_GENERATION_RESULTS.md`。
 
 ## 1. 数据规模主张
 
@@ -248,6 +272,11 @@ top-20 的召回最好，只是成本高。
 
 | 论文内容 | 建议来源 |
 | --- | --- |
+| 终期检索主表 | `outputs/test416/test416_method_comparison_threshold05.csv` |
+| 终期 paired 检索差值 | `outputs/test416/test416_bootstrap_paired_differences.csv` |
+| 终期生成主表 | `outputs/supplementary/generation/test_generation_answer_summary.csv` |
+| 终期 paired 生成差值 | `outputs/supplementary/generation/test_generation_answer_bootstrap_paired.csv` |
+| 终期结果图 | `outputs/figures/*.pdf` 与 `figure_manifest.json` |
 | 检索主表 | `outputs/validation50_method_comparison_threshold05.csv` |
 | 消融表 | 同上两行 Controller |
 | 生成主表 | `outputs/ollama_answer_summary_validation50.csv` |

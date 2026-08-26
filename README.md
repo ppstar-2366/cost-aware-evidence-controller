@@ -19,6 +19,13 @@ src/
   build_generation_prompts.py  # convert retrieval outputs into LLM prompts
   run_ollama_generation.py     # local Ollama answer generation
   evaluate_generated_answers.py# answer F1 / exact match evaluation
+  run_supplementary_retrieval.py# frozen budget-matched retrieval controls
+  analyze_controller_behavior.py# variable-budget and action diagnostics
+  build_test_generation_sample.py# freeze paper-cluster sample and prompts
+  run_deduplicated_ollama_generation.py # one call per unique prompt
+  evaluate_test_generation.py # held-out answer metrics and paper bootstrap
+  audit_test_generation.py    # alignment, completion, token, and hash audit
+  make_thesis_figures.py      # PDF/PNG result figures with provenance
   check_processed_data.py      # quick processed-data inspection
   audit_experiments.py         # verify all artifacts and refresh the archive
 
@@ -38,6 +45,8 @@ outputs/
   ollama_answer_scores_validation50.csv
   ollama_answer_summary_validation50.csv
   test416/                       # frozen held-out retrieval and bootstrap artifacts
+  supplementary/                # frozen follow-up summaries and generation audits
+  figures/                      # thesis-ready vector PDF and 400 dpi PNG figures
 
 docs/
   README.md                     # Chinese archive index and migration notes
@@ -52,6 +61,9 @@ docs/
   EXPERIMENT_GAP_AUDIT_ZH.md    # prioritized supplementary experiment plan
   SUPPLEMENTARY_EXPERIMENT_PROTOCOL.md # frozen follow-up experiment design
   SUPPLEMENTARY_RETRIEVAL_RESULTS.md # budget-matched and behaviour results
+  GENERATION_SMOKE_GATE.md      # 20-question completion and integrity gate
+  TEST_GENERATION_RESULTS.md    # frozen sampled held-out generation results
+  THESIS_FIGURE_GUIDE.md        # captions, interpretation limits, accessibility
   experiment_audit.json         # machine-readable recomputed audit
   experiment_results_overview.csv
   file_manifest_sha256.csv
@@ -139,13 +151,20 @@ Completed:
 - Test results include cost-matched BM25 top-7/top-8 baselines, the no-section
   ablation, 5,000-replicate paper-level paired bootstrap intervals, and a
   passing alignment/hash audit.
+- A frozen supplementary test generation sample covers 53 complete papers and
+  201 questions. All 608 unique prompt calls completed, with prompt-hash reuse,
+  actual token accounting, paper-level bootstrap, and passing integrity audit.
+- Four thesis-ready result figures are exported as vector PDF and 400 dpi PNG
+  with data/output hashes and alt text.
 
-Still recommended before final thesis submission:
+Thesis-use guidance:
 
 - Use the held-out table and paired intervals from
   `docs/TEST416_RESULTS.md` as the primary retrieval evidence.
-- Keep Validation50 and local generation results clearly labelled as
-  development/downstream analyses rather than independent test results.
+- Use `docs/TEST_GENERATION_RESULTS.md` for downstream results, keeping its
+  frozen supplementary-sample boundary explicit.
+- Keep the older Validation50 retrieval and generation results labelled as
+  development/archive evidence.
 - Do not revise ControllerV3 from test error analysis and then report the same
   test set as an untouched evaluation.
 
@@ -171,6 +190,25 @@ no clear paired difference, not superiority or formal statistical equivalence.
 The section-aware expansion improves recall by +0.0220 (+0.0129 to +0.0310)
 and hit rate by +0.0148 (+0.0046 to +0.0255), while adding about 104 estimated
 tokens per question.
+
+Frozen downstream answer generation on 53 complete test-paper clusters (201
+questions), using `qwen2.5:3b`:
+
+| Method | Answer F1 | 95% paper-bootstrap CI | EM | Actual prompt tokens |
+| --- | ---: | ---: | ---: | ---: |
+| BM25_top7 | 0.3278 | [0.2710, 0.3875] | 0.2040 | 1,992.46 |
+| BM25_top8 | 0.3468 | [0.2915, 0.4053] | 0.2040 | 2,269.81 |
+| ControllerV3 | 0.3280 | [0.2756, 0.3850] | 0.2090 | 2,050.92 |
+| ControllerV3_no_section | 0.3137 | [0.2632, 0.3664] | 0.1891 | 1,922.34 |
+
+ControllerV3 minus BM25 top-7 has an Answer F1 difference of +0.0002 (95%
+paired CI −0.0313 to +0.0312). The point estimates are almost identical, but
+the interval does not establish formal equivalence. ControllerV3 minus top-8
+is −0.0188 (−0.0502 to +0.0134) while using about 219 fewer prompt tokens.
+Section expansion adds about 129 actual prompt tokens relative to no-section;
+its F1 difference of +0.0143 (−0.0083 to +0.0385) remains uncertain. See
+[`docs/TEST_GENERATION_RESULTS.md`](docs/TEST_GENERATION_RESULTS.md) for the
+protocol, type diagnostics, deduplication savings, and interpretation limits.
 
 The earlier Validation50 results below are development results, because its
 questions and error analysis informed ControllerV3.
@@ -200,7 +238,9 @@ Full local Ollama answer generation using `qwen2.5:3b`, 156 questions per method
 | BM25_top20 | 0.2577 | 0.1218 | 156/156 |
 | ControllerV3 | 0.2577 | 0.1218 | 156/156 |
 
-The answer-generation results show that the lower-cost ControllerV3 evidence set can support downstream local answer generation at a level comparable to fixed top-k baselines. Because the generator is a lightweight local 3B model, the thesis should emphasize retrieval quality, cost, ablation, and error analysis, while using answer F1 / EM as downstream validation.
+These older Validation50 generation results are retained only as development
+history; the frozen test-sample table above supersedes them for the final
+downstream discussion.
 
 Note: the wall-clock time fields in the generation CSV are diagnostic only. The full generation run was completed through interrupted/resumed sessions, so thesis tables should cite Answer F1, EM, success rate, and token statistics rather than wall-clock time.
 
@@ -219,9 +259,9 @@ A strong thesis structure can be:
    - answer F1 / EM measures downstream QA utility.
 5. Analysis: error categories show when the controller fails and what future improvements are needed.
 
-The budget-matched section controls and controller-behaviour analysis are now
-complete. They do not establish an aggregate retrieval-quality advantage for
-section-aware targeting over generic additions at the same question-specific
-budget. The next experiment is the frozen, prompt-audited held-out generation
-sample specified in
-[`docs/SUPPLEMENTARY_EXPERIMENT_PROTOCOL.md`](docs/SUPPLEMENTARY_EXPERIMENT_PROTOCOL.md).
+The budget-matched controls, controller-behaviour analysis, and frozen
+prompt-audited generation sample are complete. The results do not establish an
+aggregate retrieval-quality advantage for section-aware targeting over generic
+additions at the same question-specific budget, nor a clear sampled Answer F1
+difference between ControllerV3 and BM25 top-7. The auditable interpretation is
+recorded in [`docs/THESIS_EVIDENCE_MAP_ZH.md`](docs/THESIS_EVIDENCE_MAP_ZH.md).

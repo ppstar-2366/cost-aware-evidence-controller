@@ -1,0 +1,17 @@
+method,best_reference_type,questions,answer_f1,exact_match
+BM25_top7,extractive,90,0.313236,0.111111
+BM25_top7,abstractive,59,0.130335,0.016949
+BM25_top7,boolean,30,0.4,0.4
+BM25_top7,none,22,0.818182,0.818182
+BM25_top8,extractive,91,0.365497,0.131868
+BM25_top8,abstractive,58,0.145493,0.017241
+BM25_top8,boolean,30,0.366667,0.366667
+BM25_top8,none,22,0.772727,0.772727
+ControllerV3,extractive,92,0.314911,0.119565
+ControllerV3,abstractive,58,0.119971,0.017241
+ControllerV3,boolean,28,0.392857,0.392857
+ControllerV3,none,23,0.826087,0.826087
+ControllerV3_no_section,extractive,91,0.294679,0.087912
+ControllerV3_no_section,abstractive,58,0.124777,0.017241
+ControllerV3_no_section,boolean,29,0.344828,0.344828
+ControllerV3_no_section,none,23,0.826087,0.826087

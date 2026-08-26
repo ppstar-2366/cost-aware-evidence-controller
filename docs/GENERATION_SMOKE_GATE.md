@@ -47,7 +47,9 @@ output file. The original 128-token runner audit is retained as provenance.
 The smoke sample therefore passed the schema, deduplication, parsing, token,
 completion, and alignment checks. The frozen 201-question sample was released
 for execution with `temperature=0`, `seed=42`, `num_ctx=8192`, and
-`num_predict=256`.
+`num_predict=256`. The runner and independent integrity audit both now treat a
+`done_reason=length` record as a failed completion rather than a successful
+API call.
 
 ## Reproduction
 

@@ -345,3 +345,33 @@ Invoke-RestMethod http://127.0.0.1:11434/api/tags
 ### 能否用 wall-time 写速度对比
 
 不能。BM25_top5 跨越中断和恢复，平均 wall-time 被严重污染；其余方法也没有统一冷启动、缓存和系统负载条件。
+
+## 9. 当前 macOS / VS Code 冻结 test 流程
+
+第 1–8 节保留早期 Windows Validation50 复现史。当前终期实验已经在 macOS 项目
+目录的 `.venv` 中配置好，并在 `.vscode/tasks.json` 提供可从 VS Code 的
+“Tasks: Run Task”直接执行的任务。正式生成任务显式固定
+`qwen2.5:3b`、`num_ctx=8192`、`num_predict=256`、`temperature=0`、`seed=42`。
+
+命令行等价流程如下：
+
+```bash
+.venv/bin/python src/run_supplementary_retrieval.py
+.venv/bin/python src/bootstrap_supplementary.py
+.venv/bin/python src/analyze_controller_behavior.py
+.venv/bin/python src/audit_supplementary.py
+
+.venv/bin/python src/build_test_generation_sample.py
+.venv/bin/python src/run_deduplicated_ollama_generation.py \
+  --model qwen2.5:3b --num-ctx 8192 --num-predict 256 \
+  --temperature 0 --seed 42
+.venv/bin/python src/evaluate_test_generation.py
+.venv/bin/python src/audit_test_generation.py
+.venv/bin/python src/make_thesis_figures.py --overwrite
+```
+
+生成 JSONL 支持按 prompt hash 断点续跑；但不得把不同模型、prompt 或 decoding
+设置追加到同一文件。最终验收要求：201 个对齐问题、804 个方法—问题记录、608
+个 unique prompts、0 missing、0 API error、0 `done_reason=length`，且最大实际
+prompt token 小于 8,192。正式数值和可辩护解释见
+`docs/TEST_GENERATION_RESULTS.md`，图表说明见 `docs/THESIS_FIGURE_GUIDE.md`。
