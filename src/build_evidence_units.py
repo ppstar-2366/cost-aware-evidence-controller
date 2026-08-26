@@ -7,6 +7,9 @@ import re
 from tqdm import tqdm
 
 
+DEFAULT_DATASET_REVISION = "13b496d2a5359329b110e3419628de3cf791843b"
+
+
 def normalise_text(value: Any) -> str:
     """
     Convert QASPER fields into clean text.
@@ -289,10 +292,29 @@ def process_split(dataset, split_name: str, max_papers: int = None, output_path:
 
 def parse_args():
     parser = argparse.ArgumentParser(description="Build structured evidence units from QASPER.")
+    parser.add_argument(
+        "--splits",
+        nargs="+",
+        choices=["train", "validation", "test"],
+        default=["train", "validation"],
+        help="Dataset splits to process. Test is opt-in to protect held-out evaluation.",
+    )
     parser.add_argument("--train-papers", type=int, default=100)
     parser.add_argument("--validation-papers", type=int, default=50)
+    parser.add_argument(
+        "--test-papers",
+        type=int,
+        default=None,
+        help="Optional limit for test papers. Omit to process the full test split.",
+    )
     parser.add_argument("--train-output", default="data/processed/qasper_train_100.jsonl")
     parser.add_argument("--validation-output", default="data/processed/qasper_validation_50.jsonl")
+    parser.add_argument("--test-output", default="data/processed/qasper_test_416.jsonl")
+    parser.add_argument(
+        "--dataset-revision",
+        default=DEFAULT_DATASET_REVISION,
+        help="Pinned Hugging Face dataset revision for reproducibility.",
+    )
     return parser.parse_args()
 
 
@@ -300,22 +322,27 @@ def main():
     args = parse_args()
 
     print("Loading QASPER...")
-    dataset = load_dataset("allenai/qasper", trust_remote_code=True)
+    dataset = load_dataset(
+        "allenai/qasper",
+        revision=args.dataset_revision,
+    )
 
     Path("data/processed").mkdir(parents=True, exist_ok=True)
 
-    process_split(
-        dataset,
-        "train",
-        max_papers=args.train_papers,
-        output_path=args.train_output,
-    )
-    process_split(
-        dataset,
-        "validation",
-        max_papers=args.validation_papers,
-        output_path=args.validation_output,
-    )
+    split_settings = {
+        "train": (args.train_papers, args.train_output),
+        "validation": (args.validation_papers, args.validation_output),
+        "test": (args.test_papers, args.test_output),
+    }
+
+    for split_name in args.splits:
+        max_papers, output_path = split_settings[split_name]
+        process_split(
+            dataset,
+            split_name,
+            max_papers=max_papers,
+            output_path=output_path,
+        )
 
 
 if __name__ == "__main__":

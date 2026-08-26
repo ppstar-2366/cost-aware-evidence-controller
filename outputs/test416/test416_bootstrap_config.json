@@ -1,0 +1,48 @@
+{
+  "run_name": "test416",
+  "method_files": {
+    "BM25_top1": "outputs/test416/test416_bm25_top1.jsonl",
+    "BM25_top10": "outputs/test416/test416_bm25_top10.jsonl",
+    "BM25_top20": "outputs/test416/test416_bm25_top20.jsonl",
+    "BM25_top3": "outputs/test416/test416_bm25_top3.jsonl",
+    "BM25_top5": "outputs/test416/test416_bm25_top5.jsonl",
+    "BM25_top7": "outputs/test416/test416_bm25_top7.jsonl",
+    "BM25_top8": "outputs/test416/test416_bm25_top8.jsonl",
+    "ControllerV3": "outputs/test416/test416_controller_v3.jsonl",
+    "ControllerV3_no_section": "outputs/test416/test416_controller_v3_no_section.jsonl"
+  },
+  "paper_count": 416,
+  "question_count": 1451,
+  "thresholds": [
+    0.3,
+    0.5,
+    0.7
+  ],
+  "comparisons": [
+    [
+      "ControllerV3",
+      "BM25_top5"
+    ],
+    [
+      "ControllerV3",
+      "BM25_top7"
+    ],
+    [
+      "ControllerV3",
+      "BM25_top8"
+    ],
+    [
+      "ControllerV3",
+      "BM25_top10"
+    ],
+    [
+      "ControllerV3",
+      "ControllerV3_no_section"
+    ]
+  ],
+  "replicates": 5000,
+  "seed": 42,
+  "confidence_level": 0.95,
+  "ci_method": "percentile paired cluster bootstrap",
+  "resampling_unit": "paper"
+}

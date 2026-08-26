@@ -23,11 +23,19 @@ __pycache__/
 credentials.json
 
 # Editor and operating-system files
-.vscode/
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
 .idea/
 .DS_Store
 Thumbs.db
 Desktop.ini
+
+# Rebuildable held-out data and large per-question test artifacts
+data/processed/qasper_test_416.jsonl
+outputs/test416/*.jsonl
+outputs/supplementary/*.jsonl
+outputs/supplementary/generation/*.jsonl
 
 # Temporary runtime files
 *.log
