@@ -1,0 +1,5 @@
+decision_path,questions,questions_with_gold,evidence_recall,question_hit_rate,average_best_overlap,avg_retrieved_units,avg_estimated_tokens,median_estimated_tokens
+definition,139,133,0.590786,0.789474,0.655961,4.870504,1146.553237,1175.2
+result_or_data,643,600,0.791796,0.921667,0.790535,9.895801,1897.375272,1865.5
+method_or_complex,427,390,0.699164,0.848718,0.729585,7.044496,1665.202576,1678.3
+default,242,229,0.596125,0.820961,0.64994,5.016529,1180.405372,1207.7

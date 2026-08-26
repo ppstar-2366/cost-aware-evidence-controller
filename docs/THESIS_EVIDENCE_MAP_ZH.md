@@ -2,19 +2,60 @@
 
 本文件用于解决论文写作中最常见的问题：某句话应该引用哪个实验文件、可以说到什么程度、不能说什么。每项主张都应能追溯到逐问题数据或正式汇总。
 
+> **2026-08-27 更新：** 本文件原有第 1–13 节记录 Validation50 开发归档，
+> 不能再称为独立“正式验证”。论文检索主结果必须优先使用下方 test416 映射；
+> Validation50 仅用于开发过程、prompt 试验和补充诊断。
+
+## 0. 官方 test416 主结果映射
+
+| 可写主张 | 数值或边界 | 正式证据 |
+| --- | --- | --- |
+| 完整官方 test split | 416 papers / 1,451 questions / 1,352 questions with gold evidence | `outputs/test416/test416_audit.json` |
+| ControllerV3 主结果 | Recall 0.7099；Hit 0.8706；1,638 estimated tokens | `outputs/test416/test416_method_comparison_threshold05.csv` |
+| 成本匹配 top-7 | Recall 0.7059；Hit 0.8624；1,629 estimated tokens | 同上 |
+| Controller − top-7 Recall | +0.0040，95% paired CI [-0.0118, +0.0184] | `outputs/test416/test416_bootstrap_paired_differences.csv` |
+| Controller − top-7 Hit | +0.0081，95% paired CI [-0.0044, +0.0210] | 同上 |
+| 完整 − 无章节 Recall | +0.0220，95% paired CI [+0.0129, +0.0310] | 同上 |
+| 完整 − 无章节 Hit | +0.0148，95% paired CI [+0.0046, +0.0255] | 同上 |
+| 完整 − 无章节成本 | +104.0 estimated tokens，95% paired CI [+91.1, +117.1] | 同上 |
+| 完整 − 同单元数通用扩展 Recall | +0.0027，95% paired CI [-0.0060, +0.0110] | `outputs/supplementary/test416_supplementary_bootstrap_paired_differences.csv` |
+| 完整 − 同单元数通用扩展 Hit | +0.0067，95% paired CI [-0.0015, +0.0153] | 同上 |
+| 完整 − 近似同 token 通用扩展 Recall | +0.0035，95% paired CI [-0.0051, +0.0118] | 同上 |
+
+允许写：
+
+> 在完整 QASPER test split 上，ControllerV3 与成本匹配的 BM25 top-7
+> 具有接近的平均检索质量和估算成本；paired bootstrap 区间未显示清晰差异。
+
+> 章节扩展相对低成本 no-section 版本提高了覆盖指标，但预算匹配补充分析未显示
+> 章节定向相对通用 BM25 扩展具有清晰的独立检索收益。因此，原消融中的提升不能
+> 可靠归因于章节定向，而更可能主要来自增加证据预算。
+
+不能写：
+
+> ControllerV3 显著优于 BM25 top-7。
+
+> ControllerV3 与 top-7 已被统计证明等价。
+
+> 章节感知在相同预算下优于普通 BM25 扩展。
+
+预算匹配对照已经完成；其置信区间跨零，因而最后一句目前没有数据支持。该分析在
+主 test 结果已知后固定，应标为 supplementary mechanism analysis，而非预注册的
+主假设检验。完整解释见 `docs/SUPPLEMENTARY_RETRIEVAL_RESULTS.md`。
+
 ## 1. 数据规模主张
 
 | 可写主张 | 数值 | 原始证据 | 核验位置 |
 | --- | --- | --- | --- |
-| 正式验证包含 50 篇论文 | 50 | `data/processed/qasper_validation_50.jsonl` | `experiment_audit.json → datasets.validation_50.papers` |
-| 正式验证包含 156 个问题 | 156 | 同上 | `datasets.validation_50.questions` |
+| Validation50 开发分析包含 50 篇论文 | 50 | `data/processed/qasper_validation_50.jsonl` | `experiment_audit.json → datasets.validation_50.papers` |
+| Validation50 开发分析包含 156 个问题 | 156 | 同上 | `datasets.validation_50.questions` |
 | 有金证据的问题 | 151 | 同上 raw answers | `questions_with_gold_evidence` |
 | 金证据片段总数 | 395 | 同上 raw answers | `total_gold_evidence_spans` |
 | 验证证据单元总数 | 1,574 | 同上 | `evidence_units` |
 
 推荐措辞：
 
-> 正式评估使用 QASPER validation split 前 50 篇论文，共 156 个问题；其中 151 个问题具有标注证据，共包含 395 条去重金证据片段。
+> 开发分析使用 QASPER validation split 前 50 篇论文，共 156 个问题；其中 151 个问题具有标注证据，共包含 395 条去重金证据片段。
 
 不能写成“随机选取 50 篇”，因为代码使用前 50 篇。
 

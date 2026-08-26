@@ -4,13 +4,18 @@
 
 ## 建议阅读顺序
 
-1. [EXPERIMENT_ARCHIVE_ZH.md](EXPERIMENT_ARCHIVE_ZH.md)：完整工作记录、实验设计、全部结果、历史调试与结论边界。
-2. [REPRODUCTION_GUIDE_ZH.md](REPRODUCTION_GUIDE_ZH.md)：从环境检查到重新运行全部实验的命令级手册。
-3. [DATA_DICTIONARY_ZH.md](DATA_DICTIONARY_ZH.md)：每个源码、JSONL、CSV 文件及字段的含义。
-4. [THESIS_WRITING_MATERIAL_ZH.md](THESIS_WRITING_MATERIAL_ZH.md)：毕业论文实验章节可直接使用的结构、表格和讨论要点。
-5. [RESEARCH_REFLECTIONS_AND_CONCLUSIONS_ZH.md](RESEARCH_REFLECTIONS_AND_CONCLUSIONS_ZH.md)：实验感悟、研究结论、摘要结果句和未来工作。
+1. [TEST416_RESULTS.md](TEST416_RESULTS.md)：完整官方 test split 的冻结检索主结果与 paired bootstrap 解释。
+2. [TEST_EVALUATION_PROTOCOL.md](TEST_EVALUATION_PROTOCOL.md)：主 test 评估在观察结果前固定的协议与完成记录。
+3. [EXPERIMENT_GAP_AUDIT_ZH.md](EXPERIMENT_GAP_AUDIT_ZH.md)：提交前仍应补充的实验、优先级和不建议扩展的范围。
+4. [SUPPLEMENTARY_EXPERIMENT_PROTOCOL.md](SUPPLEMENTARY_EXPERIMENT_PROTOCOL.md)：新增检索、机制对照、行为分析和 test 生成在运行前冻结的方案。
+5. [SUPPLEMENTARY_RETRIEVAL_RESULTS.md](SUPPLEMENTARY_RETRIEVAL_RESULTS.md)：预算匹配机制对照、参考点和控制器行为分析结果。
 6. [THESIS_EVIDENCE_MAP_ZH.md](THESIS_EVIDENCE_MAP_ZH.md)：每项论文主张对应的数据、允许表述与禁止过度结论。
-7. [environment_snapshot.txt](environment_snapshot.txt)：完成最终实验时的软件、模型和硬件快照。
+7. [EXPERIMENT_ARCHIVE_ZH.md](EXPERIMENT_ARCHIVE_ZH.md)：Validation50 开发过程、历史调试和生成实验归档。
+8. [REPRODUCTION_GUIDE_ZH.md](REPRODUCTION_GUIDE_ZH.md)：从环境检查到重新运行全部实验的命令级手册。
+9. [DATA_DICTIONARY_ZH.md](DATA_DICTIONARY_ZH.md)：每个源码、JSONL、CSV 文件及字段的含义。
+10. [THESIS_WRITING_MATERIAL_ZH.md](THESIS_WRITING_MATERIAL_ZH.md)：毕业论文实验章节可直接使用的结构、表格和讨论要点。
+11. [RESEARCH_REFLECTIONS_AND_CONCLUSIONS_ZH.md](RESEARCH_REFLECTIONS_AND_CONCLUSIONS_ZH.md)：实验感悟、研究结论、摘要结果句和未来工作。
+12. [environment_snapshot.txt](environment_snapshot.txt)：早期本地生成实验的软件、模型和硬件快照。
 
 ## 机器可读档案
 
@@ -20,6 +25,12 @@
 
 ## 当前完成状态
 
+- 官方 QASPER test416 冻结检索：已完成，9 种方法各 1,451 条。
+- Paper-level paired bootstrap：已完成，5,000 次，seed=42。
+- Test 输出对齐与 SHA-256 审计：已通过。
+- 补充检索参考点和两个预算匹配对照：已完成，各 1,451 条。
+- ControllerV3 行为与问题级预算分布分析：已完成。
+- 补充实验完整性、预算匹配与 SHA-256 审计：已通过。
 - 数据预处理：已完成。
 - BM25 top-1/3/5/10/20：已完成，每种方法 156 条。
 - ControllerV3：已完成，156 条。
@@ -48,4 +59,8 @@
 
 如果新机器还没有 `.venv`，请先按 [REPRODUCTION_GUIDE_ZH.md](REPRODUCTION_GUIDE_ZH.md) 重建环境。审计脚本只读取现有实验数据并刷新档案，不会重新调用 Ollama，也不会覆盖原始检索或生成结果。
 
-档案核验日期：2026-08-20（Asia/Shanghai）。
+注意：上述 156-question Ollama 结果属于 Validation50 开发/下游验证，不是
+独立 test 生成结果。后续实验按 [EXPERIMENT_GAP_AUDIT_ZH.md](EXPERIMENT_GAP_AUDIT_ZH.md)
+执行。
+
+档案核验日期：2026-08-27（Asia/Shanghai）。

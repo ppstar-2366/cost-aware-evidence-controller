@@ -25,6 +25,7 @@ src/
 data/processed/
   qasper_train_100.jsonl
   qasper_validation_50.jsonl
+  qasper_test_416.jsonl
 
 outputs/
   validation50_bm25_top*.jsonl
@@ -36,6 +37,7 @@ outputs/
   ollama_generations_validation50.jsonl
   ollama_answer_scores_validation50.csv
   ollama_answer_summary_validation50.csv
+  test416/                       # frozen held-out retrieval and bootstrap artifacts
 
 docs/
   README.md                     # Chinese archive index and migration notes
@@ -45,6 +47,11 @@ docs/
   THESIS_WRITING_MATERIAL_ZH.md # thesis-ready structure and discussion points
   RESEARCH_REFLECTIONS_AND_CONCLUSIONS_ZH.md
   THESIS_EVIDENCE_MAP_ZH.md     # map thesis claims to auditable evidence
+  TEST_EVALUATION_PROTOCOL.md   # pre-specified held-out evaluation protocol
+  TEST416_RESULTS.md            # held-out results and defensible interpretation
+  EXPERIMENT_GAP_AUDIT_ZH.md    # prioritized supplementary experiment plan
+  SUPPLEMENTARY_EXPERIMENT_PROTOCOL.md # frozen follow-up experiment design
+  SUPPLEMENTARY_RETRIEVAL_RESULTS.md # budget-matched and behaviour results
   experiment_audit.json         # machine-readable recomputed audit
   experiment_results_overview.csv
   file_manifest_sha256.csv
@@ -54,9 +61,20 @@ docs/
 
 Use the project virtual environment when possible:
 
+```bash
+# macOS / Linux
+.venv/bin/python src/check_processed_data.py \
+  --input data/processed/qasper_test_416.jsonl
+```
+
 ```powershell
+# Windows
 .\.venv\Scripts\python.exe src\check_processed_data.py
 ```
+
+In VS Code, the repository includes workspace settings that select
+`.venv/bin/python` and tasks for building the test split, running retrieval,
+bootstrapping, and auditing the held-out artifacts.
 
 If the processed QASPER files need to be rebuilt:
 
@@ -116,13 +134,46 @@ Completed:
 - A ControllerV3 ablation without section-aware expansion has been added.
 - The generation prompt has been revised to use extractive short-answer behaviour, which is more suitable for a small local 3B model.
 - Full local answer generation has been completed for all 624 prompts using `qwen2.5:3b`.
+- The frozen ControllerV3 has been evaluated once on the full official QASPER
+  test split (416 papers and 1,451 questions).
+- Test results include cost-matched BM25 top-7/top-8 baselines, the no-section
+  ablation, 5,000-replicate paper-level paired bootstrap intervals, and a
+  passing alignment/hash audit.
 
 Still recommended before final thesis submission:
 
-- Discuss failure categories from `error_analysis_controller_v3_validation50.csv`.
-- Use the final retrieval, ablation, and answer-generation tables in the thesis.
+- Use the held-out table and paired intervals from
+  `docs/TEST416_RESULTS.md` as the primary retrieval evidence.
+- Keep Validation50 and local generation results clearly labelled as
+  development/downstream analyses rather than independent test results.
+- Do not revise ControllerV3 from test error analysis and then report the same
+  test set as an untouched evaluation.
 
 ## Current key results
+
+Frozen retrieval evaluation on the official QASPER test split at the primary
+evidence-overlap threshold 0.5:
+
+| Method | Evidence recall | Question hit rate | Avg. estimated tokens | Recall / 1k tokens |
+| --- | ---: | ---: | ---: | ---: |
+| BM25_top5 | 0.6149 | 0.8003 | 1171 | 0.5251 |
+| BM25_top7 | 0.7059 | 0.8624 | 1629 | 0.4333 |
+| BM25_top8 | 0.7442 | 0.8876 | 1864 | 0.3992 |
+| BM25_top10 | 0.8084 | 0.9127 | 2305 | 0.3507 |
+| ControllerV3 | 0.7099 | 0.8706 | 1638 | 0.4334 |
+| ControllerV3_no_section | 0.6879 | 0.8558 | 1534 | 0.4484 |
+
+At almost identical estimated cost, ControllerV3 minus BM25 top-7 has an
+Evidence Recall difference of +0.0040 (95% paired CI −0.0118 to +0.0184) and a
+Question Hit Rate difference of +0.0081 (−0.0044 to +0.0210). The defensible
+primary conclusion is closely matched aggregate point estimates and cost with
+no clear paired difference, not superiority or formal statistical equivalence.
+The section-aware expansion improves recall by +0.0220 (+0.0129 to +0.0310)
+and hit rate by +0.0148 (+0.0046 to +0.0255), while adding about 104 estimated
+tokens per question.
+
+The earlier Validation50 results below are development results, because its
+questions and error analysis informed ControllerV3.
 
 Retrieval evaluation on `qasper_validation_50` at evidence-overlap threshold 0.5:
 
@@ -159,10 +210,18 @@ A strong thesis structure can be:
 
 1. Problem: scientific QA requires evidence grounding, but fixed large top-k retrieval increases cost.
 2. Baseline: BM25 top-k retrieval provides a transparent lexical retrieval baseline.
-3. Proposed method: a cost-aware controller dynamically selects evidence actions by question type.
+3. Proposed method: a lightweight controller uses interpretable question-type
+   and section-aware rules to allocate a variable evidence budget.
 4. Evaluation:
    - evidence recall and hit rate measure retrieval quality;
    - average retrieved tokens measure cost;
    - recall per 1k tokens measures cost-effectiveness;
    - answer F1 / EM measures downstream QA utility.
 5. Analysis: error categories show when the controller fails and what future improvements are needed.
+
+The budget-matched section controls and controller-behaviour analysis are now
+complete. They do not establish an aggregate retrieval-quality advantage for
+section-aware targeting over generic additions at the same question-specific
+budget. The next experiment is the frozen, prompt-audited held-out generation
+sample specified in
+[`docs/SUPPLEMENTARY_EXPERIMENT_PROTOCOL.md`](docs/SUPPLEMENTARY_EXPERIMENT_PROTOCOL.md).

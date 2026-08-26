@@ -1,0 +1,5 @@
+method,threshold,total_questions_with_gold,question_hit_rate,evidence_recall,average_best_overlap,avg_retrieved_units,avg_evidence_words,avg_estimated_tokens,avg_chunks,avg_tables,avg_figures,avg_abstracts,avg_action_steps,recall_per_1k_tokens
+AbstractOnly,0.5,1352,0.2078,0.1063,0.3264,1.0,136.76,178,0.0,0.0,0.0,1.0,1.0,0.5972
+ReadAll,0.5,1352,1.0,0.9973,0.9642,29.43,3946.49,5130,21.47,4.11,2.82,1.0,1.0,0.1944
+GenericCountMatched,0.5,1352,0.8639,0.7072,0.7312,7.76,1265.48,1645,6.0,0.95,0.13,0.68,4.43,0.4299
+GenericTokenMatched,0.5,1352,0.8654,0.7064,0.7307,7.75,1258.85,1637,5.99,0.95,0.14,0.68,4.43,0.4315

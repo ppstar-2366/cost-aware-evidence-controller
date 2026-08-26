@@ -1,0 +1,13 @@
+first_method,second_method,contrast,threshold,metric,point_difference,ci_lower,ci_upper,papers,replicates,seed,resampling_unit
+ControllerV3,GenericCountMatched,ControllerV3 - GenericCountMatched,0.5,evidence_recall,0.002684,-0.006016,0.010984,416,5000,42,paper
+ControllerV3,GenericCountMatched,ControllerV3 - GenericCountMatched,0.5,question_hit_rate,0.006657,-0.001497,0.015326,416,5000,42,paper
+ControllerV3,GenericCountMatched,ControllerV3 - GenericCountMatched,0.5,average_best_overlap,0.003048,-0.00266,0.008572,416,5000,42,paper
+ControllerV3,GenericCountMatched,ControllerV3 - GenericCountMatched,0.5,avg_estimated_tokens,-7.569745,-13.228978,-1.638677,416,5000,42,paper
+ControllerV3,GenericCountMatched,ControllerV3 - GenericCountMatched,0.5,avg_retrieved_units,0.0,0.0,0.0,416,5000,42,paper
+ControllerV3,GenericCountMatched,ControllerV3 - GenericCountMatched,0.5,recall_per_1k_tokens,0.003626,-0.001866,0.008863,416,5000,42,paper
+ControllerV3,GenericTokenMatched,ControllerV3 - GenericTokenMatched,0.5,evidence_recall,0.003489,-0.005082,0.011751,416,5000,42,paper
+ControllerV3,GenericTokenMatched,ControllerV3 - GenericTokenMatched,0.5,question_hit_rate,0.005178,-0.003698,0.014085,416,5000,42,paper
+ControllerV3,GenericTokenMatched,ControllerV3 - GenericTokenMatched,0.5,average_best_overlap,0.003595,-0.001811,0.009086,416,5000,42,paper
+ControllerV3,GenericTokenMatched,ControllerV3 - GenericTokenMatched,0.5,avg_estimated_tokens,1.048243,-1.228629,3.269121,416,5000,42,paper
+ControllerV3,GenericTokenMatched,ControllerV3 - GenericTokenMatched,0.5,avg_retrieved_units,0.012405,-0.016054,0.039811,416,5000,42,paper
+ControllerV3,GenericTokenMatched,ControllerV3 - GenericTokenMatched,0.5,recall_per_1k_tokens,0.001854,-0.003422,0.006863,416,5000,42,paper

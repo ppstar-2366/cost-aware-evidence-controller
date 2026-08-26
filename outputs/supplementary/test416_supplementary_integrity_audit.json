@@ -1,0 +1,90 @@
+{
+  "status": "pass",
+  "run_name": "test416_supplementary",
+  "input": "data/processed/qasper_test_416.jsonl",
+  "input_sha256": "ec8e3166a18da3b4347e8f12252b9eecdaa271d2694986145d35e84a0ce8e792",
+  "papers": 416,
+  "questions": 1451,
+  "methods": {
+    "AbstractOnly": {
+      "path": "outputs/supplementary/test416_supplementary_abstract_only.jsonl",
+      "records": 1451,
+      "papers": 416,
+      "unique_keys": 1451,
+      "duplicate_keys": 0,
+      "missing_keys": 0,
+      "unexpected_keys": 0,
+      "sha256": "00b1b0d565d593821c3b8099c4fc398ea33da5cb1cc47605c42a8d2282d09565"
+    },
+    "ReadAll": {
+      "path": "outputs/supplementary/test416_supplementary_read_all.jsonl",
+      "records": 1451,
+      "papers": 416,
+      "unique_keys": 1451,
+      "duplicate_keys": 0,
+      "missing_keys": 0,
+      "unexpected_keys": 0,
+      "sha256": "7ea8361f52ba2a87e7d71ed1c364b1ab1e7cac6a914b1441801b64b1530c5f12"
+    },
+    "GenericCountMatched": {
+      "path": "outputs/supplementary/test416_supplementary_generic_count_matched.jsonl",
+      "records": 1451,
+      "papers": 416,
+      "unique_keys": 1451,
+      "duplicate_keys": 0,
+      "missing_keys": 0,
+      "unexpected_keys": 0,
+      "sha256": "16600f9dadbd6620865d2bf459a06d13690b91d329b2cd1eedd084ff0e1da215"
+    },
+    "GenericTokenMatched": {
+      "path": "outputs/supplementary/test416_supplementary_generic_token_matched.jsonl",
+      "records": 1451,
+      "papers": 416,
+      "unique_keys": 1451,
+      "duplicate_keys": 0,
+      "missing_keys": 0,
+      "unexpected_keys": 0,
+      "sha256": "03b44f3a54bb57c67d815965ed9e9606a0e3efcfea334b8bbe14552304c4edcf"
+    }
+  },
+  "budget_matching": {
+    "rows": 1451,
+    "count_max_abs_unit_difference": 0,
+    "token_exact_word_matches": 1051,
+    "token_mean_abs_word_difference": 14.307374224672639,
+    "token_max_abs_word_difference": 125
+  },
+  "controller_behavior": {
+    "paired_rows": 1451,
+    "decision_path_rows": 4,
+    "decision_path_question_total": 1451
+  },
+  "bootstrap": {
+    "method_files": {
+      "ControllerV3": "outputs/test416/test416_controller_v3.jsonl",
+      "ControllerV3_no_section": "outputs/test416/test416_controller_v3_no_section.jsonl",
+      "AbstractOnly": "outputs/supplementary/test416_supplementary_abstract_only.jsonl",
+      "ReadAll": "outputs/supplementary/test416_supplementary_read_all.jsonl",
+      "GenericCountMatched": "outputs/supplementary/test416_supplementary_generic_count_matched.jsonl",
+      "GenericTokenMatched": "outputs/supplementary/test416_supplementary_generic_token_matched.jsonl"
+    },
+    "comparisons": [
+      [
+        "ControllerV3",
+        "GenericCountMatched"
+      ],
+      [
+        "ControllerV3",
+        "GenericTokenMatched"
+      ]
+    ],
+    "threshold": 0.5,
+    "papers": 416,
+    "questions": 1451,
+    "replicates": 5000,
+    "seed": 42,
+    "resampling_unit": "paper",
+    "ci_method": "percentile paired cluster bootstrap"
+  },
+  "errors": []
+}
