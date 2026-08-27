@@ -1,0 +1,71 @@
+\chapter{Discussion}
+\label{chap:discussion}
+
+The experiments answer a more nuanced question than whether ControllerV3 ``wins''. Explicit rules do vary the reading budget, and the resulting evidence supports answers from a local model. At the same time, a fixed BM25 depth chosen at the same mean cost performs almost identically in aggregate. The value of the work lies in making that trade-off and its confounds visible.
+
+\section{What the controller achieves}
+
+ControllerV3 changes the amount and type of evidence read according to lexical properties of the question. Definitions receive a small context centred on introductory material; result and data questions receive the largest context and table opportunities; method and complex questions receive an intermediate global expansion. The 4-to-12-unit range and the paired budget distribution confirm that the controller is not merely fixed top-$k$ under another name.
+
+The action log is also operationally useful. A failed answer can be traced to the question category, action sequence, selected unit types, and section choices. This is a form of process transparency: it explains which explicit rule selected a unit. It should not be confused with a causal explanation of a learned model's internal state.
+
+The held-out evidence evaluation is a further achievement. The interim workflow risked overestimating performance because the validation subset informed rule design. Freezing the method and running the complete official test split converts the project from a prototype demonstration into a defensible empirical study. The close replication of validation-scale patterns on test also suggests that the pipeline itself is stable, even though the controller advantage is limited.
+
+\section{Why the cost-matched baseline matters}
+
+ControllerV3 clearly improves coverage relative to BM25 top-5, but it also reads substantially more. It clearly reduces cost relative to top-10, but it also covers less evidence. These are useful operating-point comparisons, not evidence of dominance. Top-7 removes much of this ambiguity because its average cost is within nine estimated tokens of the controller. At that point the recall, hit-rate, and efficiency differences are small and their paired intervals cross zero.
+
+This result shows why adaptive systems need a carefully tuned fixed baseline. A method can appear favourable when compared only with an arbitrary low-$k$ baseline or only with a high-cost baseline. The most informative comparator is the fixed policy lying closest on the same cost axis.
+
+Average matching is still incomplete. ControllerV3 spends less than top-7 on about one quarter of questions and more on nearly half. A better question-conditioned allocation could outperform at the same mean cost even if a poor allocation does not. The present result says that these particular rules have not demonstrated that benefit in aggregate. It leaves open whether learned complexity signals, semantic reranking, or evidence-sufficiency estimates can allocate the same budget more effectively.
+
+\section{Interpreting section-aware expansion}
+
+The full-versus-no-section ablation initially appears to validate section awareness: the full policy improves recall and hit rate with paired intervals above zero. Yet the full policy also adds about 104 estimated tokens. Once the no-section selection is expanded generically to the same number of units or tokens, the full controller's remaining advantage is small and unclear.
+
+The mechanism analysis changes the causal interpretation. It is reasonable to say that the complete policy improves coverage over its lower-budget ablation. It is not supported to say that section targeting itself improves aggregate retrieval at a fixed budget. The result may have several explanations. BM25's global ranking may already encode much of the same lexical signal as section filtering. Section-name heuristics may be too coarse. Benefits for a small subset of data or definition questions may be diluted by neutral or harmful selections elsewhere. Finally, QASPER's gold spans may not reward additional context that is semantically useful but lexically different.
+
+This negative result is constructive. It identifies a design criterion for future controllers: structural actions should compete with global candidates under a common budget, rather than being appended as extra evidence. A learned reranker could score global and section candidates together, or a controller could replace low-value global units instead of increasing the context.
+
+\section{Retrieval quality and answer quality}
+
+Evidence coverage is necessary but not sufficient for answer quality. The generation sample has wide paired intervals and shows no clear F1 difference among the controller and neighbouring fixed-depth methods. Several factors weaken the link between retrieval gains and answer metrics.
+
+First, QASPER answers include free-form, extractive, yes/no, and unanswerable cases. Token F1 can penalise a semantically correct paraphrase or an answer with the wrong level of detail. Second, the 3B generator may fail to exploit evidence even when it is retrieved. Third, additional prompt tokens may contain redundant or distracting content. Fourth, some method pairs produce identical prompts after deduplication, so their retrieval labels do not always correspond to different generator inputs.
+
+The correct role of the sampled generation study is therefore to test downstream viability. It shows that the controller's selected evidence can support answers with F1 close to top-7 under one local configuration. It does not show that its slight retrieval point-estimate gain transfers to generation.
+
+\section{From the interim proposal to the final system}
+
+The interim report proposed actions including SearchMore, SplitLongChunk, and a Stop decision based on the state of collected evidence and the remaining budget. It also considered an LLM-assisted controller and multiple model calls. These components were not implemented in the frozen final method. ControllerV3 uses precomputed BM25 rankings, question-type rules, section and caption expansion, and a terminal Stop after rule completion. Evidence selection makes zero model calls; answer generation makes one call per unique prompt.
+
+This scope reduction trades methodological ambition for feasibility and auditability. On the available CPU and memory, a multi-round LLM controller across the complete test split would be expensive. A deterministic policy made it possible to run held-out retrieval, extensive baselines, 5,000-replicate paper-level bootstrap analyses, and a reproducible sampled generation study. The cost is that the dissertation cannot answer whether evidence-conditioned stopping is effective. That question is retained as future work rather than claimed retrospectively.
+
+\section{Threats to validity}
+
+\subsection{Internal validity}
+
+Although the test evaluation follows a frozen protocol, the test split was later reused for supplementary mechanism analysis and for constructing the frozen generation sample. These later analyses are labelled accordingly. The word-based token proxy is deterministic but approximate. Retrieval code and audit manifests reduce implementation errors, yet the heuristic error categories have not been independently annotated.
+
+Local generation is not assumed to be byte-for-byte deterministic across all environments. The completed frozen run is internally consistent and all prompts and outputs are archived, but small score differences should not be attributed to retrieval unless the underlying prompts differ and the paired uncertainty supports the conclusion.
+
+\subsection{Construct validity}
+
+Evidence Recall uses lexical token-set overlap. It ignores token frequency and semantic equivalence and does not penalise irrelevant words within a selected unit. A threshold of 0.5 is a practical coverage rule, not a direct measurement of evidence sufficiency. Question Hit Rate further reduces a question to whether any one gold span is covered, even when several spans may be needed.
+
+Estimated tokens measure words multiplied by 1.3; they are not actual tokenizer counts, latency, energy, or monetary cost. The supplementary generation analysis reports actual prompt tokens but still does not measure energy directly. Recall per 1,000 tokens is a ratio whose interpretation depends on the desired minimum quality.
+
+Answer F1 and EM are strict lexical metrics. They do not assess factual faithfulness to the selected evidence, citation quality, or whether a longer answer is semantically acceptable. Human evaluation would strengthen the downstream claims.
+
+\subsection{External validity}
+
+The study uses QASPER, whose papers are primarily from NLP. Results may not transfer to mathematics, biomedicine, or disciplines with different document structure. Only English questions and papers are included. The retriever is lexical BM25, and the generator is one local 3B model. A dense or hybrid retriever may change both candidate quality and the value of section rules; a larger generator may use longer contexts differently.
+
+The task supplies the target paper. Open-domain academic research requires paper discovery, multi-document evidence aggregation, source reliability assessment, and citation generation, none of which is evaluated here.
+
+\section{Practical lessons}
+
+Three lessons generalise beyond the particular controller. First, cost is part of the method definition. A retrieval improvement is not meaningful without reporting how much additional context produced it. Second, an ablation that removes a module and reduces budget cannot isolate the module's mechanism; a matched-budget control is required. Third, the system should audit the context that reaches the generator, not only the units emitted by the retriever. Prompt construction can erase or amplify retrieval differences.
+
+The project also shows the value of recoverable experiments. Incremental JSONL output, unique keys, hashes, and integrity checks allow a long local run to resume without silently duplicating work. Such engineering is not separate from research quality: it determines whether reported tables can be traced back to individual predictions.
+

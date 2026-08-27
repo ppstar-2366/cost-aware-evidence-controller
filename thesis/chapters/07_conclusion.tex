@@ -1,0 +1,29 @@
+\chapter{Conclusion and Future Work}
+\label{chap:conclusion}
+
+This dissertation investigated question-aware evidence-budget allocation for scientific paper QA. It constructed typed evidence units from QASPER, used BM25 to rank candidates within each paper, and implemented a deterministic controller whose actions are inexpensive and auditable. The final evaluation separated development from held-out evidence and reported paired paper-level uncertainty on the complete official test split.
+
+The fixed-budget experiments answer \textbf{RQ1}: increasing BM25 depth steadily improves evidence coverage but produces diminishing recall per estimated token. Top-20 covers 0.9538 of annotated spans at 4,014 estimated tokens, while top-5 covers 0.6149 at 1,171. There is no universally best $k$ without a required quality level and cost preference.
+
+For \textbf{RQ2}, ControllerV3 occupies an interpretable variable-budget point between top-5 and top-10. It obtains 0.7099 Evidence Recall and 0.8706 Question Hit Rate at 1,638 estimated tokens. Its cost-matched top-7 baseline obtains 0.7059 and 0.8624 at 1,629 tokens. Paired intervals show no clear aggregate difference. The controller reallocates budget across questions, but the implemented allocation has not demonstrated an advantage over a well-chosen fixed depth.
+
+For \textbf{RQ3}, adding section expansion improves the full controller over a lower-budget ablation. Matched-budget controls remove the apparent aggregate advantage, indicating that the gain is largely due to reading more evidence rather than to section targeting itself. This finding narrows the claim and suggests that future structural actions should replace weaker candidates within a fixed budget.
+
+For \textbf{RQ4}, the frozen Qwen2.5-3B sample yields almost identical ControllerV3 and top-7 F1 point estimates, 0.3280 and 0.3278, with no clear paired difference. The evidence selected by the controller is therefore viable for downstream generation in this setting, but it does not improve sampled answer quality.
+
+For \textbf{RQ5}, the main limitations are the lexical retriever, heuristic categories, absence of evidence-conditioned stopping, proxy evidence metric, sampled single-model generation, and single-dataset scope. These boundaries are central to the conclusion rather than qualifications added after it.
+
+\section{Future work}
+
+The most direct extension is a ControllerV4 that implements the loop originally envisaged in the interim report. It would compute an evidence-sufficiency score from the question and current evidence, choose between Stop and SearchMore, and enforce explicit unit, token, and model-call limits. Development should occur only on train and validation data; the test split would remain untouched until the policy and thresholds are frozen.
+
+A second extension is stronger candidate ranking. Dense retrieval, hybrid BM25--embedding retrieval, or a lightweight cross-encoder could address paraphrases and selection failures that remain inside the top-20 pool~\cite{karpukhin2020dpr,reimers2019sbert,khattab2020colbert}. Structural candidates should be pooled with global candidates and reranked under the same token budget.
+
+Third, prompt construction should become part of the controller. Rather than selecting units and truncating later, the policy should use the generator's tokenizer, account for instructions and metadata, and decide which complete units fit. This would align reported retrieval cost with the input actually processed by the model.
+
+Fourth, future evaluation should include a larger frozen generation set, repeated generation where nondeterminism matters, and blinded human judgements of answer correctness, evidence sufficiency, and faithfulness. A semantic evidence metric could complement lexical overlap, but it should be validated against human decisions.
+
+Finally, evaluation on other document domains would test external validity. Clinical papers, computer-vision papers with visually informative figures, and multi-paper synthesis would stress different evidence types. In those settings, parsing table cells and figure content rather than captions alone may become necessary.
+
+The final contribution of this project is not a claim that rule-based adaptation supersedes fixed retrieval. It is a transparent account of what adaptation changed, what it cost, and which apparent gains survived fair controls. That evidence provides a sound basis for a genuinely evidence-conditioned controller in future work.
+

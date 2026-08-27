@@ -1,0 +1,63 @@
+\chapter{Background and Related Work}
+\label{chap:background}
+
+This chapter develops the argument for a decision layer between retrieval and answer generation. It begins with scientific document question answering, where evidence localisation is part of the task rather than an incidental implementation detail. It then reviews sparse and neural retrieval, retrieval-augmented generation, adaptive retrieval, long-context behaviour, and cost-aware routing. The final section states precisely how the present work differs from these lines of research.
+
+\section{Scientific document question answering}
+
+Question answering over scientific literature differs from generic factoid QA in both document structure and evidential burden. Answers may depend on a numerical comparison, an experimental setup, a definition, or a qualification stated far from the paper's abstract. A reliable system should find the supporting material and use it correctly, rather than produce a plausible answer solely from parametric knowledge.
+
+QASPER was designed around this information-seeking setting. Its 5,049 questions cover 1,585 NLP papers; question writers saw the title and abstract and asked for information expected to be found in the full text~\cite{dasigi2021qasper}. Answers were then collected with supporting-evidence annotations. The task therefore exposes two related but separable failures: the system may fail to retrieve the needed evidence, or it may fail to form the correct answer even when the evidence is present. This separation is central to the evaluation in this dissertation.
+
+Other scientific NLP datasets reinforce the value of evidence-level supervision. SciFact pairs scientific claims with abstracts, support or refute labels, and rationale spans~\cite{wadden2020scifact}. Evidence Inference asks systems to infer comparative clinical-trial outcomes and identify the text supporting the inference~\cite{deyoung2020evidence}. Their task definitions differ from QASPER, but each treats evidence identification as part of an accountable prediction rather than as an invisible preprocessing step.
+
+Scientific papers also contain structure worth preserving. S2ORC represents millions of papers with section boundaries and references to tables and figures~\cite{lo2020s2orc}. QASPER's parsed representation similarly makes it possible to distinguish abstracts, body sections, and captions. Flattening these elements into one undifferentiated sequence would discard signals that a reading policy can use, although exploiting structure is only beneficial if the additional selection budget is controlled.
+
+\section{Retrieval foundations}
+
+BM25 is a probabilistic lexical ranking model derived from the probabilistic relevance framework~\cite{robertson2009bm25}. Its score rewards query terms that occur in a document, discounts common terms, and normalises for document length. For query $q$ and evidence unit $u$, a standard form is
+\begin{equation}
+\operatorname{BM25}(q,u)=\sum_{t\in q}
+\operatorname{IDF}(t)
+\frac{f(t,u)(k_1+1)}{f(t,u)+k_1\left(1-b+b\frac{|u|}{\operatorname{avgdl}}\right)},
+\end{equation}
+where $f(t,u)$ is the term frequency, $|u|$ is unit length, and $k_1$ and $b$ control saturation and length normalisation. BM25 is attractive here because its ranking behaviour is inexpensive and reproducible. It also establishes a strong fixed-depth baseline: any benefit from the controller must arise from how ranked units are expanded and filtered, not from a hidden neural retriever.
+
+Lexical matching can miss paraphrases and conceptual relations. Dense Passage Retrieval learns dual encoders for questions and passages and ranks by vector similarity~\cite{karpukhin2020dpr}. Sentence-BERT provides sentence representations that can be compared efficiently~\cite{reimers2019sbert}, while ColBERT retains token-level late interaction between separately encoded queries and documents~\cite{khattab2020colbert}. These methods define credible alternatives for future work. They are not included in the final experiment because the project isolates evidence-budget control under limited hardware rather than comparing retriever capacity.
+
+\section{Retrieval-augmented generation}
+
+RAG combines a parametric sequence model with retrieved non-parametric information~\cite{lewis2020rag}. The architectural separation between retriever and generator is useful for scientific QA: evidence can be inspected before generation, and the same generator can be evaluated across alternative selection policies. Yet the common retrieve-then-generate abstraction leaves open how much evidence should be supplied.
+
+Fusion-in-Decoder (FiD) encodes retrieved passages separately and fuses their representations in the decoder~\cite{izacard2021fid}. Its results show that, in the evaluated open-domain QA setting, a generator can benefit from multiple retrieved passages. This does not imply that continually adding context is cost-free or uniformly beneficial. More passages increase computation and may exceed the point at which a particular downstream model can use the additional information. A fixed top-$k$ strategy therefore defines an operating point, not a universally appropriate policy.
+
+In the present project, the generator is intentionally downstream of a stored selection result. ControllerV3 itself makes no model call. This separation lets the retrieval study cover all 1,451 test questions cheaply, while the more expensive answer study uses a frozen paper-cluster sample. It also makes clear that evidence-selection cost, prompt construction, and generation cost must be reported separately.
+
+\section{Adaptive and iterative retrieval}
+
+Adaptive retrieval work challenges the assumption that one retrieval operation should precede every generation in exactly the same way. FLARE predicts upcoming content during long-form generation and retrieves when low-confidence tokens suggest that more information is needed~\cite{jiang2023flare}. IRCoT alternates retrieval with chain-of-thought steps, allowing information derived at one step to guide the next search~\cite{trivedi2023ircot}. Self-Ask decomposes a multi-hop question into explicit follow-up questions that can be answered through search~\cite{press2023selfask}. In each case, the information need can change as reasoning progresses.
+
+Self-RAG learns reflection tokens for decisions about retrieval, relevance, evidence support, and generation quality~\cite{asai2024selfrag}. Adaptive-RAG instead uses a smaller classifier to route queries among no-retrieval, single-step, and iterative strategies according to predicted complexity~\cite{jeong2024adaptiverag}. These systems use learned model behaviour to decide whether or how to retrieve. Their flexibility comes with training, inference, and reproducibility costs that are material in a low-resource project.
+
+ControllerV3 is related to adaptive routing but should not be placed in the same category as evidence-conditioned iterative retrieval. Its decision is conditioned on the question text and the paper's explicit structure. It does not revise the query in response to collected evidence, estimate uncertainty, or test whether the current evidence supports a provisional answer. The term \emph{variable budget} is therefore more precise than \emph{dynamic stopping} for the implemented method.
+
+\section{Long contexts and selective reading}
+
+Larger context windows make read-all strategies technically possible for more documents, but capacity does not guarantee uniform use. Liu \etal{} vary the position of relevant information in controlled multi-document QA and key--value retrieval tasks and report that performance often falls when evidence appears in the middle of a long context~\cite{liu2024lost}. The appropriate conclusion is bounded: the study demonstrates position-sensitive use in its evaluated models and tasks, not that long context is always harmful.
+
+For scientific papers, read-all also changes the economics of repeated questioning. A paper may be queried many times, and supplying its full text on every request incurs input computation whether or not the question needs it. Irrelevant sections can obscure which passages support the answer. A selective system may therefore remain useful even when the entire paper fits into a model's nominal context window.
+
+This dissertation includes AbstractOnly and ReadAll as reference points. They anchor the quality--cost frontier without being treated as realistic competitors at all budgets. AbstractOnly asks how far minimal reading can go; ReadAll asks how much annotated evidence becomes coverable when selection is almost removed.
+
+\section{Cost-aware routing and constrained tool use}
+
+Cost-aware language-model research often allocates computation across models rather than passages. FrugalGPT learns cascades that trade model-query cost against prediction quality~\cite{chen2024frugalgpt}. Adaptive Computation Time applies the broader principle of allocating different amounts of computation to different inputs~\cite{graves2016act}. These works motivate question-dependent budgets, although neither addresses typed evidence selection within a paper.
+
+Tool-use systems make the decision problem more general. ReAct interleaves language reasoning and external actions~\cite{yao2023react}; Toolformer trains a model to decide which API to call, when to call it, and how to integrate its result~\cite{schick2023toolformer}. ControllerV3 adopts a much smaller action space: read initial BM25 units, add global or section-filtered units, add table or figure captions, and stop. The constrained space limits flexibility but improves auditability. Each selected unit records the action responsible for it, which supports per-question diagnosis without interpreting hidden model states.
+
+\section{Research gap and positioning}
+
+Prior work establishes that scientific QA needs evidence, RAG can condition generation on retrieved text, adaptive systems can vary retrieval behaviour, and long inputs can be used unevenly. The remaining question addressed here is narrower: what can be learned from an explicit, low-cost policy that varies the amount and type of evidence read inside one structured scientific paper?
+
+The project's contribution is primarily empirical and methodological. It combines typed scientific-document units, a transparent variable-budget policy, held-out evidence evaluation, paired uncertainty estimates, and a matched-budget mechanism analysis. It does not claim that hand-written rules are superior to learned adaptive retrieval. Instead, it tests whether their behaviour adds value beyond choosing an appropriate fixed $k$, and it reports the negative and positive findings with the same level of scrutiny.
+

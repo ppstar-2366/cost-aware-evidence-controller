@@ -1,0 +1,69 @@
+\chapter{Experimental Methodology}
+\label{chap:methodology}
+
+The evaluation is organised around a primary held-out retrieval experiment and a supplementary sampled generation experiment. The separation reflects both scientific and computational constraints. Retrieval can be evaluated against evidence annotations for the complete test split without a language model. Generation is substantially more expensive and is therefore performed on a frozen, paper-clustered sample after the retrieval protocol has been fixed.
+
+\section{Dataset and split discipline}
+
+QASPER contains train, validation, and test splits over scientific papers~\cite{dasigi2021qasper}. During early development, the first 100 training papers were processed to test data structures, and the first 50 validation papers were used for preliminary metrics and error analysis. Because ControllerV3's rules were influenced by those validation questions and errors, the resulting validation_50 scores are development evidence rather than independent evaluation.
+
+Before the final experiment, the ControllerV3 implementation and parameters were frozen. The complete official test split was then processed and evaluated once without revising the method in response to test performance. It contains 416 papers and 1,451 questions. Of these questions, 1,352 have at least one annotated gold-evidence span and contribute to evidence coverage metrics. Questions without annotated evidence remain relevant to the supplementary answer evaluation but are excluded from evidence-recall denominators.
+
+The generation sample was constructed after the test retrieval experiment, so it is not described as a new untouched test set. A fixed seed selects 53 whole-paper clusters containing 201 questions. Sampling whole papers keeps all questions from a selected paper together and permits paper-level resampling. Four evidence methods produce 804 method--question records. Identical prompts are reused, leaving 608 unique model calls.
+
+\section{Compared methods}
+
+The primary retrieval comparison includes fixed BM25 top-$k$ for $k\in\{1,3,5,7,8,10,20\}$, ControllerV3, and ControllerV3 without section expansion. Top-7 is the principal cost-matched baseline because its average estimated evidence cost is closest to the controller's. Top-5 and top-10 show the surrounding lower- and higher-budget operating points; top-1 and top-20 reveal the wider frontier.
+
+Supplementary retrieval includes AbstractOnly, ReadAll, GenericCountMatched, and GenericTokenMatched. AbstractOnly supplies the paper abstract as a minimum structured context. ReadAll returns every retrievable evidence unit and acts as a high-cost coverage ceiling. The two generic matched-budget controls are defined in \Cref{chap:system}.
+
+The generation sample compares BM25 top-7, BM25 top-8, ControllerV3, and the no-section ablation. Top-8 is included because actual prompt tokenisation can make it a relevant neighbouring budget even when the word-based estimate identifies top-7 as the closest full-split baseline.
+
+\section{Evidence metrics}
+
+Let $T(x)$ be the set of normalised lexical tokens in text $x$. For annotated evidence span $g$ and retrieved unit $u$, coverage overlap is
+\begin{equation}
+    O(g,u)=\frac{|T(g)\cap T(u)|}{|T(g)|}.
+\end{equation}
+For each gold span, the evaluation keeps the largest overlap across selected units:
+\begin{equation}
+    O^*(g,S)=\max_{u\in S}O(g,u).
+\end{equation}
+A gold span is covered when $O^*\geq\tau$, with $\tau=0.5$ as the primary threshold. Sensitivity results at 0.3 and 0.7 are retained in the experiment archive.
+
+Evidence Recall is the proportion of all gold spans covered at the threshold. Question Hit Rate is the proportion of questions with annotated evidence for which at least one gold span is covered. Average Best Overlap is the mean of $O^*$ before thresholding. These measures are deliberately asymmetric: a retrieved unit may contain additional irrelevant words without being penalised as long as it covers the gold span. Cost metrics and matched-budget controls are therefore necessary companions.
+
+\section{Cost and answer metrics}
+
+The primary retrieval table reports average selected units, average evidence words, estimated tokens, and Recall per 1,000 estimated tokens:
+\begin{equation}
+    \operatorname{RecallPer1k}=\frac{\operatorname{EvidenceRecall}}{\widehat{T}}\times 1000.
+\end{equation}
+This ratio is descriptive rather than an optimisation objective. A very small context can attain a high ratio while failing to answer an unacceptable share of questions.
+
+Generated answers are normalised using the QASPER evaluation convention and scored with token F1 and Exact Match (EM). When multiple reference answers exist, a generated answer receives the maximum score across references. Scores are macro-averaged across questions. The audit also reports actual prompt and output tokens and accuracy on unanimously unanswerable questions.
+
+\section{Uncertainty estimation}
+
+Point estimates alone can encourage over-interpretation of small paired differences. Statistical procedures should reflect the dependence structure of the evaluated data~\cite{dror2018significance}. Questions from the same paper share document content and evidence units, so the final analysis uses paired cluster bootstrap resampling at the paper level.
+
+For each of 5,000 replicates with seed 42, papers are sampled with replacement and all of their questions are retained. The metric difference between two methods is recomputed on the same resampled papers. The 2.5th and 97.5th percentiles form a 95\% interval. A fully positive or negative interval is reported as a clear sampled difference. An interval crossing zero is reported as showing no clear difference; it is not treated as evidence of statistical equivalence.
+
+Generation intervals use the same paired paper-level design over the 53 sampled papers. They express uncertainty for the frozen sample only and do not license a claim about all 1,451 test questions.
+
+\section{Predefined and supplementary analyses}
+
+The full test retrieval protocol, baselines, thresholds, bootstrap configuration, and frozen code version were recorded before the final run. The no-section ablation is part of this primary analysis. The generic matched-budget controls were added after the main test pattern was observed to investigate mechanism. They are therefore labelled supplementary rather than preregistered hypothesis tests.
+
+Controller behaviour is summarised using action frequencies, decision-path counts, and per-question budget differences from BM25 top-7. Diagnostic error categories are produced by explicit heuristics over retrieval outcomes rather than by multiple human annotators. They help locate failure modes but are not presented as an independently validated taxonomy.
+
+\section{Environment and reproducibility}
+
+Retrieval and analysis run locally in Python. Generation uses Ollama 0.30.10 and Qwen2.5-3B on a machine with an Intel i5-10210U processor, approximately 7.8~GB of memory, and integrated Intel UHD graphics. The experiment does not use paid model APIs. Because local wall time is affected by model loading, interruptions, caching, and machine sleep, it is recorded for operations but not compared as a reliable efficiency metric.
+
+Reproducibility artefacts include protocol documents, environment snapshots, method-level CSV files, per-question JSONL records, bootstrap configurations, integrity audits, and SHA-256 manifests. The repository also includes scripts that rebuild thesis figures from the archived results.
+
+\section{Validity considerations built into the design}
+
+Several design choices reduce, but do not eliminate, validity threats. Freezing the controller before the official test run addresses the validation leakage in earlier development. Paper-level resampling respects within-paper dependence. Matched-budget controls separate content targeting from amount of evidence. Prompt-token audits expose differences hidden by a word-based proxy. Conversely, lexical overlap remains an imperfect proxy for semantic support, the generator study is sampled, and only one dataset, retriever family, and local model are evaluated. These limitations are interpreted in \Cref{chap:discussion} rather than concealed by aggregate scores.
+

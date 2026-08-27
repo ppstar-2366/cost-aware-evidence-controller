@@ -1,0 +1,19 @@
+\chapter*{Declarations}
+\addcontentsline{toc}{chapter}{Declarations}
+
+\section*{Use of generative artificial intelligence}
+
+I acknowledge the use of Codex, a GPT-5-based system provided by OpenAI (\url{https://openai.com/codex/}), to assist with planning the dissertation structure, drafting and editing prose, checking consistency between claims and experiment files, and producing LaTeX. I also used a local Qwen2.5-3B model through Ollama as the answer generator evaluated in the experiments; its outputs were treated as experimental data rather than as authored dissertation text. I reviewed and verified the technical claims, numerical results, citations, and final wording, and I take responsibility for the submitted work. This statement should be reviewed against the Department's current guidance before submission.
+
+\section*{Ethical considerations}
+
+The project uses the publicly released QASPER dataset and does not recruit participants, collect new personal data, or process private medical or financial information. Questions and paper text were processed locally. The evaluated local language model was instructed to answer only from supplied academic evidence. The main ethical risks are inaccurate generated answers and overstatement of empirical findings. These risks are mitigated by reporting evidence-level metrics, retaining per-question outputs, separating development from held-out evaluation, and restricting conclusions to the evaluated data and model configuration. No additional ethical approval was required for the completed scope.
+
+\section*{Sustainability}
+
+The project was designed for a low-resource computer and used lexical retrieval and a 3-billion-parameter local generator rather than repeated calls to substantially larger hosted models. Retrieval experiments were cached, generation prompts were deduplicated, and long-running generation supported resumption so that completed work was not repeated. These choices reduced unnecessary computation. The dissertation reports token counts and avoids using unreliable elapsed-time measurements as evidence of efficiency.
+
+\section*{Availability of data and materials}
+
+Source code, experiment protocols, processed summaries, audit files, and thesis figures are available in the project repository at \url{https://github.com/ppstar-2366/cost-aware-evidence-controller}. QASPER is distributed by its original authors and is not republished in full in this dissertation. Some large generated JSONL artefacts are retained locally rather than committed to the repository; hashes, manifests, summary tables, and reproduction instructions are provided so that the reported results can be checked and regenerated.
+

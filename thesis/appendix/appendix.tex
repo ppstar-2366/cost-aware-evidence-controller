@@ -1,0 +1,40 @@
+\chapter{Reproducibility and Supplementary Material}
+
+\section{Primary experiment configuration}
+
+The primary retrieval experiment uses the official QASPER test split at pinned dataset revision \code{13b496d2a5359329b110e3419628de3cf791843b}. ControllerV3 was frozen before evaluation. Evidence thresholds are 0.3, 0.5, and 0.7, with 0.5 designated primary. Paired percentile cluster bootstrap uses 5,000 replicates, paper as the resampling unit, and seed 42.
+
+The authoritative audit is \code{outputs/test416/test416\_audit.json}. Per-question predictions are stored under \code{outputs/test416/}; summary and paired files are \code{test416\_method\_comparison\_threshold05.csv} and \code{test416\_bootstrap\_paired\_differences.csv}. SHA-256 manifests permit file-integrity checks.
+
+\section{Generation configuration}
+
+The frozen generation sample contains 53 papers and 201 questions. Methods are BM25 top-7, BM25 top-8, ControllerV3, and ControllerV3 without section expansion. The model is Qwen2.5-3B served through Ollama 0.30.10. The context size is 8,192 tokens and the output cap is 256 tokens. All 608 unique prompts complete successfully; no prompt is truncated and no output terminates because of the length cap.
+
+The integrity audit is \code{outputs/supplementary/generation/test\_generation\_integrity\_audit.json}. The sample manifest, prompts, unique generations, scoring details, bootstrap files, and SHA-256 manifest are stored in the same directory.
+
+\section{Sensitivity analysis}
+
+The repository retains retrieval summaries for overlap thresholds 0.3, 0.5, and 0.7. The qualitative conclusion of the cost-matched ControllerV3--top-7 comparison is unchanged: no threshold provides a basis for claiming that ControllerV3 is generally superior. Threshold changes alter absolute coverage because they redefine how much of a gold span a retrieved unit must contain.
+
+\section{Action trace schema}
+
+Each ControllerV3 prediction records \code{question\_type}, an ordered \code{actions} list, and the final \code{retrieved\_units}. An action contains \code{action}, \code{added\_units}, and \code{reason}. Every selected unit contains \code{selected\_by}. These fields permit reconstruction of how the final context was assembled without rerunning the controller.
+
+\section{Files supporting dissertation claims}
+
+\begin{longtable}{@{}p{0.39\textwidth}p{0.55\textwidth}@{}}
+\toprule
+File & Purpose \\
+\midrule
+\endhead
+\code{docs/TEST416\_RESULTS.md} & primary held-out retrieval interpretation \\
+\code{docs/SUPPLEMENTARY\_RETRIEVAL\_RESULTS.md} & matched-budget mechanism analysis \\
+\code{docs/TEST\_GENERATION\_RESULTS.md} & frozen generation-sample results \\
+\code{docs/THESIS\_EVIDENCE\_MAP\_ZH.md} & allowable claims and evidence locations \\
+\code{docs/TEST\_EVALUATION\_PROTOCOL.md} & frozen retrieval protocol \\
+\code{docs/SUPPLEMENTARY\_EXPERIMENT\_PROTOCOL.md} & supplementary protocol and scope \\
+\code{docs/environment\_snapshot.txt} & software and hardware environment \\
+\code{outputs/figures/figure\_manifest.json} & figure sources and generation audit \\
+\bottomrule
+\end{longtable}
+

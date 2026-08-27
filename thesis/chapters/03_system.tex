@@ -1,0 +1,128 @@
+\chapter{System Design and Implementation}
+\label{chap:system}
+
+The system separates document preparation, lexical ranking, evidence-budget control, prompt construction, and answer generation. This design keeps the evidence selector inexpensive and permits retrieval results to be evaluated independently of generator behaviour. \Cref{fig:system-overview} summarises the data flow.
+
+\begin{figure}[tb]
+\centering
+\begin{tikzpicture}[
+    node distance=8mm and 9mm,
+    box/.style={draw,rounded corners,align=center,minimum height=9mm,minimum width=28mm,fill=blue!5},
+    decision/.style={draw,rounded corners,align=center,minimum height=11mm,minimum width=34mm,fill=orange!10},
+    arrow/.style={-{Latex[length=2mm]},thick}
+]
+\node[box] (paper) {QASPER\\paper};
+\node[box,right=of paper] (units) {typed evidence\\units};
+\node[box,right=of units] (bm25) {per-paper\\BM25 ranking};
+\node[decision,right=of bm25] (ctrl) {question-type rules\\and expansions};
+\node[box,below=of ctrl] (selected) {selected units\\and action log};
+\node[box,left=of selected] (prompt) {bounded prompt\\construction};
+\node[box,left=of prompt] (gen) {Qwen2.5-3B\\answer};
+\draw[arrow] (paper) -- (units);
+\draw[arrow] (units) -- (bm25);
+\draw[arrow] (bm25) -- (ctrl);
+\draw[arrow] (ctrl) -- (selected);
+\draw[arrow] (selected) -- (prompt);
+\draw[arrow] (prompt) -- (gen);
+\draw[arrow,dashed] (selected.east) -- ++(7mm,0) |- (ctrl.south) node[pos=0.2,right,align=left,font=\small] {no iterative\\feedback in V3};
+\end{tikzpicture}
+\caption{System overview. The dashed path indicates the evidence-conditioned feedback loop envisaged in the interim proposal but not implemented in ControllerV3.}
+\label{fig:system-overview}
+\end{figure}
+
+\section{Evidence-unit construction}
+
+Each QASPER record is converted into a paper object containing metadata, questions, raw answers, and a list of evidence units. An evidence unit contains a paper identifier, unit identifier, type, section name, text, document position, source identifier, and word count.
+
+Five unit types are created. A title unit and an abstract unit preserve front matter. Full-text paragraphs belonging to the same section are normalised and concatenated before being split into chunks of at most 250 whitespace-separated words with a 40-word overlap. Captions are classified as \code{table}, \code{figure\_caption}, or a fallback \code{figure\_table} type using their leading text. The title is retained in the paper record but excluded from retrieval; the retrievable set consists of abstracts, chunks, tables, figure captions, and fallback caption units.
+
+The overlap reduces the probability that an evidential statement is broken exactly at a chunk boundary. It also duplicates some words and therefore slightly inflates a read-all cost. This is an accepted trade-off in the current implementation. The pipeline does not recover cell-level table structure or figure pixels: only captions are available as typed evidence. Consequently, a question whose answer appears solely inside a table cell or diagram may remain unreachable.
+
+\section{Per-paper BM25 ranking}
+
+The system builds a BM25 index independently for each paper. This reflects the task definition: the relevant paper is already known, so the selector searches within that paper rather than across a corpus. Text is lower-cased and tokenised using a regular expression over English letters, digits, and underscores. The same tokenisation is applied to the question.
+
+For every question, fixed-depth baselines return the top $k$ units from the per-paper ranker. ControllerV3 initially obtains the top 20 ranking so that later actions can select prefixes from a common candidate order. Separate BM25 rankings are also constructed over table units and figure-caption units. Section-aware actions filter units by section-name or early-text keywords before ranking them with an expanded query.
+
+\section{Question classification}
+
+The controller applies a deterministic multi-label classifier to the lower-cased question. \Cref{tab:qtypes} summarises the principal signals. Categories are not mutually exclusive: a question can be both method-oriented and complex, or both result-oriented and data-oriented.
+
+\begin{table}[tb]
+\centering
+\caption{Question categories and representative lexical triggers. The implementation contains the complete trigger lists.}
+\label{tab:qtypes}
+\begin{tabularx}{\textwidth}{@{}lXl@{}}
+\toprule
+Category & Representative signals & Main consequence \\
+\midrule
+Result & result, performance, score, evaluation, comparison & expand global rank and inspect tables \\
+Data & dataset, corpus, training data, test set, language pair & expand global rank, data sections, and tables \\
+Method & method, model, train, supervision, how & expand global rank \\
+Complex & at least 12 tokens, or begins with how/why & expand global rank \\
+Definition & short what-is/what-are form; abbreviation patterns & prefer abstract/introduction/background \\
+Figure & figure, architecture, pipeline, diagram & add figure captions \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+The enhanced classifier was developed after inspecting errors on the QASPER validation subset. It adds patterns for datasets, corpora, language pairs, and abbreviations. This development history is the reason validation results are not treated as held-out evidence. The classifier is frozen before the official test evaluation.
+
+\section{ControllerV3 policy}
+
+Algorithmically, ControllerV3 begins by adding BM25 top-3. It then follows the first applicable main branch, after which figure expansion may also run. Units are deduplicated by identifier, and each retained copy receives a \code{selected\_by} field.
+
+\begin{table}[tb]
+\centering
+\caption{ControllerV3 actions.}
+\label{tab:actions}
+\begin{tabularx}{\textwidth}{@{}lXr@{}}
+\toprule
+Action & Behaviour & Maximum target \\
+\midrule
+ReadTop3 & initialise from global BM25 ranking & top 3 \\
+DefinitionIntroExpansion & rank definition query within abstract/introduction/background/overview units & 2 new \\
+DefinitionExpansion & fallback definition query across all retrievable units & 2 new \\
+ReadMoreForResultOrData & extend selection along global BM25 order & top 7 \\
+DataSectionExpansion & rank an expanded data query within data/setup/experiment sections & 3 new \\
+ReadTable & add table-caption ranking & 2 new \\
+ReadMoreForMethodOrComplex & extend selection along global BM25 order & top 7 \\
+ReadDefaultTop5 & use a moderate budget for unmatched questions & top 5 \\
+ReadFigureCaption & add figure-caption ranking & 2 new \\
+Stop & record completion of the configured branch & 0 \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+Definition and abbreviation questions form an early-return branch. After top-3, the controller constructs a query containing definition-oriented terms and attempts to add up to two units from likely introductory sections. If this adds nothing, it falls back to an all-section definition search. It then stops.
+
+Result or data questions extend the global BM25 selection to top-7. Data questions additionally search sections whose names or leading text contain terms such as \emph{data}, \emph{dataset}, \emph{corpus}, \emph{experimental setup}, or \emph{experiments}; up to three new units are added. Both result and data questions may add up to two table captions. Method and complex questions extend to global top-7 without the data-specific branch. Questions matching none of these branches use global top-5. Finally, figure-oriented questions may add up to two figure captions.
+
+This policy produces a variable number of units because categories trigger different caps, section and caption candidates may be absent, and deduplication removes repeated selections. The policy is nevertheless bounded and non-iterative. It never evaluates the semantic sufficiency of the selected set. Its final Stop reason explicitly states that stopping follows the question-type and section-aware rules.
+
+\section{Ablation and generic mechanism controls}
+
+The \code{ControllerV3\_no\_section} ablation uses the same initial ranking, categories, global expansion, table and figure handling, and Stop semantics, but disables definition-introduction and data-section filtering. It therefore reads fewer units on average.
+
+A direct full-versus-ablation comparison cannot by itself identify why performance changes: adding section actions also increases evidence budget. Two supplementary controls address this confound. \code{GenericCountMatched} starts from the no-section selection and extends it along the ordinary global BM25 order until its unit count matches the full controller for that question. \code{GenericTokenMatched} similarly selects a generic prefix whose estimated token cost is as close as possible to the full controller. If section targeting has an independent aggregate benefit, the full policy should outperform these generic matched-budget expansions.
+
+\section{Cost accounting}
+
+For retrieval experiments, every selected unit contributes its whitespace word count. The original implementation estimates tokens as
+\begin{equation}
+    \widehat{T}=\operatorname{round}(1.3W),
+\end{equation}
+where $W$ is the total evidence word count. This is a transparent proxy, not the output of the Qwen tokenizer. It supports consistent full-split comparisons before generation but should not be interpreted as a billing or latency measurement.
+
+The generation pipeline records actual tokenizer counts. A prompt contains the paper title, question, instructions, and selected evidence blocks with type and section labels. In the earlier development experiment evidence was capped at 6,000 characters, which caused many high-$k$ methods to produce identical prompts. The final sampled experiment instead uses a token-aware bounded configuration and audits the exact prompts. This separation yields three quantities: complete selected-evidence cost, constructed prompt cost, and model-token cost.
+
+\section{Answer generation and resumability}
+
+The answer prompt instructs the generator to use only supplied evidence, prefer concise spans grounded in that evidence, and return \emph{Not enough evidence} only when the context is clearly unrelated. The frozen generation experiment uses Qwen2.5-3B served locally through Ollama. Each method--question record retains identifiers, references, retrieved units, the final prompt, generation settings, token counts, and model output.
+
+Generation is deduplicated by prompt text: if different retrieval methods construct exactly the same prompt for the same question, the model is called once and the result is reused. JSONL output is appended incrementally, and completed keys are detected at restart. These engineering choices matter on the available low-memory CPU machine because a complete run spans many hours and may be interrupted. Integrity audits check record counts, duplicate keys, missing prompts, failures, length stops, and SHA-256 hashes.
+
+\section{Implementation summary}
+
+The pipeline is implemented in Python. QASPER loading is pinned to dataset revision \code{13b496d2a5359329b110e3419628de3cf791843b}; BM25 uses \code{rank\_bm25}; tabular summaries and statistical analyses are written as CSV and JSON. Experiment commands, frozen protocols, environment snapshots, and manifests are stored with the repository. No controller parameters are learned from the train split: the first 100 training papers were used only to test data formats and the processing pipeline.
+

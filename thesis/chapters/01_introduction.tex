@@ -1,0 +1,67 @@
+\chapter{Introduction}
+\label{chap:introduction}
+
+Scientific papers are written to support claims with methods, measurements, and comparisons, yet answering a question about a paper often begins with a much simpler operation: deciding what to read. A question asking what an abbreviation means may be resolved in an abstract or introduction. A question about an experimental score may require a results paragraph or table. A question about a model's training procedure may depend on several passages spread across a method section. Treating all of these questions as if they required the same amount and type of context is convenient, but it disregards a central property of academic reading: evidence demand varies with the question.
+
+Retrieval-augmented generation (RAG) offers a natural architecture for evidence-grounded question answering. A retriever first selects text from an external source, after which a generator answers from the retrieved context~\cite{lewis2020rag}. In a scientific-paper setting, the source is bounded but structurally rich. Abstracts, body sections, tables, and figure captions serve different functions, and QASPER provides both information-seeking questions and annotated supporting evidence over full NLP papers~\cite{dasigi2021qasper}. These annotations make it possible to evaluate an intermediate evidence-selection stage rather than attributing every final-answer error to the language model.
+
+The retrieval depth is also a computational decision. Increasing a fixed top-$k$ budget generally gives the generator more opportunities to encounter relevant evidence, but it consumes additional context and may introduce material that is unrelated to the question. Long context is not a free substitute for selection: controlled studies have found that model performance can depend on the position of relevant information within a long input~\cite{liu2024lost}. A practical system should therefore account for evidence quality and reading cost together.
+
+This dissertation studies that decision layer. It develops and evaluates a lightweight controller that begins from a small BM25 result set and expands it according to explicit question-type rules. The controller is designed for a resource-constrained setting: it invokes no language model while selecting evidence, uses no learned parameters, and exposes the action that selected every unit. The resulting method is less flexible than model-based adaptive retrieval, but its behaviour is inexpensive, deterministic, and auditable.
+
+\section{Problem statement}
+
+Let a paper be represented by a set of evidence units
+\begin{equation}
+    D = \{u_1,u_2,\ldots,u_n\},
+\end{equation}
+where a unit has text, type, section, and position metadata. Given a question $q$, an evidence selector produces a subset $S(q,D)\subseteq D$. An answer generator then maps the question and selected evidence to an answer $\hat{a}$:
+\begin{equation}
+    \hat{a}=G(q,S(q,D)).
+\end{equation}
+The design goal is not simply to maximise evidence coverage. It is to obtain useful coverage without allocating the largest available context to every question. In this work, evidence quality is measured using overlap with QASPER's annotated evidence and cost is measured using evidence-unit counts, a word-based token proxy, and---for the supplementary generation study---the local model tokenizer.
+
+The original interim proposal described a richer iterative process in which a controller would assess the sufficiency of the current evidence, search again when necessary, and stop when further reading was not worthwhile. The final implementation narrows this scope. ControllerV3 applies a finite sequence of rules based on lexical question categories and then emits a \emph{Stop} action. It does not compute an evidence-sufficiency score, inspect generated answers during selection, or create a retrieval--assessment loop. This distinction is important to both the novelty claim and the interpretation of the results.
+
+\section{Research questions}
+
+The central research question is:
+
+\begin{quote}
+Can an inexpensive, interpretable, question-aware controller allocate a variable evidence budget for scientific paper question answering while retaining retrieval and downstream answer quality close to cost-matched fixed-depth BM25 retrieval?
+\end{quote}
+
+Five supporting questions guide the evaluation:
+
+\begin{enumerate}[label=\textbf{RQ\arabic*:}]
+    \item How does evidence coverage change as a fixed BM25 evidence budget increases?
+    \item Does ControllerV3 occupy a useful quality--cost operating point relative to fixed top-$k$ baselines?
+    \item What does section-aware expansion add, and can its effect be separated from the effect of reading more units?
+    \item Does the selected evidence preserve answer quality under a fixed local generation setting?
+    \item Which design assumptions and failure modes limit the conclusions?
+\end{enumerate}
+
+\section{Contributions}
+
+The project makes five contributions.
+
+First, it implements a reproducible pipeline that converts QASPER papers into typed evidence units. Body text is divided into overlapping chunks, while abstracts, table captions, and figure captions remain identifiable. This representation supports both ordinary lexical retrieval and type-specific controller actions.
+
+Second, it introduces ControllerV3, a question-aware variable-budget evidence selector. The method starts from BM25 top-3 and applies explicit expansions for definition, data, result, method, complex, and figure-oriented questions. Every action records its reason and newly selected units. The contribution is therefore an interpretable decision policy over a conventional retriever, not a new retrieval model.
+
+Third, the final evaluation repairs a weakness in the development process. Rules had been influenced by inspection of a 50-paper validation subset, so those results cannot serve as independent final evidence. The controller was frozen and evaluated once on the complete official QASPER test split: 416 papers and 1,451 questions. Retrieval comparisons use paired paper-level bootstrap intervals to express uncertainty.
+
+Fourth, the dissertation includes a mechanism analysis that distinguishes section targeting from evidence budget. The full controller is compared not only with a lower-budget no-section ablation, but also with generic BM25 expansions matched by unit count and by estimated tokens. This analysis produces a useful negative result: section targeting has no clear independent aggregate advantage under a matched budget, so the simpler ablation contrast should not be interpreted causally.
+
+Fifth, a frozen 201-question sample is evaluated end to end with Qwen2.5-3B. The pipeline records retrieved evidence, the constructed prompt, actual prompt tokens, output tokens, and generated answers. Prompt deduplication and audit files reveal that retrieval cost and model input cost are related but distinct quantities.
+
+\section{Scope}
+
+The experiments concern question answering over one supplied scientific paper at a time. They do not evaluate open-web search, multi-paper synthesis, or autonomous research agents. BM25 is deliberately retained as the core ranker to keep the decision layer observable and feasible on the available computer. Dense retrieval and learned reranking are relevant alternatives, but they are outside the implemented comparison. Similarly, the answer study uses one local 3-billion-parameter model and automatic QASPER metrics; it is not a general comparison of language models.
+
+The dissertation does not claim state-of-the-art QASPER performance. Its primary empirical question concerns how evidence-selection policies behave at different budgets. A confidence interval crossing zero is described as showing no clear sampled difference, not as proof that two methods are equivalent. Results from the development subset are retained only to explain design history and errors.
+
+\section{Report structure}
+
+\Cref{chap:background} positions the project in scientific document QA, retrieval, adaptive RAG, long-context reasoning, and cost-aware inference. \Cref{chap:system} describes the evidence representation, BM25 ranking, ControllerV3 rules, stopping semantics, and answer-generation pipeline. \Cref{chap:methodology} defines the data split, baselines, metrics, bootstrap procedure, and experimental protocols. \Cref{chap:results} reports the held-out retrieval results, mechanism controls, controller behaviour, and supplementary generation sample. \Cref{chap:discussion} interprets the findings and analyses limitations. \Cref{chap:conclusion} answers the research questions and proposes future work.
+
