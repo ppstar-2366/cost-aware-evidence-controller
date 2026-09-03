@@ -1,4 +1,4 @@
-"""Audit all thesis experiment artifacts and export a machine-readable archive.
+"""Audit the saved Validation50 experiment artifacts and export a machine-readable archive.
 
 This script does not rerun retrieval or answer generation. It reads the saved
 artifacts, recomputes descriptive statistics, and writes:
@@ -527,17 +527,16 @@ def write_manifest() -> None:
     with MANIFEST_PATH.open("w", encoding="utf-8-sig", newline="") as handle:
         writer = csv.DictWriter(
             handle,
-            fieldnames=["relative_path", "size_bytes", "sha256", "modified_at_local"],
+            fieldnames=["relative_path", "size_bytes", "sha256"],
+            lineterminator="\n",
         )
         writer.writeheader()
         for path in manifest_candidates():
-            stat = path.stat()
             writer.writerow(
                 {
                     "relative_path": path.relative_to(ROOT).as_posix(),
-                    "size_bytes": stat.st_size,
+                    "size_bytes": path.stat().st_size,
                     "sha256": sha256_file(path),
-                    "modified_at_local": datetime.fromtimestamp(stat.st_mtime).isoformat(),
                 }
             )
 
@@ -564,7 +563,7 @@ def write_overview(audit: Dict[str, Any]) -> None:
         "notes",
     ]
     with OVERVIEW_PATH.open("w", encoding="utf-8-sig", newline="") as handle:
-        writer = csv.DictWriter(handle, fieldnames=fields)
+        writer = csv.DictWriter(handle, fieldnames=fields, lineterminator="\n")
         writer.writeheader()
         for method in RETRIEVAL_FILES:
             stats = audit["retrieval"][method]
@@ -606,7 +605,7 @@ def main() -> None:
     audit = {
         "archive_schema_version": 1,
         "generated_at_utc": datetime.now(timezone.utc).isoformat(),
-        "project_root_name": ROOT.name,
+        "project_root_name": "cost-aware-evidence-controller",
         "experiment_completion": {
             "retrieval_methods_expected": list(RETRIEVAL_FILES),
             "generation_methods_expected": [

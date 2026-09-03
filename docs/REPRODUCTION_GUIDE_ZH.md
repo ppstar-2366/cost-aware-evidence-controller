@@ -1,11 +1,11 @@
-# 实验复现与换机手册
+# 实验复现说明
 
-本手册给出两条路径：
+本文档给出两种复现路径：
 
 - **只查看和验证已有结果**：不需要重新下载 QASPER，也不需要重新运行 Ollama；
 - **从头重跑完整实验**：需要 Python、网络、Ollama 和较长运行时间。
 
-所有命令默认在项目根目录 `cost_aware_evidence_controller` 中执行，shell 为 Windows PowerShell。
+第1--8节保留早期 Windows Validation50 开发环境的执行记录；第9节给出冻结测试与补充实验的 macOS/VS Code 命令。所有相对路径均以仓库根目录为起点。
 
 ## 1. 换机时应复制什么
 
@@ -82,7 +82,7 @@ Ollama: 0.30.10
 Model: qwen2.5:3b, ID 357c53fb659c, about 1.9 GB
 ```
 
-Python 精确包版本见 `environment_snapshot.txt`。`requirements.txt` 使用最低版本约束，便于安装；环境快照用于严格记录当时实际版本。
+`requirements.txt` 记录运行所需的 Python 依赖。需要逐次复现实验时，还应保存所用 Python、Ollama 和模型版本，因为最低版本约束不保证跨环境逐字节一致。
 
 ## 4. Ollama 在 D 盘的配置
 
@@ -345,3 +345,33 @@ Invoke-RestMethod http://127.0.0.1:11434/api/tags
 ### 能否用 wall-time 写速度对比
 
 不能。BM25_top5 跨越中断和恢复，平均 wall-time 被严重污染；其余方法也没有统一冷启动、缓存和系统负载条件。
+
+## 9. 当前 macOS / VS Code 冻结 test 流程
+
+第 1–8 节保留早期 Windows Validation50 复现史。当前终期实验已经在 macOS 项目
+目录的 `.venv` 中配置好，并在 `.vscode/tasks.json` 提供可从 VS Code 的
+“Tasks: Run Task”直接执行的任务。正式生成任务显式固定
+`qwen2.5:3b`、`num_ctx=8192`、`num_predict=256`、`temperature=0`、`seed=42`。
+
+命令行等价流程如下：
+
+```bash
+.venv/bin/python src/run_supplementary_retrieval.py
+.venv/bin/python src/bootstrap_supplementary.py
+.venv/bin/python src/analyze_controller_behavior.py
+.venv/bin/python src/audit_supplementary.py
+
+.venv/bin/python src/build_test_generation_sample.py
+.venv/bin/python src/run_deduplicated_ollama_generation.py \
+  --model qwen2.5:3b --num-ctx 8192 --num-predict 256 \
+  --temperature 0 --seed 42
+.venv/bin/python src/evaluate_test_generation.py
+.venv/bin/python src/audit_test_generation.py
+.venv/bin/python src/make_thesis_figures.py --overwrite
+```
+
+生成 JSONL 支持按 prompt hash 断点续跑；但不得把不同模型、prompt 或 decoding
+设置追加到同一文件。最终验收要求：201 个对齐问题、804 个方法—问题记录、608
+个 unique prompts、0 missing、0 API error、0 `done_reason=length`，且最大实际
+prompt token 小于 8,192。正式数值和可辩护解释见
+`docs/TEST_GENERATION_RESULTS.md`，图表说明见 `docs/FIGURE_GUIDE.md`。

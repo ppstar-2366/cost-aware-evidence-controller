@@ -1,51 +1,30 @@
-# 毕设实验档案索引
+# 实验文档索引
 
-本目录是“Cost-Aware Evidence Controller for Scientific QA”项目的完整交接档案。它的目标是：即使原聊天记录丢失、换到另一台机器，也能从项目文件本身还原已完成的工作、实验设计、运行参数、数据含义、最终结果和当前局限。
+本目录保存实验协议、结果汇总、完整性检查和复现说明。正式结论以完整 QASPER 测试集的冻结检索实验和预先固定的生成样本为准；Validation50 文档只记录方法开发过程。
 
-## 建议阅读顺序
+## 主要检索评价
 
-1. [EXPERIMENT_ARCHIVE_ZH.md](EXPERIMENT_ARCHIVE_ZH.md)：完整工作记录、实验设计、全部结果、历史调试与结论边界。
-2. [REPRODUCTION_GUIDE_ZH.md](REPRODUCTION_GUIDE_ZH.md)：从环境检查到重新运行全部实验的命令级手册。
-3. [DATA_DICTIONARY_ZH.md](DATA_DICTIONARY_ZH.md)：每个源码、JSONL、CSV 文件及字段的含义。
-4. [THESIS_WRITING_MATERIAL_ZH.md](THESIS_WRITING_MATERIAL_ZH.md)：毕业论文实验章节可直接使用的结构、表格和讨论要点。
-5. [RESEARCH_REFLECTIONS_AND_CONCLUSIONS_ZH.md](RESEARCH_REFLECTIONS_AND_CONCLUSIONS_ZH.md)：实验感悟、研究结论、摘要结果句和未来工作。
-6. [THESIS_EVIDENCE_MAP_ZH.md](THESIS_EVIDENCE_MAP_ZH.md)：每项论文主张对应的数据、允许表述与禁止过度结论。
-7. [environment_snapshot.txt](environment_snapshot.txt)：完成最终实验时的软件、模型和硬件快照。
+1. [TEST_EVALUATION_PROTOCOL.md](TEST_EVALUATION_PROTOCOL.md)：测试集评价前固定的方法、基线、指标和重采样设计。
+2. [TEST416_RESULTS.md](TEST416_RESULTS.md)：416篇论文、1,451个问题的主要结果和论文级配对区间。
+3. [SUPPLEMENTARY_EXPERIMENT_PROTOCOL.md](SUPPLEMENTARY_EXPERIMENT_PROTOCOL.md)：预算匹配对照、控制器行为分析与生成实验的预定协议。
+4. [SUPPLEMENTARY_RETRIEVAL_RESULTS.md](SUPPLEMENTARY_RETRIEVAL_RESULTS.md)：逐问题预算匹配、参考点与分支行为结果。
 
-## 机器可读档案
+## 生成评价
 
-- [experiment_audit.json](experiment_audit.json)：从现有原始输出重新统计得到的完整审计结果。
-- [experiment_results_overview.csv](experiment_results_overview.csv)：可直接用 Excel 打开的检索与生成结果总表。
-- [file_manifest_sha256.csv](file_manifest_sha256.csv)：项目关键文件的大小、修改时间与 SHA-256 校验值。
+1. [GENERATION_SMOKE_GATE.md](GENERATION_SMOKE_GATE.md)：输出长度、提示词去重和完整性检查记录。
+2. [TEST_GENERATION_RESULTS.md](TEST_GENERATION_RESULTS.md)：53篇论文、201个问题的冻结生成结果、实际 token 数和配对区间。
 
-## 当前完成状态
+## 复现与数据说明
 
-- 数据预处理：已完成。
-- BM25 top-1/3/5/10/20：已完成，每种方法 156 条。
-- ControllerV3：已完成，156 条。
-- ControllerV3 去除章节扩展的消融实验：已完成，156 条。
-- 阈值 0.5 的检索质量、成本和效率评估：已完成。
-- ControllerV3 错误分析：已完成，覆盖 151 个具有标注证据的问题。
-- 本地 Ollama 回答生成：已完成，4 种方法各 156 条，共 624 条，全部成功。
-- 答案 F1/EM 评估：已完成，共 624 条。
-- 完整性审计与文件哈希：已完成。
+- [REPRODUCTION_GUIDE_ZH.md](REPRODUCTION_GUIDE_ZH.md)：Windows 和 macOS 环境下的命令与运行顺序。
+- [DATA_DICTIONARY_ZH.md](DATA_DICTIONARY_ZH.md)：源码、JSONL、CSV 和审计文件的字段定义。
+- [FIGURE_GUIDE.md](FIGURE_GUIDE.md)：图文件、数据来源、可访问性设计和解释边界。
 
-## 迁移到另一台机器时
+## 机器可读材料
 
-不要只复制 `docs/`。应复制整个 `cost_aware_evidence_controller` 文件夹，尤其保留：
+- outputs/test416/：主要检索汇总、bootstrap 区间、错误分析和 SHA-256 清单。
+- outputs/supplementary/：预算匹配、行为分析、生成结果和完整性审计。
+- outputs/figures/：矢量 PDF、400 dpi PNG 及数据来源和输出哈希。
+- experiment_audit.json、experiment_results_overview.csv 与 file_manifest_sha256.csv：Validation50 开发归档的机器可读检查。
 
-- `src/`：实验实现；
-- `data/processed/`：已处理的 QASPER 子集；
-- `outputs/`：逐问题原始实验结果；
-- `docs/`：本交接档案；
-- `README.md` 与 `requirements.txt`。
-
-复制后首先运行：
-
-```powershell
-.\.venv\Scripts\python.exe src\audit_experiments.py
-```
-
-如果新机器还没有 `.venv`，请先按 [REPRODUCTION_GUIDE_ZH.md](REPRODUCTION_GUIDE_ZH.md) 重建环境。审计脚本只读取现有实验数据并刷新档案，不会重新调用 Ollama，也不会覆盖原始检索或生成结果。
-
-档案核验日期：2026-08-20（Asia/Shanghai）。
+QASPER 完整测试集、本地模型、提示词、生成原始记录和体积较大的逐问题检索 JSONL 文件没有提交到 Git。相应协议和清单保留了它们的生成方法、文件大小与 SHA-256 标识。

@@ -1,0 +1,17 @@
+method,metric,point_estimate,ci_lower,ci_upper,papers,replicates,seed,resampling_unit
+BM25_top7,f1,0.327766,0.271007,0.387493,53,5000,42,paper
+BM25_top7,em,0.20398,0.15,0.261781,53,5000,42,paper
+BM25_top7,prompt_tokens,1992.462687,1909.687223,2074.22435,53,5000,42,paper
+BM25_top7,output_tokens,11.552239,8.805072,14.958226,53,5000,42,paper
+BM25_top8,f1,0.34676,0.291533,0.4053,53,5000,42,paper
+BM25_top8,em,0.20398,0.151111,0.262142,53,5000,42,paper
+BM25_top8,prompt_tokens,2269.80597,2177.716442,2359.489696,53,5000,42,paper
+BM25_top8,output_tokens,12.80597,9.881381,16.247487,53,5000,42,paper
+ControllerV3,f1,0.328011,0.275644,0.384959,53,5000,42,paper
+ControllerV3,em,0.208955,0.157657,0.264253,53,5000,42,paper
+ControllerV3,prompt_tokens,2050.920398,1957.657606,2147.450654,53,5000,42,paper
+ControllerV3,output_tokens,12.049751,9.482999,15.005151,53,5000,42,paper
+ControllerV3_no_section,f1,0.313696,0.263219,0.366419,53,5000,42,paper
+ControllerV3_no_section,em,0.189055,0.137056,0.245192,53,5000,42,paper
+ControllerV3_no_section,prompt_tokens,1922.338308,1842.240719,2007.013703,53,5000,42,paper
+ControllerV3_no_section,output_tokens,12.9801,10.069812,16.461598,53,5000,42,paper

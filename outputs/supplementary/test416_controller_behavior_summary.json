@@ -1,0 +1,199 @@
+{
+  "controller": {
+    "retrieved_units": {
+      "n": 1451,
+      "mean": 7.761544,
+      "sd": 2.239996,
+      "median": 7.0,
+      "p10": 5.0,
+      "p25": 5.0,
+      "p75": 9.0,
+      "p90": 11.0,
+      "min": 4.0,
+      "max": 12.0
+    },
+    "evidence_words": {
+      "n": 1451,
+      "mean": 1259.652653,
+      "sd": 355.1732,
+      "median": 1245.0,
+      "p10": 825.0,
+      "p25": 988.5,
+      "p75": 1494.5,
+      "p90": 1710.0,
+      "min": 326.0,
+      "max": 2513.0
+    },
+    "estimated_tokens_continuous": {
+      "n": 1451,
+      "mean": 1637.548449,
+      "sd": 461.72516,
+      "median": 1618.5,
+      "p10": 1072.5,
+      "p25": 1285.05,
+      "p75": 1942.85,
+      "p90": 2223.0,
+      "min": 423.8,
+      "max": 3266.9
+    }
+  },
+  "bm25_top7": {
+    "retrieved_units": {
+      "n": 1451,
+      "mean": 6.998622,
+      "sd": 0.037113,
+      "median": 7.0,
+      "p10": 7.0,
+      "p25": 7.0,
+      "p75": 7.0,
+      "p90": 7.0,
+      "min": 6.0,
+      "max": 7.0
+    },
+    "evidence_words": {
+      "n": 1451,
+      "mean": 1253.416954,
+      "sd": 235.367854,
+      "median": 1272.0,
+      "p10": 922.0,
+      "p25": 1105.0,
+      "p75": 1425.0,
+      "p90": 1548.0,
+      "min": 456.0,
+      "max": 1761.0
+    },
+    "estimated_tokens_continuous": {
+      "n": 1451,
+      "mean": 1629.44204,
+      "sd": 305.97821,
+      "median": 1653.6,
+      "p10": 1198.6,
+      "p25": 1436.5,
+      "p75": 1852.5,
+      "p90": 2012.4,
+      "min": 592.8,
+      "max": 2289.3
+    }
+  },
+  "paired_token_difference": {
+    "n": 1451,
+    "mean": 8.106409,
+    "sd": 370.190084,
+    "median": 0.0,
+    "p10": -525.2,
+    "p25": -152.1,
+    "p75": 105.3,
+    "p90": 514.8,
+    "min": -1110.2,
+    "max": 1066.0
+  },
+  "controller_budget_relation_to_top7": {
+    "lower": {
+      "count": 379,
+      "proportion": 0.261199
+    },
+    "equal": {
+      "count": 429,
+      "proportion": 0.295658
+    },
+    "higher": {
+      "count": 643,
+      "proportion": 0.443143
+    }
+  },
+  "decision_paths": [
+    {
+      "decision_path": "definition",
+      "questions": 139,
+      "questions_with_gold": 133,
+      "evidence_recall": 0.590786,
+      "question_hit_rate": 0.789474,
+      "average_best_overlap": 0.655961,
+      "avg_retrieved_units": 4.870504,
+      "avg_estimated_tokens": 1146.553237,
+      "median_estimated_tokens": 1175.2
+    },
+    {
+      "decision_path": "result_or_data",
+      "questions": 643,
+      "questions_with_gold": 600,
+      "evidence_recall": 0.791796,
+      "question_hit_rate": 0.921667,
+      "average_best_overlap": 0.790535,
+      "avg_retrieved_units": 9.895801,
+      "avg_estimated_tokens": 1897.375272,
+      "median_estimated_tokens": 1865.5
+    },
+    {
+      "decision_path": "method_or_complex",
+      "questions": 427,
+      "questions_with_gold": 390,
+      "evidence_recall": 0.699164,
+      "question_hit_rate": 0.848718,
+      "average_best_overlap": 0.729585,
+      "avg_retrieved_units": 7.044496,
+      "avg_estimated_tokens": 1665.202576,
+      "median_estimated_tokens": 1678.3
+    },
+    {
+      "decision_path": "default",
+      "questions": 242,
+      "questions_with_gold": 229,
+      "evidence_recall": 0.596125,
+      "question_hit_rate": 0.820961,
+      "average_best_overlap": 0.64994,
+      "avg_retrieved_units": 5.016529,
+      "avg_estimated_tokens": 1180.405372,
+      "median_estimated_tokens": 1207.7
+    }
+  ],
+  "action_counts": {
+    "ReadTop3": 1451,
+    "ReadMoreForResultOrData": 643,
+    "DataSectionExpansion": 351,
+    "ReadTable": 604,
+    "Stop": 1451,
+    "ReadMoreForMethodOrComplex": 427,
+    "ReadDefaultTop5": 242,
+    "DefinitionIntroExpansion": 135,
+    "ReadFigureCaption": 18,
+    "DefinitionExpansion": 4
+  },
+  "action_added_units": {
+    "ReadTop3": 4353,
+    "ReadMoreForResultOrData": 2572,
+    "DataSectionExpansion": 736,
+    "ReadTable": 1123,
+    "Stop": 0,
+    "ReadMoreForMethodOrComplex": 1707,
+    "ReadDefaultTop5": 484,
+    "DefinitionIntroExpansion": 252,
+    "ReadFigureCaption": 27,
+    "DefinitionExpansion": 8
+  },
+  "action_sequence_counts": {
+    "ReadTop3 -> ReadMoreForResultOrData -> DataSectionExpansion -> ReadTable -> Stop": 328,
+    "ReadTop3 -> ReadMoreForMethodOrComplex -> Stop": 413,
+    "ReadTop3 -> ReadMoreForResultOrData -> ReadTable -> Stop": 274,
+    "ReadTop3 -> ReadMoreForResultOrData -> Stop": 16,
+    "ReadTop3 -> ReadDefaultTop5 -> Stop": 240,
+    "ReadTop3 -> DefinitionIntroExpansion -> Stop": 135,
+    "ReadTop3 -> ReadMoreForResultOrData -> DataSectionExpansion -> Stop": 23,
+    "ReadTop3 -> ReadDefaultTop5 -> ReadFigureCaption -> Stop": 2,
+    "ReadTop3 -> ReadMoreForMethodOrComplex -> ReadFigureCaption -> Stop": 14,
+    "ReadTop3 -> DefinitionExpansion -> Stop": 4,
+    "ReadTop3 -> ReadMoreForResultOrData -> ReadTable -> ReadFigureCaption -> Stop": 2
+  },
+  "selected_by_counts": {
+    "ReadTop3": 4353,
+    "ReadMoreForResultOrData": 2572,
+    "DataSectionExpansion": 736,
+    "ReadTable": 1123,
+    "ReadMoreForMethodOrComplex": 1707,
+    "ReadDefaultTop5": 484,
+    "DefinitionIntroExpansion": 252,
+    "ReadFigureCaption": 27,
+    "DefinitionExpansion": 8
+  },
+  "interpretation_boundary": "Decision-path results are post-primary descriptive/exploratory analyses."
+}

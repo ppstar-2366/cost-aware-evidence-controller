@@ -1,0 +1,64 @@
+{
+  "status": "pass",
+  "mode": "frozen_sample",
+  "input": "outputs/supplementary/generation/test_generation_prompts.jsonl",
+  "output": "outputs/supplementary/generation/test_generation_unique_generations.jsonl",
+  "methods": [
+    "BM25_top7",
+    "BM25_top8",
+    "ControllerV3",
+    "ControllerV3_no_section"
+  ],
+  "papers": 53,
+  "questions": 201,
+  "method_question_records": 804,
+  "unique_prompts": 608,
+  "prompt_reuse_rate": 0.24378109452736318,
+  "successful_unique_prompts": 608,
+  "failed_unique_prompts": 0,
+  "failed_hashes": [],
+  "length_stopped_unique_prompts": 0,
+  "length_stopped_hashes": [],
+  "model": "qwen2.5:3b",
+  "model_inventory": [
+    {
+      "name": "qwen2.5:3b",
+      "model": "qwen2.5:3b",
+      "modified_at": "2026-08-27T01:55:28.211826277+08:00",
+      "size": 1929912432,
+      "digest": "357c53fb659c5076de1d65ccb0b397446227b71a42be9d1603d46168015c9e4b",
+      "details": {
+        "parent_model": "",
+        "format": "gguf",
+        "family": "qwen2",
+        "families": [
+          "qwen2"
+        ],
+        "parameter_size": "3.1B",
+        "quantization_level": "Q4_K_M",
+        "context_length": 32768,
+        "embedding_length": 2048
+      },
+      "capabilities": [
+        "completion",
+        "tools"
+      ]
+    }
+  ],
+  "options": {
+    "temperature": 0.0,
+    "seed": 42,
+    "num_ctx": 8192,
+    "num_predict": 256
+  },
+  "prompt_tokens": {
+    "mean": 2094.4917763157896,
+    "maximum": 3796,
+    "context_limit": 8192,
+    "maximum_fraction_of_context": 0.46337890625
+  },
+  "output_tokens": {
+    "mean": 11.99671052631579,
+    "maximum": 236
+  }
+}

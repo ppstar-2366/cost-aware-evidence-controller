@@ -1,0 +1,61 @@
+{
+  "status": "pass",
+  "methods": [
+    "ControllerV3",
+    "BM25_top7",
+    "BM25_top8",
+    "ControllerV3_no_section"
+  ],
+  "papers": 53,
+  "questions": 201,
+  "method_question_records": 804,
+  "unique_prompts": 608,
+  "reused_method_question_records": 196,
+  "prompt_reuse_rate": 0.24378109452736318,
+  "max_prompt_reuse": 3,
+  "max_evidence_chars": 20000,
+  "methods_audit": {
+    "ControllerV3": {
+      "path": "outputs/test416/test416_controller_v3.jsonl",
+      "sha256": "a33831239f9ea0e5d9e562d139e65b99b5d6217dcabf9579edda131bc2af9355",
+      "records": 201,
+      "mean_retained_units": 7.985074626865671,
+      "max_retained_units": 12,
+      "mean_retained_evidence_chars": 8866.253731343284,
+      "max_retained_evidence_chars": 16339,
+      "truncated_questions": 0
+    },
+    "BM25_top7": {
+      "path": "outputs/test416/test416_bm25_top7.jsonl",
+      "sha256": "09e62573bb91f5a0a711add0f9d168e9a6a0d783ec92f31d54cc9ab15b3d9973",
+      "records": 201,
+      "mean_retained_units": 7.0,
+      "max_retained_units": 7,
+      "mean_retained_evidence_chars": 8606.796019900497,
+      "max_retained_evidence_chars": 12600,
+      "truncated_questions": 0
+    },
+    "BM25_top8": {
+      "path": "outputs/test416/test416_bm25_top8.jsonl",
+      "sha256": "c2ad0ce014d144af799582d10c7daf6a677436eaea07e8ca574743079150ee52",
+      "records": 201,
+      "mean_retained_units": 8.0,
+      "max_retained_units": 8,
+      "mean_retained_evidence_chars": 9911.388059701492,
+      "max_retained_evidence_chars": 14339,
+      "truncated_questions": 0
+    },
+    "ControllerV3_no_section": {
+      "path": "outputs/test416/test416_controller_v3_no_section.jsonl",
+      "sha256": "7e01e0ca3b584332abe5b219c4f0579ff8cdf570e6c70ddb2d143dde31b2208b",
+      "records": 201,
+      "mean_retained_units": 7.417910447761194,
+      "max_retained_units": 10,
+      "mean_retained_evidence_chars": 8248.373134328358,
+      "max_retained_evidence_chars": 12752,
+      "truncated_questions": 0
+    }
+  },
+  "prompts_path": "outputs/supplementary/generation/test_generation_prompts.jsonl",
+  "prompts_sha256": "1f55a3631e54191c9f4c275cc502685d6e40305ef25142bc717d537304c5858b"
+}

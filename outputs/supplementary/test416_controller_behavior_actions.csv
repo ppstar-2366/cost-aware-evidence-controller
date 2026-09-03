@@ -1,0 +1,11 @@
+action,trigger_count,total_added_units,avg_added_when_triggered
+ReadTop3,1451,4353,3.0
+Stop,1451,0,0.0
+ReadMoreForResultOrData,643,2572,4.0
+ReadTable,604,1123,1.859272
+ReadMoreForMethodOrComplex,427,1707,3.997658
+DataSectionExpansion,351,736,2.096866
+ReadDefaultTop5,242,484,2.0
+DefinitionIntroExpansion,135,252,1.866667
+ReadFigureCaption,18,27,1.5
+DefinitionExpansion,4,8,2.0

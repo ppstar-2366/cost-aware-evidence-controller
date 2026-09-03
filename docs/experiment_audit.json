@@ -1,7 +1,7 @@
 {
   "archive_schema_version": 1,
-  "generated_at_utc": "2026-08-20T07:45:32.015888+00:00",
-  "project_root_name": "cost_aware_evidence_controller",
+  "generated_at_utc": "2026-09-03T02:10:16.392818+00:00",
+  "project_root_name": "cost-aware-evidence-controller",
   "experiment_completion": {
     "retrieval_methods_expected": [
       "BM25_top1",
@@ -22,9 +22,9 @@
     "expected_total_generation_records": 624
   },
   "runtime": {
-    "python": "3.13.5",
-    "platform": "Windows-11-10.0.26200-SP0",
-    "logical_processors_visible": 8
+    "python": "3.12.13",
+    "platform": "macOS-26.3.2-arm64-arm-64bit",
+    "logical_processors_visible": 10
   },
   "datasets": {
     "train_100": {

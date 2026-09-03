@@ -1,0 +1,150 @@
+{
+  "status": "pass",
+  "run_name": "test416",
+  "input": "data/processed/qasper_test_416.jsonl",
+  "input_sha256": "ec8e3166a18da3b4347e8f12252b9eecdaa271d2694986145d35e84a0ce8e792",
+  "papers": 416,
+  "questions": 1451,
+  "questions_with_gold": 1352,
+  "methods": {
+    "BM25_top1": {
+      "path": "outputs/test416/test416_bm25_top1.jsonl",
+      "records": 1451,
+      "papers": 416,
+      "unique_keys": 1451,
+      "duplicate_keys": 0,
+      "missing_keys": 0,
+      "unexpected_keys": 0,
+      "sha256": "abf77a2f9d846049abcd5074dc7c775047e9e5dc2b04cc2298f8cb44584b36e8"
+    },
+    "BM25_top3": {
+      "path": "outputs/test416/test416_bm25_top3.jsonl",
+      "records": 1451,
+      "papers": 416,
+      "unique_keys": 1451,
+      "duplicate_keys": 0,
+      "missing_keys": 0,
+      "unexpected_keys": 0,
+      "sha256": "62a4e160048558e570a7b981abad849a2a21f6426c61010333a9b6d4b79819ed"
+    },
+    "BM25_top5": {
+      "path": "outputs/test416/test416_bm25_top5.jsonl",
+      "records": 1451,
+      "papers": 416,
+      "unique_keys": 1451,
+      "duplicate_keys": 0,
+      "missing_keys": 0,
+      "unexpected_keys": 0,
+      "sha256": "dcf2297dfe8918883247e13be2650b368722b0c10e5d6b788234ac41377d2f8f"
+    },
+    "BM25_top7": {
+      "path": "outputs/test416/test416_bm25_top7.jsonl",
+      "records": 1451,
+      "papers": 416,
+      "unique_keys": 1451,
+      "duplicate_keys": 0,
+      "missing_keys": 0,
+      "unexpected_keys": 0,
+      "sha256": "09e62573bb91f5a0a711add0f9d168e9a6a0d783ec92f31d54cc9ab15b3d9973"
+    },
+    "BM25_top8": {
+      "path": "outputs/test416/test416_bm25_top8.jsonl",
+      "records": 1451,
+      "papers": 416,
+      "unique_keys": 1451,
+      "duplicate_keys": 0,
+      "missing_keys": 0,
+      "unexpected_keys": 0,
+      "sha256": "c2ad0ce014d144af799582d10c7daf6a677436eaea07e8ca574743079150ee52"
+    },
+    "BM25_top10": {
+      "path": "outputs/test416/test416_bm25_top10.jsonl",
+      "records": 1451,
+      "papers": 416,
+      "unique_keys": 1451,
+      "duplicate_keys": 0,
+      "missing_keys": 0,
+      "unexpected_keys": 0,
+      "sha256": "383a1cb22a156c5f2f0f8d2a4458d02ae4a219c471d89a89ceca032edcbe58f8"
+    },
+    "BM25_top20": {
+      "path": "outputs/test416/test416_bm25_top20.jsonl",
+      "records": 1451,
+      "papers": 416,
+      "unique_keys": 1451,
+      "duplicate_keys": 0,
+      "missing_keys": 0,
+      "unexpected_keys": 0,
+      "sha256": "723c8b3da3164494e1978a7d452e5cbfc3d5996b20e191776a74577cb16e1ca4"
+    },
+    "ControllerV3": {
+      "path": "outputs/test416/test416_controller_v3.jsonl",
+      "records": 1451,
+      "papers": 416,
+      "unique_keys": 1451,
+      "duplicate_keys": 0,
+      "missing_keys": 0,
+      "unexpected_keys": 0,
+      "sha256": "a33831239f9ea0e5d9e562d139e65b99b5d6217dcabf9579edda131bc2af9355"
+    },
+    "ControllerV3_no_section": {
+      "path": "outputs/test416/test416_controller_v3_no_section.jsonl",
+      "records": 1451,
+      "papers": 416,
+      "unique_keys": 1451,
+      "duplicate_keys": 0,
+      "missing_keys": 0,
+      "unexpected_keys": 0,
+      "sha256": "7e01e0ca3b584332abe5b219c4f0579ff8cdf570e6c70ddb2d143dde31b2208b"
+    }
+  },
+  "bootstrap": {
+    "run_name": "test416",
+    "method_files": {
+      "BM25_top1": "outputs/test416/test416_bm25_top1.jsonl",
+      "BM25_top10": "outputs/test416/test416_bm25_top10.jsonl",
+      "BM25_top20": "outputs/test416/test416_bm25_top20.jsonl",
+      "BM25_top3": "outputs/test416/test416_bm25_top3.jsonl",
+      "BM25_top5": "outputs/test416/test416_bm25_top5.jsonl",
+      "BM25_top7": "outputs/test416/test416_bm25_top7.jsonl",
+      "BM25_top8": "outputs/test416/test416_bm25_top8.jsonl",
+      "ControllerV3": "outputs/test416/test416_controller_v3.jsonl",
+      "ControllerV3_no_section": "outputs/test416/test416_controller_v3_no_section.jsonl"
+    },
+    "paper_count": 416,
+    "question_count": 1451,
+    "thresholds": [
+      0.3,
+      0.5,
+      0.7
+    ],
+    "comparisons": [
+      [
+        "ControllerV3",
+        "BM25_top5"
+      ],
+      [
+        "ControllerV3",
+        "BM25_top7"
+      ],
+      [
+        "ControllerV3",
+        "BM25_top8"
+      ],
+      [
+        "ControllerV3",
+        "BM25_top10"
+      ],
+      [
+        "ControllerV3",
+        "ControllerV3_no_section"
+      ]
+    ],
+    "replicates": 5000,
+    "seed": 42,
+    "confidence_level": 0.95,
+    "ci_method": "percentile paired cluster bootstrap",
+    "resampling_unit": "paper"
+  },
+  "errors": []
+}

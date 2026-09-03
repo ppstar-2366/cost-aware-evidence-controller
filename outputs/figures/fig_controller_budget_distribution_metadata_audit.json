@@ -1,0 +1,76 @@
+{
+  "checks": [
+    {
+      "actual": "PNG",
+      "detail": "File format is compared with the explicit allow-list.",
+      "expected": [
+        "PNG"
+      ],
+      "name": "format",
+      "status": "pass"
+    },
+    {
+      "actual": "RGB",
+      "detail": "Vector containers generally do not expose one image mode.",
+      "expected": [
+        "RGB"
+      ],
+      "name": "mode",
+      "status": "pass"
+    },
+    {
+      "actual": 399.41499999999996,
+      "detail": "DPI basis: effective at target width. Metadata DPI is not a quality measure; effective DPI depends on final physical size.",
+      "expected": {
+        "max": null,
+        "min": 399.0
+      },
+      "name": "dpi",
+      "status": "pass"
+    },
+    {
+      "actual": false,
+      "detail": "Alpha is detected for raster modes/transparency metadata. Vector transparency requires rendered-content inspection.",
+      "expected": "forbid",
+      "name": "alpha",
+      "status": "pass"
+    }
+  ],
+  "input": {
+    "name": "fig_controller_budget_distribution.png",
+    "path": "/Users/ppstar/Documents/ChatGPT/毕设/cost-aware-evidence-controller/outputs/figures/fig_controller_budget_distribution.png",
+    "size_bytes": 114652,
+    "suffix": ".png"
+  },
+  "metadata": {
+    "bands": [
+      "R",
+      "G",
+      "B"
+    ],
+    "compression": null,
+    "dpi_x": 399.9992,
+    "dpi_y": 399.9992,
+    "exif_present": false,
+    "format": "PNG",
+    "frames": 1,
+    "has_alpha": false,
+    "height_mm_from_metadata": 87.88417576835154,
+    "height_px": 1384,
+    "icc_profile_bytes": 0,
+    "icc_profile_present": false,
+    "kind": "raster",
+    "mode": "RGB",
+    "pixel_count": 3482144,
+    "width_mm_from_metadata": 159.76631953263907,
+    "width_px": 2516
+  },
+  "notice": "This deterministic metadata screen checks only the supplied constraints. It does not verify visual quality, scientific integrity, accessibility, embedded-raster resolution in vector files, or journal compliance.",
+  "schema_version": "1.0",
+  "screening_summary": {
+    "fail": 0,
+    "pass": 4,
+    "unknown": 0,
+    "warning": 0
+  }
+}

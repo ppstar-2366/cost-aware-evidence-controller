@@ -1,0 +1,31 @@
+{
+  "status": "pass",
+  "mode": "frozen_sample",
+  "methods": [
+    "BM25_top7",
+    "BM25_top8",
+    "ControllerV3",
+    "ControllerV3_no_section"
+  ],
+  "papers": 53,
+  "questions": 201,
+  "method_question_records": 804,
+  "unique_prompt_hashes": 608,
+  "successful_unique_generations": 608,
+  "prompt_hash_reuse_verified": true,
+  "actual_unique_prompt_tokens": 1273451,
+  "actual_unique_output_tokens": 7294,
+  "bootstrap": {
+    "replicates": 5000,
+    "seed": 42,
+    "resampling_unit": "paper",
+    "ci_method": "paired percentile paper-cluster bootstrap"
+  },
+  "scoring": {
+    "answer_f1": "official QASPER/SQuAD token F1; maximum over annotations",
+    "answer_type": "type of first maximum-F1 reference, matching official evaluator tie behaviour",
+    "exact_match": "supplementary normalized exact match",
+    "unanswerable_accuracy": "exact Unanswerable match for unanimously unanswerable reference sets",
+    "failed_or_missing_generations": "retained in denominator with zero F1/EM"
+  }
+}

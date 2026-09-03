@@ -1,5 +1,6 @@
 import argparse
 from collections import Counter
+from pathlib import Path
 from typing import Any, Dict, List
 
 from common import read_jsonl, write_csv, write_jsonl
@@ -179,6 +180,11 @@ def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description="Run BM25 baselines and the final cost-aware ControllerV3.")
     parser.add_argument("--input", default=DEFAULT_INPUT)
     parser.add_argument("--output-dir", default=DEFAULT_OUTPUT_DIR)
+    parser.add_argument(
+        "--run-name",
+        default="validation50",
+        help="Prefix used for every output artifact, for example test416.",
+    )
     parser.add_argument("--threshold", type=float, default=DEFAULT_THRESHOLD)
     parser.add_argument("--top-k", type=int, nargs="+", default=DEFAULT_TOP_K)
     parser.add_argument(
@@ -193,11 +199,14 @@ def parse_args() -> argparse.Namespace:
 def main() -> None:
     args = parse_args()
     rows: List[Dict[str, Any]] = []
+    output_dir = Path(args.output_dir)
+    output_dir.mkdir(parents=True, exist_ok=True)
+    artifact_prefix = output_dir / args.run_name
 
     print("\nRunning BM25 baselines...")
     for top_k in args.top_k:
         predictions = run_bm25(input_path=args.input, top_k=top_k)
-        output_path = f"{args.output_dir}/validation50_bm25_top{top_k}.jsonl"
+        output_path = f"{artifact_prefix}_bm25_top{top_k}.jsonl"
         write_jsonl(predictions, output_path)
 
         rows.append(
@@ -211,7 +220,7 @@ def main() -> None:
 
     print("\nRunning ControllerV3...")
     controller_predictions = run_controller_v3(args.input)
-    controller_path = f"{args.output_dir}/validation50_controller_v3.jsonl"
+    controller_path = f"{artifact_prefix}_controller_v3.jsonl"
     write_jsonl(controller_predictions, controller_path)
 
     rows.append(
@@ -229,7 +238,7 @@ def main() -> None:
             args.input,
             use_section_expansion=False,
         )
-        ablation_path = f"{args.output_dir}/validation50_controller_v3_no_section.jsonl"
+        ablation_path = f"{artifact_prefix}_controller_v3_no_section.jsonl"
         write_jsonl(ablation_predictions, ablation_path)
 
         rows.append(
@@ -241,7 +250,8 @@ def main() -> None:
             )
         )
 
-    summary_path = f"{args.output_dir}/validation50_method_comparison_threshold05.csv"
+    threshold_label = f"{args.threshold:g}".replace(".", "")
+    summary_path = f"{artifact_prefix}_method_comparison_threshold{threshold_label}.csv"
     write_csv(rows, summary_path)
 
     print("\nRetrieval comparison")
@@ -258,10 +268,10 @@ def main() -> None:
     print(f"\nSaved retrieval summary to {summary_path}")
 
     if not args.skip_error_analysis and 20 in args.top_k:
-        error_path = f"{args.output_dir}/error_analysis_controller_v3_validation50.csv"
+        error_path = f"{artifact_prefix}_error_analysis_controller_v3.csv"
         write_error_analysis(
             controller_path=controller_path,
-            bm25_top20_path=f"{args.output_dir}/validation50_bm25_top20.jsonl",
+            bm25_top20_path=f"{artifact_prefix}_bm25_top20.jsonl",
             output_path=error_path,
             threshold=args.threshold,
         )

@@ -1,0 +1,27 @@
+{
+  "method_files": {
+    "ControllerV3": "outputs/test416/test416_controller_v3.jsonl",
+    "ControllerV3_no_section": "outputs/test416/test416_controller_v3_no_section.jsonl",
+    "AbstractOnly": "outputs/supplementary/test416_supplementary_abstract_only.jsonl",
+    "ReadAll": "outputs/supplementary/test416_supplementary_read_all.jsonl",
+    "GenericCountMatched": "outputs/supplementary/test416_supplementary_generic_count_matched.jsonl",
+    "GenericTokenMatched": "outputs/supplementary/test416_supplementary_generic_token_matched.jsonl"
+  },
+  "comparisons": [
+    [
+      "ControllerV3",
+      "GenericCountMatched"
+    ],
+    [
+      "ControllerV3",
+      "GenericTokenMatched"
+    ]
+  ],
+  "threshold": 0.5,
+  "papers": 416,
+  "questions": 1451,
+  "replicates": 5000,
+  "seed": 42,
+  "resampling_unit": "paper",
+  "ci_method": "percentile paired cluster bootstrap"
+}

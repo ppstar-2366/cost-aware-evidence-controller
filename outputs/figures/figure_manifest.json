@@ -1,0 +1,92 @@
+{
+  "status": "publication_ready_result_figures",
+  "destination": "Imperial College Computing MSc individual project report",
+  "physical_width_mm": 160,
+  "raster_dpi": 400,
+  "formats": [
+    "PDF",
+    "PNG"
+  ],
+  "background": "opaque white",
+  "palette": "Okabe-Ito-derived colors with marker/line-style redundancy",
+  "uncertainty": "95% percentile paper-cluster bootstrap, 5,000 replicates, seed 42",
+  "figures": [
+    {
+      "stem": "fig_retrieval_quality_cost",
+      "files": [
+        "outputs/figures/fig_retrieval_quality_cost.pdf",
+        "outputs/figures/fig_retrieval_quality_cost.png"
+      ],
+      "source_data": [
+        "outputs/test416/test416_method_comparison_threshold05.csv",
+        "outputs/test416/test416_bootstrap_method_cis.csv",
+        "outputs/supplementary/test416_supplementary_retrieval_summary.csv",
+        "outputs/supplementary/test416_supplementary_bootstrap_method_cis.csv"
+      ],
+      "transformations": "Direct plotting of reported point estimates and 95% paper-cluster bootstrap intervals; no smoothing.",
+      "alt_text": "Scatter-line plot of Evidence Recall against estimated tokens. BM25 recall rises with k and cost. ControllerV3 lies almost on BM25 top-7; the budget-matched generic control is adjacent. Read-all has near-complete recall at much higher cost."
+    },
+    {
+      "stem": "fig_paired_retrieval_effects",
+      "files": [
+        "outputs/figures/fig_paired_retrieval_effects.pdf",
+        "outputs/figures/fig_paired_retrieval_effects.png"
+      ],
+      "source_data": [
+        "outputs/test416/test416_bootstrap_paired_differences.csv",
+        "outputs/supplementary/test416_supplementary_bootstrap_paired_differences.csv"
+      ],
+      "transformations": "Recall and hit-rate differences multiplied by 100 to percentage points; token differences unchanged.",
+      "alt_text": "Two forest plots. ControllerV3 minus BM25 top-7 and budget-matched generic controls have small retrieval-quality intervals crossing zero. Full ControllerV3 minus no-section has positive retrieval intervals and roughly 104 additional estimated tokens."
+    },
+    {
+      "stem": "fig_controller_budget_distribution",
+      "files": [
+        "outputs/figures/fig_controller_budget_distribution.pdf",
+        "outputs/figures/fig_controller_budget_distribution.png"
+      ],
+      "source_data": [
+        "outputs/supplementary/test416_controller_behavior_paired_budget.csv"
+      ],
+      "transformations": "Fixed 62.5-token-width bins across the observed range; no smoothing. Equal/lower/higher categories copied from the audited per-question table.",
+      "alt_text": "Histogram of ControllerV3 minus BM25 top-7 estimated tokens across 1,451 questions. The median is zero and mean is about eight tokens, but the distribution is wide, showing substantial question-level budget redistribution."
+    },
+    {
+      "stem": "fig_generation_results",
+      "files": [
+        "outputs/figures/fig_generation_results.pdf",
+        "outputs/figures/fig_generation_results.png"
+      ],
+      "source_data": [
+        "outputs/supplementary/generation/test_generation_answer_summary.csv",
+        "outputs/supplementary/generation/test_generation_answer_bootstrap_method_cis.csv",
+        "outputs/supplementary/generation/test_generation_answer_bootstrap_paired.csv"
+      ],
+      "transformations": "Direct plotting of method estimates and 95% paper-cluster bootstrap intervals; failed generations, if any, remain in the answer denominator.",
+      "alt_text": "Three panels compare frozen test-sample Answer F1, paired ControllerV3 F1 differences, and actual prompt tokens for four retrieval methods. Intervals show paper-cluster bootstrap uncertainty."
+    }
+  ],
+  "source_sha256": {
+    "outputs/supplementary/generation/test_generation_answer_bootstrap_method_cis.csv": "24c26ca697a66538dfa40a2b692bfc9aecd1ad030efaaa75c9b8bd8f9fe99f03",
+    "outputs/supplementary/generation/test_generation_answer_bootstrap_paired.csv": "ad28c62b0076481fb26e4fec726a9b84ff403230ef3264c362a2cfa54e6fdf89",
+    "outputs/supplementary/generation/test_generation_answer_summary.csv": "6f14f886e121ca5dd65a647a0e663e7669efade14609ca236fcc4f953ece5af5",
+    "outputs/supplementary/test416_controller_behavior_paired_budget.csv": "4f11e837af840a2d2e395742600eb60b8ad3346d905e68a8f2ddaaf1959104cf",
+    "outputs/supplementary/test416_supplementary_bootstrap_method_cis.csv": "defbb7eeda084f3b93e22195c578bf6dc2141b9c7965f0f155fc45fc0a41901a",
+    "outputs/supplementary/test416_supplementary_bootstrap_paired_differences.csv": "b5ed43aeb299227d855b9e6e53e6848715300131feb49e3b427afc5b44023bab",
+    "outputs/supplementary/test416_supplementary_retrieval_summary.csv": "db7a394fc5b13f34f24315632f72dfb9953e4061997a77963494a632e9c304b8",
+    "outputs/test416/test416_bootstrap_method_cis.csv": "36462e03081d5be1de3d7cefaa65dc43fd43a0d1243ebe723756d92cb3e4794b",
+    "outputs/test416/test416_bootstrap_paired_differences.csv": "6ffe75fab35cd311da11a9a65143754d11e63cfd9f2be17bcf87ee73692892d7",
+    "outputs/test416/test416_method_comparison_threshold05.csv": "736391c16a6f041bf27b296dad5739ee5e1b5f483e35b6915991cc0530e8603e"
+  },
+  "output_sha256": {
+    "outputs/figures/fig_retrieval_quality_cost.pdf": "d5d1e6e230797ce28fddf354256b99f5a90e4df6677f91a2614411e4aa11a85d",
+    "outputs/figures/fig_retrieval_quality_cost.png": "b2a339d339079545e2f9c2fe564ce19f3e36c69ecc1ca22b71ba274510422246",
+    "outputs/figures/fig_paired_retrieval_effects.pdf": "02703e0dc1911ebb3f59ff264904479501e5b7bbb95a53661049deca4729bc43",
+    "outputs/figures/fig_paired_retrieval_effects.png": "c3433c81ca53aa6156bbf74156f1bebb53e32fbfb9adeaf5f2e4e2715ee03bde",
+    "outputs/figures/fig_controller_budget_distribution.pdf": "659ad004f416f400348af2843aff9be328f7e516223db9f477bb70e7d9e016b7",
+    "outputs/figures/fig_controller_budget_distribution.png": "be18f8dc30045b76e0ff9c0f46a169320f59f39e3431f68fac7fd09378da4c3a",
+    "outputs/figures/fig_generation_results.pdf": "7b6e8749e3201058a0cd3c462be0ab3afcd5f49d365796bef04b04d913345f7a",
+    "outputs/figures/fig_generation_results.png": "4d673e53e9f891d697d0c8fbbf7509e3035968f22ba1fd2a86b70162611c5dfa"
+  },
+  "matplotlib_version": "3.11.1"
+}

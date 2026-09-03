@@ -1,0 +1,34 @@
+{
+  "run_name": "test416_supplementary",
+  "threshold": 0.5,
+  "papers": 416,
+  "questions": 1451,
+  "methods": {
+    "AbstractOnly": {
+      "records": 1451,
+      "unique_keys": 1451
+    },
+    "ReadAll": {
+      "records": 1451,
+      "unique_keys": 1451
+    },
+    "GenericCountMatched": {
+      "records": 1451,
+      "unique_keys": 1451
+    },
+    "GenericTokenMatched": {
+      "records": 1451,
+      "unique_keys": 1451
+    }
+  },
+  "count_match": {
+    "exact_unit_matches": 1451,
+    "max_abs_unit_difference": 0,
+    "mean_word_difference": 5.8228807718814615
+  },
+  "token_match": {
+    "exact_word_matches": 1051,
+    "mean_abs_word_difference": 14.307374224672639,
+    "max_abs_word_difference": 125
+  }
+}

@@ -1,0 +1,13 @@
+first_method,second_method,contrast,metric,point_difference,ci_lower,ci_upper,papers,replicates,seed,resampling_unit
+ControllerV3,BM25_top7,ControllerV3 - BM25_top7,f1,0.000244,-0.031259,0.031248,53,5000,42,paper
+ControllerV3,BM25_top7,ControllerV3 - BM25_top7,em,0.004975,-0.020619,0.030928,53,5000,42,paper
+ControllerV3,BM25_top7,ControllerV3 - BM25_top7,prompt_tokens,58.457711,-1.751056,115.190332,53,5000,42,paper
+ControllerV3,BM25_top7,ControllerV3 - BM25_top7,output_tokens,0.497512,-1.559813,2.575003,53,5000,42,paper
+ControllerV3,BM25_top8,ControllerV3 - BM25_top8,f1,-0.01875,-0.050179,0.013385,53,5000,42,paper
+ControllerV3,BM25_top8,ControllerV3 - BM25_top8,em,0.004975,-0.023474,0.035176,53,5000,42,paper
+ControllerV3,BM25_top8,ControllerV3 - BM25_top8,prompt_tokens,-218.885572,-284.735934,-154.610457,53,5000,42,paper
+ControllerV3,BM25_top8,ControllerV3 - BM25_top8,output_tokens,-0.756219,-3.597353,1.850161,53,5000,42,paper
+ControllerV3,ControllerV3_no_section,ControllerV3 - ControllerV3_no_section,f1,0.014315,-0.008296,0.038507,53,5000,42,paper
+ControllerV3,ControllerV3_no_section,ControllerV3 - ControllerV3_no_section,em,0.0199,-0.000111,0.043478,53,5000,42,paper
+ControllerV3,ControllerV3_no_section,ControllerV3 - ControllerV3_no_section,prompt_tokens,128.58209,94.024988,165.624492,53,5000,42,paper
+ControllerV3,ControllerV3_no_section,ControllerV3 - ControllerV3_no_section,output_tokens,-0.930348,-2.424629,0.272263,53,5000,42,paper
