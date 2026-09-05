@@ -1,30 +1,37 @@
-# 实验文档索引
+# 实验文档
 
-本目录保存实验协议、结果汇总、完整性检查和复现说明。正式结论以完整 QASPER 测试集的冻结检索实验和预先固定的生成样本为准；Validation50 文档只记录方法开发过程。
+这个目录放的是实验协议、结果摘要、完整性检查和复现命令。项目在 2026 年
+6–8 月主要在本地开发和运行，主要实验结束后才将代码、小型结果文件和说明统一
+整理到 GitHub。因此，文档中的日期表示对应协议、运行或检查的记录时间，Git
+提交日期并不是完整的本地开发时间线。
 
-## 主要检索评价
+正式检索结论来自完整 QASPER test split；Validation50 只用于方法开发和早期排查。
 
-1. [TEST_EVALUATION_PROTOCOL.md](TEST_EVALUATION_PROTOCOL.md)：测试集评价前固定的方法、基线、指标和重采样设计。
-2. [TEST416_RESULTS.md](TEST416_RESULTS.md)：416篇论文、1,451个问题的主要结果和论文级配对区间。
-3. [SUPPLEMENTARY_EXPERIMENT_PROTOCOL.md](SUPPLEMENTARY_EXPERIMENT_PROTOCOL.md)：预算匹配对照、控制器行为分析与生成实验的预定协议。
-4. [SUPPLEMENTARY_RETRIEVAL_RESULTS.md](SUPPLEMENTARY_RETRIEVAL_RESULTS.md)：逐问题预算匹配、参考点与分支行为结果。
+## 主要检索实验
 
-## 生成评价
+- [TEST_EVALUATION_PROTOCOL.md](TEST_EVALUATION_PROTOCOL.md)：测试集运行前确定的方法、基线、指标和 bootstrap 设置。
+- [TEST416_RESULTS.md](TEST416_RESULTS.md)：416 篇论文、1,451 个问题的检索结果和论文级配对区间。
+- [SUPPLEMENTARY_EXPERIMENT_PROTOCOL.md](SUPPLEMENTARY_EXPERIMENT_PROTOCOL.md)：预先记录的预算匹配、控制器行为和生成实验设置。
+- [SUPPLEMENTARY_RETRIEVAL_RESULTS.md](SUPPLEMENTARY_RETRIEVAL_RESULTS.md)：逐问题预算匹配、参考点和分支行为结果。
 
-1. [GENERATION_SMOKE_GATE.md](GENERATION_SMOKE_GATE.md)：输出长度、提示词去重和完整性检查记录。
-2. [TEST_GENERATION_RESULTS.md](TEST_GENERATION_RESULTS.md)：53篇论文、201个问题的冻结生成结果、实际 token 数和配对区间。
+## 答案生成实验
 
-## 复现与数据说明
+- [GENERATION_SMOKE_GATE.md](GENERATION_SMOKE_GATE.md)：正式生成前对输出长度、prompt 去重和完整性的检查。
+- [TEST_GENERATION_RESULTS.md](TEST_GENERATION_RESULTS.md)：53 篇论文、201 个问题的生成结果、实际 token 数和配对区间。
 
-- [REPRODUCTION_GUIDE_ZH.md](REPRODUCTION_GUIDE_ZH.md)：Windows 和 macOS 环境下的命令与运行顺序。
-- [DATA_DICTIONARY_ZH.md](DATA_DICTIONARY_ZH.md)：源码、JSONL、CSV 和审计文件的字段定义。
-- [FIGURE_GUIDE.md](FIGURE_GUIDE.md)：图文件、数据来源、可访问性设计和解释边界。
+## 复现和文件说明
 
-## 机器可读材料
+- [REPRODUCTION_GUIDE_ZH.md](REPRODUCTION_GUIDE_ZH.md)：Windows 和 macOS 下的环境、命令与运行顺序。
+- [DATA_DICTIONARY_ZH.md](DATA_DICTIONARY_ZH.md)：源码、JSONL、CSV 和检查文件的字段。
+- [FIGURE_GUIDE.md](FIGURE_GUIDE.md)：图片的数据来源、输出格式和阅读边界。
 
-- outputs/test416/：主要检索汇总、bootstrap 区间、错误分析和 SHA-256 清单。
-- outputs/supplementary/：预算匹配、行为分析、生成结果和完整性审计。
-- outputs/figures/：矢量 PDF、400 dpi PNG 及数据来源和输出哈希。
-- experiment_audit.json、experiment_results_overview.csv 与 file_manifest_sha256.csv：Validation50 开发归档的机器可读检查。
+## 机器可读结果
 
-QASPER 完整测试集、本地模型、提示词、生成原始记录和体积较大的逐问题检索 JSONL 文件没有提交到 Git。相应协议和清单保留了它们的生成方法、文件大小与 SHA-256 标识。
+- `outputs/test416/`：主要检索汇总、bootstrap 区间、错误分析和 SHA-256 清单。
+- `outputs/supplementary/`：预算匹配、行为分析、生成结果和完整性检查。
+- `outputs/figures/`：PDF、PNG 及其数据来源和输出哈希。
+- `experiment_audit.json`、`experiment_results_overview.csv` 和
+  `file_manifest_sha256.csv`：Validation50 开发实验的汇总检查。
+
+完整 QASPER 测试数据、本地模型、完整 prompts、原始生成记录和大型逐问题
+JSONL 没有上传。对应的文件大小和 SHA-256 值保留在各结果目录的 manifest 中。

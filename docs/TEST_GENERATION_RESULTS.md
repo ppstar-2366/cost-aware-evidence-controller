@@ -1,6 +1,6 @@
-# Frozen QASPER test-sample answer-generation results
+# QASPER Test-Sample Answer Generation
 
-Run date: 2026-08-27. Status: complete; independent integrity audit passed.
+Run completed: 27 August 2026. The independent integrity check passed.
 
 ## Scope
 
@@ -94,23 +94,21 @@ the ten questions whose references are unanimously unanswerable.
 The local model inventory records Qwen2.5 3.1B, Q4_K_M quantization, digest
 `357c53fb659c5076de1d65ccb0b397446227b71a42be9d1603d46168015c9e4b`.
 
-## Interpretation boundary
+## Interpretation
 
-The defensible downstream conclusion is narrow: under this fixed local 3B
-generator and frozen 201-question paper-cluster sample, ControllerV3 and BM25
-top-7 produced almost identical aggregate Answer F1 point estimates, and the
-paired interval did not show a clear difference. Reading more evidence with
-top-8 increased actual model input and gave the highest numerical F1, but its
-F1 advantage over ControllerV3 was not clear within the sample. Section
-expansion clearly increased prompt cost relative to the no-section ablation;
-its downstream F1 benefit was uncertain.
+With this local 3B model and the 201-question paper-cluster sample,
+ControllerV3 and BM25 top-7 produced almost identical aggregate Answer F1 point
+estimates. The paired interval did not show a clear difference. BM25 top-8
+read more evidence and had the highest numerical F1, although its sampled F1
+advantage over ControllerV3 remained uncertain. Section expansion also raised
+prompt cost relative to the no-section version without a clear sampled F1 gain.
 
-Do not describe these results as formal equivalence, proof of superiority, a
-full 1,451-question generation evaluation, or evidence that the current Stop
-action is based on evidence sufficiency. They are specific to one small local
-generator and one frozen supplementary sample.
+These findings are specific to one small local model and one supplementary
+sample. They neither establish formal equivalence or superiority nor represent
+a full 1,451-question generation evaluation. They also do not change the fact
+that the current `Stop` action is rule-based rather than evidence-conditioned.
 
-## Auditable artifacts
+## Saved result files
 
 - method summary: `test_generation_answer_summary.csv`;
 - type diagnostics: `test_generation_answer_by_type.csv`;

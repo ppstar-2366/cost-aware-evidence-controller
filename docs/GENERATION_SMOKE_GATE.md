@@ -1,8 +1,9 @@
-# Held-out Generation Smoke Gate
+# Generation Smoke Check
 
-Gate completed: 2026-08-27. This document records execution validation only;
-the smoke answer scores are not thesis results and were not used to change the
-sample, prompts, retrieval methods, or ControllerV3.
+Check completed: 27 August 2026. This was a small execution check before the
+201-question generation run. Its answer scores are not reported as experimental
+results and were not used to change the sample, prompts, retrieval methods, or
+ControllerV3.
 
 ## Frozen sample and prompts
 
@@ -23,14 +24,14 @@ prompt construction.
 
 The first 20-question run used the initially specified `num_predict=128`. All
 67 unique prompts completed at the API level, but two returned
-`done_reason=length`; one answer was visibly incomplete. This was a failure of
-the smoke gate's pre-specified completion check, not an outcome comparison.
+`done_reason=length`; one answer was visibly incomplete. This failed the planned
+completion check; it was not used as a comparison of answer quality.
 
 The only amended parameter was `num_predict=256`. The same 20 questions,
 evidence, prompt hashes, model, seed, and four methods were rerun from a new
 output file. The original 128-token runner audit is retained as provenance.
 
-## Passing 256-token gate
+## Repeat with a 256-token output limit
 
 | Check | Result |
 |---|---:|
@@ -44,9 +45,9 @@ output file. The original 128-token runner audit is retained as provenance.
 | Identical-prompt answer reuse | passed |
 | Method/question alignment | passed |
 
-The smoke sample therefore passed the schema, deduplication, parsing, token,
-completion, and alignment checks. The frozen 201-question sample was released
-for execution with `temperature=0`, `seed=42`, `num_ctx=8192`, and
+The repeated sample passed the schema, deduplication, parsing, token,
+completion, and alignment checks. I then ran the 201-question sample with
+`temperature=0`, `seed=42`, `num_ctx=8192`, and
 `num_predict=256`. The runner and independent integrity audit both now treat a
 `done_reason=length` record as a failed completion rather than a successful
 API call.

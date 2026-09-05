@@ -1,11 +1,14 @@
 # 实验复现说明
 
-本文档给出两种复现路径：
+项目在 2026 年 6–8 月主要于本地开发和运行，完成后才整理到 GitHub。
+下面分别说明如何检查已有结果，以及如何从头运行实验：
 
 - **只查看和验证已有结果**：不需要重新下载 QASPER，也不需要重新运行 Ollama；
 - **从头重跑完整实验**：需要 Python、网络、Ollama 和较长运行时间。
 
-第1--8节保留早期 Windows Validation50 开发环境的执行记录；第9节给出冻结测试与补充实验的 macOS/VS Code 命令。所有相对路径均以仓库根目录为起点。
+第 1–8 节保留早期 Windows Validation50 开发环境的执行记录；第 9 节给出
+完整 test split 和补充实验的 macOS/VS Code 命令。所有相对路径均以仓库
+根目录为起点。
 
 ## 1. 换机时应复制什么
 
@@ -60,16 +63,16 @@ ControllerV3: 156/156 successful
 
 它不会修改 `data/processed` 或 `outputs`。
 
-### 2.3 快速查看正式结果
+### 2.3 快速查看 Validation50 开发结果
 
 ```powershell
 Get-Content outputs\validation50_method_comparison_threshold05.csv
 Get-Content outputs\ollama_answer_summary_validation50.csv
 ```
 
-## 3. 最终实验环境快照
+## 3. Windows Validation50 运行环境
 
-完成正式实验时的核心环境：
+当时运行 Validation50 开发实验的核心环境：
 
 ```text
 OS kernel: Microsoft Windows NT 10.0.26200.0, x64
@@ -297,7 +300,7 @@ keep_alive=10m
 
 审计会重新从逐问题原始文件统计数据规模、检索指标、动作分布、错误类别、prompt 相同性、回答分布和 paired comparison，并更新哈希清单。
 
-## 6. 正式结果验收标准
+## 6. Validation50 输出检查
 
 完成一次复现后应逐项确认：
 
@@ -314,7 +317,9 @@ keep_alive=10m
 
 ## 7. 不建议重跑或覆盖的场景
 
-只是在另一台机器写论文时，不需要重跑本地模型。复制当前 `outputs` 和 `docs` 即可，因为正式生成耗时长，并且相同 prompt 在跨时段 Ollama 推理中也未做到逐字符完全确定。
+如果只是在另一台机器上查看结果或写报告，不需要重跑本地模型。复制
+`outputs` 和 `docs` 即可。生成耗时较长，而且相同 prompt 在不同时段的 Ollama
+运行中也不一定逐字符一致。
 
 如果只想重算论文表格，运行 `src/audit_experiments.py` 即可；如果只想重算 F1/EM，运行 `src/evaluate_generated_answers.py` 即可。两者都不需要启动 Ollama。
 
@@ -340,17 +345,18 @@ Invoke-RestMethod http://127.0.0.1:11434/api/tags
 
 ### 为什么 top-10 和 top-20 的回答差不多
 
-正式 prompt 有 6000 字符证据上限，二者 156 对 prompt 全部相同。微小回答差异来自本地推理未完全确定，而不是 top-20 额外证据。
+Validation50 使用 6000 字符的证据上限，二者的 156 对 prompt 全部相同。微小
+回答差异来自本地推理未完全确定，而不是 top-20 的额外证据。
 
 ### 能否用 wall-time 写速度对比
 
 不能。BM25_top5 跨越中断和恢复，平均 wall-time 被严重污染；其余方法也没有统一冷启动、缓存和系统负载条件。
 
-## 9. 当前 macOS / VS Code 冻结 test 流程
+## 9. macOS / VS Code 完整测试集流程
 
-第 1–8 节保留早期 Windows Validation50 复现史。当前终期实验已经在 macOS 项目
-目录的 `.venv` 中配置好，并在 `.vscode/tasks.json` 提供可从 VS Code 的
-“Tasks: Run Task”直接执行的任务。正式生成任务显式固定
+第 1–8 节是早期 Windows Validation50 的复现记录。完整 test split 和补充实验
+使用 macOS 项目目录中的 `.venv`；`.vscode/tasks.json` 也保留了可从 VS Code
+“Tasks: Run Task”执行的任务。生成任务固定为
 `qwen2.5:3b`、`num_ctx=8192`、`num_predict=256`、`temperature=0`、`seed=42`。
 
 命令行等价流程如下：
@@ -373,5 +379,5 @@ Invoke-RestMethod http://127.0.0.1:11434/api/tags
 生成 JSONL 支持按 prompt hash 断点续跑；但不得把不同模型、prompt 或 decoding
 设置追加到同一文件。最终验收要求：201 个对齐问题、804 个方法—问题记录、608
 个 unique prompts、0 missing、0 API error、0 `done_reason=length`，且最大实际
-prompt token 小于 8,192。正式数值和可辩护解释见
+prompt token 小于 8,192。结果数值和解读见
 `docs/TEST_GENERATION_RESULTS.md`，图表说明见 `docs/FIGURE_GUIDE.md`。

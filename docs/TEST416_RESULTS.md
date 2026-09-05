@@ -1,11 +1,11 @@
-# Frozen QASPER Test Evaluation Results
+# QASPER Test Retrieval Results
 
-Evaluation date: 2026-08-27 (Asia/Shanghai)
+Run completed: 27 August 2026 (Asia/Shanghai)
 
-## Evaluation status
+## Data checked
 
-The frozen ControllerV3 evaluation completed on the full official QASPER test
-split: 416 papers and 1,451 questions. Of these, 1,352 questions contain gold
+The evaluation covers the full official QASPER test split: 416 papers and
+1,451 questions. Of these, 1,352 questions contain gold
 evidence and contribute to Evidence Recall and Question Hit Rate. Every method
 produced one aligned record for each of the 1,451 questions. The automated audit
 passed with no duplicate, missing, or unexpected paper-question keys.
@@ -49,10 +49,10 @@ evidence costs are almost identical.
 | ControllerV3 − no-section ablation | Question Hit Rate | +0.0148 (+0.0046 to +0.0255) | Higher hit rate with a larger budget |
 | ControllerV3 − no-section ablation | Estimated tokens | +104.0 (+91.1 to +117.1) | The full method reads more evidence |
 
-The main defensible conclusion is therefore that the aggregate point estimates
-and costs are closely matched to the top-7 baseline and that the paired interval
-does not show a clear difference. This is not a formal equivalence claim because
-no equivalence margin or equivalence test was pre-specified.
+The aggregate point estimates and costs are close to those of the top-7
+baseline, and the paired intervals do not show a clear difference. This is not
+a formal equivalence result because I did not specify an equivalence margin or
+test in advance.
 ControllerV3 lies between top-7 and top-8 on the empirical cost–coverage trade-off.
 The full method has higher coverage than the no-section ablation, but it also
 reads more evidence and lowers Recall per 1,000 estimated tokens at threshold
@@ -82,6 +82,7 @@ primary analysis, and should be labelled accordingly.
 - Full hashes and sizes: `outputs/test416/test416_sha256_manifest.csv`
 - Machine-readable audit: `outputs/test416/test416_audit.json`
 
-These are retrieval-stage results. Estimated tokens are computed as evidence
-words multiplied by 1.3; they are not tokenizer counts or measured Ollama usage.
-No claim about final answer quality follows from this experiment alone.
+These results concern retrieval only. Estimated tokens are evidence words
+multiplied by 1.3, rather than tokenizer counts or measured Ollama usage. The
+separate generation experiment checks whether the retrieval differences carry
+through to answers.

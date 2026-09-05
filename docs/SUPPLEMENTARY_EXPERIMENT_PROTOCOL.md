@@ -1,15 +1,14 @@
-# Frozen Supplementary Experiment Protocol
+# Supplementary Experiment Protocol
 
-Protocol timestamp: 2026-08-27, before running the supplementary retrieval,
-behaviour, or test-generation analyses described below.
+Recorded on 27 August 2026, before the supplementary retrieval, behaviour, and
+test-generation analyses below were run.
 
 ## Status and scope
 
-The official QASPER test split has already been used for the primary frozen
-retrieval evaluation. All analyses in this document are therefore labelled
-**supplementary**. They will not be used to modify ControllerV3, choose a more
-favourable overlap threshold, or replace the primary ControllerV3 versus BM25
-top-7 comparison.
+The official QASPER test split had already been used for the main retrieval
+evaluation. I therefore treat all analyses in this document as supplementary.
+They do not alter ControllerV3, determine the overlap threshold, or replace the
+main ControllerV3 versus BM25 top-7 comparison.
 
 Frozen artifacts:
 
@@ -137,8 +136,8 @@ confirmatory tests.
 - hash every complete prompt and call the model once per unique prompt;
 - reuse that generation for every method-question record with the same hash.
 
-The final point is mandatory: repeated inference on identical prompts must not
-create apparent method differences through local runtime nondeterminism.
+Generating each distinct prompt once prevents local runtime variation from
+creating differences between methods that supplied identical inputs.
 
 ### Execution gate
 
@@ -180,10 +179,12 @@ bootstrap samples with seed 42. The report will lead with effect sizes and
 intervals. It will not infer equivalence from a non-significant or
 zero-crossing interval.
 
-## Artifact and Git policy
+## Saved artifacts
 
-Supplementary artifacts are written under `outputs/supplementary/`. Source,
-protocols, small CSV/JSON summaries, audits, figures, and SHA-256 manifests are
-committed to Git after each major stage. Rebuildable QASPER test data, local
-models, virtual environments, and large per-question JSONL outputs remain
-local and ignored by Git.
+Supplementary artifacts are written under `outputs/supplementary/`. I produced
+the source files, protocols, CSV/JSON summaries, checks, figures, and SHA-256
+manifests locally during the experiments, then organised and uploaded the
+smaller files after the main runs were complete. Rebuildable QASPER test data,
+local models, virtual environments, and large per-question JSONL outputs remain
+local and are ignored by Git. The Git commit dates therefore record the later
+archive, not the time of every local experiment.

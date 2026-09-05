@@ -1,12 +1,13 @@
-# Frozen QASPER Test Evaluation Protocol
+# QASPER Test Evaluation Protocol
 
-Protocol date: 2026-08-27 (Asia/Shanghai)
+Recorded on 27 August 2026 (Asia/Shanghai), before the test output was
+inspected.
 
-This document fixes the held-out evaluation plan before inspecting QASPER test
-questions, gold evidence, or method results. The test split will not be used to
-modify ControllerV3 or select favourable thresholds, baselines, or metrics.
+I used the settings below for the held-out evaluation. I did not use the test
+questions, gold evidence, or results to revise ControllerV3 or to choose the
+reported thresholds, baselines, or metrics.
 
-## Frozen method
+## Method state
 
 - Remote baseline commit: `c7ec037c413e0ac30b9b2050aa8f7ec73a643465`
 - Controller: `ControllerV3`, a rule-based, question-aware variable-budget
@@ -18,9 +19,9 @@ modify ControllerV3 or select favourable thresholds, baselines, or metrics.
 - Shared metric source SHA-256:
   `2338ff4c992f9554c4c5d6d91add29306e887b85fbe9306bac34628f96ea247e`
 
-The controller code is unchanged from the remote baseline. Infrastructure-only
-changes add test-split processing, run-specific artifact names, cost-matched
-fixed-k baselines, and bootstrap analysis.
+The ControllerV3 code is the same as in the remote baseline. The later changes
+only added test-split processing, run-specific filenames, cost-matched fixed-k
+baselines, and bootstrap analysis.
 
 ## Data
 
@@ -100,18 +101,18 @@ All held-out outputs will be stored under `outputs/test416/` and prefixed with
 analysis may be performed after the frozen evaluation, but its findings will
 not be used to revise the method reported against this test set.
 
-## Deferred work
+## Work outside this evaluation
 
 Full test-split Ollama generation, a dense retriever, and a new dynamic-stopping
-ControllerV4 are not part of this frozen primary evaluation. They may only be
-added later as explicitly labelled supplementary or future work.
+ControllerV4 are outside this primary evaluation. Any later analysis using the
+same test split is marked as supplementary.
 
-## Post-evaluation completion record
+## Run record
 
-The frozen run completed on 2026-08-27 without changing ControllerV3. The
-processed split contained the expected 416 papers and 1,451 questions. Nine
-method outputs, 5,000-replicate paper-level bootstrap intervals, error-analysis
-artifacts, and a SHA-256 manifest were written under `outputs/test416/`.
+The run finished on 27 August 2026 without changes to ControllerV3. The
+processed split contained the expected 416 papers and 1,451 questions. It
+produced nine method outputs, 5,000-replicate paper-level bootstrap intervals,
+error-analysis files, and a SHA-256 manifest under `outputs/test416/`.
 
 The automated alignment audit passed. The processed test file SHA-256 is
 `ec8e3166a18da3b4347e8f12252b9eecdaa271d2694986145d35e84a0ce8e792`.

@@ -1,4 +1,4 @@
-# Result figure guide
+# Result Figures
 
 `src/make_thesis_figures.py` exports each figure as a vector PDF and a 400 dpi
 RGB PNG at 160 mm width. The PDF is intended for document typesetting; the PNG
@@ -8,7 +8,7 @@ is retained for visual review and fallback use.
 
 Files: `outputs/figures/fig_retrieval_quality_cost.{pdf,png}`
 
-Figure content:
+Suggested caption:
 
 > Held-out retrieval quality and estimated evidence-reading cost on the full
 > QASPER test split (416 papers; 1,451 questions). Points show the mean Evidence
@@ -18,15 +18,15 @@ Figure content:
 > the question-level count-matched generic control. Abstract-only and read-all
 > provide low- and high-cost reference points.
 
-Interpretation boundary: this figure supports close aggregate location of
-ControllerV3 and BM25 top-7. It does not establish statistical equivalence or
-ControllerV3 superiority.
+ControllerV3 and BM25 top-7 occupy a similar aggregate position in this plot.
+The figure does not establish statistical equivalence or show that
+ControllerV3 is superior.
 
 ## Figure 2: paired retrieval contrasts
 
 Files: `outputs/figures/fig_paired_retrieval_effects.{pdf,png}`
 
-Figure content:
+Suggested caption:
 
 > Paired ControllerV3 retrieval contrasts on the QASPER test split. The upper
 > panel reports Evidence Recall and Question Hit Rate differences in percentage
@@ -41,7 +41,7 @@ Figure content:
 
 Files: `outputs/figures/fig_controller_budget_distribution.{pdf,png}`
 
-Figure content:
+Suggested caption:
 
 > Distribution of the per-question difference in estimated evidence tokens
 > between ControllerV3 and BM25 top-7 over all 1,451 test questions. Although
@@ -50,15 +50,15 @@ Figure content:
 > of questions, respectively. The controller therefore redistributes the
 > evidence budget across questions without materially reducing its mean cost.
 
-## Figure 4: frozen test-sample answer generation
+## Figure 4: test-sample answer generation
 
 Files: `outputs/figures/fig_generation_results.{pdf,png}`. This figure is only
 created after the frozen generation evaluation has produced its summary and
 bootstrap tables.
 
-Figure content:
+Suggested caption:
 
-> Frozen supplementary test-sample answer-generation results for 53 complete paper clusters
+> Supplementary test-sample answer-generation results for 53 complete paper clusters
 > (201 questions), using Qwen2.5-3B with a fixed prompt and decoding settings.
 > Panels report method-level Answer F1, paired ControllerV3 Answer F1
 > differences, and actual Ollama prompt-token counts. Bars are 95%

@@ -1,9 +1,9 @@
-# Supplementary Retrieval and Controller-Behaviour Results
+# Supplementary Retrieval and Controller Behaviour
 
-Run date: 2026-08-27. These analyses use the complete official QASPER test
-split (416 papers, 1,451 questions) after the primary test result was known.
-They are therefore supplementary and do not replace the frozen primary
-ControllerV3 versus BM25 top-7 comparison.
+Run completed: 27 August 2026. These analyses use the complete official QASPER
+test split (416 papers, 1,451 questions) after the main test result was known.
+They are supplementary and do not replace the original ControllerV3 versus
+BM25 top-7 comparison.
 
 ## Integrity and statistical design
 
@@ -88,16 +88,15 @@ of allocating more evidence. In particular, the result/data path both receives
 the largest budget and may contain questions with different intrinsic
 retrieval difficulty.
 
-## Interpretation boundary
+## What these results show
 
-ControllerV3 is best described as a lightweight, interpretable,
-question-type-aware variable-budget controller. On the held-out test split, it
-redistributes evidence cost substantially at the question level while keeping
-mean cost close to a fixed top-7 baseline. Its aggregate retrieval performance
-is also close to budget-matched generic selection, and the present experiment
-does not demonstrate an independent benefit from section-aware targeting. This
-result limits the supported claim to transparent budget redistribution and
-motivates evidence-sufficiency estimation or stronger reranking as future work.
+ControllerV3 changes the evidence budget substantially from one question to
+another while keeping its mean cost close to BM25 top-7. Its aggregate
+retrieval result is also close to the budget-matched generic controls. The
+experiment therefore shows that the controller performs transparent budget
+redistribution, but it does not show a separate overall gain from section-aware
+targeting. Evidence-sufficiency estimation or a stronger reranker would be
+needed to make the allocation depend more directly on the evidence found.
 
 ## Reproduction
 
